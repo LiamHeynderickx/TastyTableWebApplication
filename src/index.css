@@ -14,3 +14,65 @@
     background-size: cover;
     position: relative;
 }
+
+.form-box{
+    width: 90%;
+    max-width: 450px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 50px 60px 70px;
+    text-align: center;
+}
+
+.input-field {
+    background: #eaeaea;
+    margin: 15px 0;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+}
+
+/*making input fields larger*/
+input{
+    width: 100%;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    padding: 18px 15px;
+}
+
+/*giving icons more space (tag i)*/
+.input-field i{
+    margin-left: 15px;
+    color: #999;
+}
+
+.input-group{
+    height: 200px;
+}
+
+.btn-field button.disable{
+    background: #eaeaea;
+    color: #999999;
+}
+
+.btn-field{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-field button{
+    flex-basis: 48%;
+    background: #F5863ECC;
+    color: #fff;
+    height: 40px;
+    border-radius: 20px;
+    border: 0;
+    outline: 0;
+    cursor: pointer;
+    transition: background 1s;
+}
