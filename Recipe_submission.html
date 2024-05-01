@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Submission Form</title>
+</head>
+<body>
+<h1>Submit Your Recipe</h1>
+<form action="submit_recipe.php" method="POST" enctype="multipart/form-data">
+
+    <label for="recipe_name">Recipe Name:</label><br>
+    <input type="text" id="recipe_name" name="recipe_name" required><br><br>
+
+    <label for="recipe_image">Recipe Image:</label><br>
+    <input type="file" id="recipe_image" name="recipe_image" accept="image/*" required><br><br>
+
+    <label for="servings">Number of Servings:</label><br>
+    <input type="number" id="servings" name="servings" required><br><br>
+
+    <label for="cooking_time">Cooking Time (minutes):</label><br>
+    <input type="number" id="cooking_time" name="cooking_time" required><br><br>
+
+    <label for="calories">Calories:</label><br>
+    <input type="number" id="calories" name="calories" required><br><br>
+
+    <label for="ingredients">Ingredients:</label><br>
+    <div id="ingredients_list">
+        <div class="ingredient">
+            <input type="text" name="ingredient[]" placeholder="Ingredient" required>
+            <input type="text" name="quantity[]" placeholder="Quantity" required>
+            <input type="text" name="unit[]" placeholder="Unit" required>
+        </div>
+        // maybe concatenate the 3 as one string to make it easier to store and retrieve in the database
+    </div>
+    <button type="button" onclick="addIngredient()">Add Ingredient</button><br><br>
+
+    <label for="instructions">Instructions:</label><br>
+    <textarea id="instructions" name="instructions" rows="8" cols="50" required></textarea><br><br>
+
+    <button type="submit">Submit Recipe</button><br><br>
+
+</form>
+
+<script>
+    function addIngredient() {
+        var ingredientsList = document.getElementById('ingredients_list');
+        var newIngredient = document.createElement('div');
+        newIngredient.classList.add('ingredient');
+        newIngredient.innerHTML = `
+                <input type="text" name="ingredient[]" placeholder="Ingredient" required>
+                <input type="text" name="quantity[]" placeholder="Quantity" required>
+                <input type="text" name="unit[]" placeholder="Unit" required>
+            `;
+        ingredientsList.appendChild(newIngredient);
+    }
+
+</script>
+</body>
+</html>

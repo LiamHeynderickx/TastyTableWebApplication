@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Details</title>
+</head>
+<body>
+<h1>Recipe Details</h1>
+<div>
+
+    <h2>Recipe Name</h2>
+
+    <img src="path/to/recipe/image.jpg" alt="Recipe Image">
+
+    <p>Number of Servings: 3</p>
+
+    <p>Cooking Time (minutes): 45</p>
+
+    <p>Calories: 12</p>
+
+    <div>
+        <h3>Ingredients</h3>
+        <ul>
+            <li>Ingredient 1: Quantity 1 Unit 1</li>
+            <li>Ingredient 2: Quantity 2 Unit 2</li>
+            // add more ingredients dynamically
+        </ul>
+    </div>
+
+    <div>
+        <h3>Instructions</h3>
+        <p>I ama doinga da cook, i like ehhh the spaghet?!</p>
+    </div>
+
+    // Buttons to like recipe and mark as done
+    <button onclick="likeRecipe()">Like</button>
+    <button onclick="markAsDone()">Mark as Done</button>
+</div>
+
+<script>
+    function likeRecipe() {
+        // JavaScript function to handle like button action with database
+        alert('Recipe liked!');
+    }
+
+    function markAsDone() {
+        // JavaScript function to handle mark as done button action with database
+        alert('Recipe marked as done!');
+    }
+</script>
+</body>
+</html>
