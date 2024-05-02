@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="stylesheet" href="signUp.css">
+  <script src="https://kit.fontawesome.com/4c4c8749b1.js" crossorigin="anonymous"></script> <!--special icon library-->
+</head>
+<body>
+<div class = "container">
+  <div class = "form-box">
+    <h1>Sign Up</h1>
+    <form>
+      <div class="input-group" style>
+        <div class="input-field" id="username">
+          <i class="fa-solid fa-user"></i><!--declaring icon-->
+          <input type="username" placeholder="Username">
+        </div>
+        <div class="input-field" id="nameField">
+          <i class="fa-solid fa-envelope"></i> <!--declaring icon-->
+          <input type="email" placeholder="Email">
+        </div>
+        <div class="input-field" id="passwordField">
+          <i class="fa-solid fa-lock"></i>
+          <input type="password" placeholder="Password">
+        </div>
+      </div>
+      <div class="btn-field">
+        <button type="button" id="register">Register</button>
+      </div>
+      <a id = "accountExist" href="index.html">Already have an account? Login</a>
+    </form>
+
+  </div>
+</div>
+<script>
+  let loginBtn = document.getElementById("loginBtn");
+  let nameField = document.getElementById("nameField");
+  let passwordField = document.getElementById("passwordField");
+
+  loginBtn.onClick = function (){
+
+  }
+</script>
+</body>
+</html>
