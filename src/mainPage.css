@@ -5,37 +5,6 @@ padding: 0;
 background-color: white;
 }
 
-header {
-    background-color: #bc4d36;
-    color: white;
-    padding: 20px;
-    display: flex;
-    align-items: center;
-}
-
-header img {
-    width: 100px; /* Adjust the width as needed */
-    margin-right: 10px; /* Add some spacing between the image and the text */
-    border-radius: 10px;
-
-}
-
-header h1{
-    display: flex;
-    justify-content: space-evenly;
-
-}
-
-input[type="search"] {
-    padding: 10px;
-    width: 600px; /* Set a fixed width for the search bar */
-    margin-left: 20%;
-    text-align: center;
-    background-color: rgba(255, 255, 255, 0.5); /* Set a slightly transparent white background */
-    border: none; /* Remove the border */
-    border-radius: 10px;
-    outline: none;
-}
 
 main {
     display: flex;
