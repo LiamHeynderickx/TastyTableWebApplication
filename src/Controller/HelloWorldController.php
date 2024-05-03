@@ -12,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class HelloWorldController
 {
 
-    #[Route('/welcome/{name}')]
+    #[Route('/welcome/vendor/autoload_runtime.php')]
     public function welcome(string $name): Response
     {
         $htmlContent = "<!DOCTYPE html>
