@@ -6,6 +6,12 @@
     <title>Recipe Submission Form</title>
 </head>
 <body>
+<header>
+    <img src="../assets/styles/WebTech%20Mascot.jpg">
+    <h1>Tasty Table</h1>
+    <input type="search" placeholder="Find a recipe or ingredient">
+    <i class="fa fa-search"></i>
+</header>
 <h1>Submit Your Recipe</h1>
 <form action="submit_recipe.php" method="POST" enctype="multipart/form-data">
 
@@ -31,7 +37,7 @@
             <input type="text" name="quantity[]" placeholder="Quantity" required>
             <input type="text" name="unit[]" placeholder="Unit" required>
         </div>
-        // maybe concatenate the 3 as one string to make it easier to store and retrieve in the database
+        <!-- maybe concatenate the 3 as one string to make it easier to store and retrieve in the database -->
     </div>
     <button type="button" onclick="addIngredient()">Add Ingredient</button><br><br>
 

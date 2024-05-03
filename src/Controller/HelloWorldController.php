@@ -9,25 +9,38 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class HelloWorldController
+class HelloWorldController extends AbstractController
 {
 
-    #[Route('/{name}')]
-    public function welcome(string $name =null): Response
+    #[Route('/',name:'logIn')]
+    public function homePage(): Response
     {
-        $htmlContent = "<!DOCTYPE html>
-<html lang=\"en\">
-<head>
-    <meta charset=\"UTF-8\">#
-    <div></div>
-    <title>Welcome big dawg</title>
-</head>
-<body>
-    <h1>Welcome, " . htmlspecialchars($name, ENT_QUOTES, 'UTF-8') . "!</h1>
-</body>
-</html>";
 
-        return new Response($htmlContent);
+        $tracks=[['name'=>'ramazan','surname'=>'yetismis'],
+            ['name'=>'ramo','surname'=>'yetismis'],
+            ['name'=>'ramazan','surname'=>'yetismis']
+
+           ];
+        return $this->render('Pages/index.html.twig',[
+           'title'=> 'Ramazan and Ramo',
+            'tracks'=>$tracks,
+        ]);
+    }
+
+
+    #[Route('/register',name:'SignIn')]
+    public function register(): Response
+    {
+
+        $tracks=[['name'=>'ramazan','surname'=>'yetismis'],
+            ['name'=>'ramo','surname'=>'yetismis'],
+            ['name'=>'ramazan','surname'=>'yetismis']
+
+        ];
+        return $this->render('Pages/register.html.twig',[
+            'title'=> 'Ramazan and Ramo',
+            'tracks'=>$tracks,
+        ]);
     }
 }
 

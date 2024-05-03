@@ -1,0 +1,21 @@
+.container {
+    display: flex;
+    align-items: flex-start;
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+.container .ingredients {
+    margin-bottom: 20px;
+}
+
+.container aside img {
+    width: 220px;
+    height: 220px;
+    border-radius: 10px;
+    margin-right: 20px;
+}
+
+ul li {
+    padding-bottom: 5px;
+}
