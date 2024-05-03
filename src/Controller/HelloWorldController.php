@@ -12,8 +12,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class HelloWorldController
 {
 
-    #[Route('/welcome/vendor/autoload_runtime.php')]
-    public function welcome(string $name): Response
+    #[Route('/{name}')]
+    public function welcome(string $name =null): Response
     {
         $htmlContent = "<!DOCTYPE html>
 <html lang=\"en\">
