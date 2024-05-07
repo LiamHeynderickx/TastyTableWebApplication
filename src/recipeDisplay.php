@@ -1,3 +1,32 @@
+<?php
+
+global $db;
+require_once 'DB.php'; // include the database connection
+
+// Fetch recipe data from the database
+$query = $db->prepare('SELECT * FROM recipes WHERE recipeId = 1');
+$query->execute();
+$recipeData = $query->fetch(PDO::FETCH_ASSOC);
+
+// Check if data is retrieved
+if ($recipeData) {
+    // Access individual fields
+    $recipeName = $recipeData['recipeName'];
+    $recipeDescription = $recipeData['recipeDescription'];
+    $servings = $recipeData['servings'];
+    $time = $recipeData['time'];
+    $calories = $recipeData['calories'];
+    $instructions = $recipeData['instructions'];
+    $ingredients = json_decode($recipeData['ingredients'], true);
+    $quantities = json_decode($recipeData['ingredientsQuantity'], true);
+    $units = json_decode($recipeData['amountUnits'], true);
+} else {
+    // Handle the case where no recipe data is found
+    echo "Recipe not found!";
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,9 +35,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tasty Table</title>
-    <link rel="stylesheet" href="Recipe_display.css">
+    <link rel="stylesheet" href="recipeDisplay.css">
     <script src="https://kit.fontawesome.com/4c4c8749b1.js" crossorigin="anonymous"></script>
-
 </head>
 <body>
 <div id="header"></div>
@@ -28,15 +56,15 @@
                 <button onclick="increaseServings()">+</button>
             </div>
             <ul>
-                <li><span class="ingredient-amount" data-original-amount="125">125g</span> Rice</li>
-                <li><span class="ingredient-amount" data-original-amount="350">350g</span> Minced meat </li>
-                <li><span class="ingredient-amount" data-original-amount="75">75g</span> Mushrooms</li>
+                <li><span class="ingredient-amount" data-original-amount="125g">125g</span> Rice</li>
+                <li><span class="ingredient-amount" data-original-amount="350g">350g</span> Minced meat </li>
+                <li><span class="ingredient-amount" data-original-amount="75g">75g</span> Mushrooms</li>
                 <li><span class="ingredient-amount" data-original-amount="2">2</span> Onions</li>
                 <li><span class="ingredient-amount" data-original-amount="2">2</span> Tomatoes</li>
                 <li><span class="ingredient-amount" data-original-amount="3">3</span> Lettuce leaves</li>
                 <li><span class="ingredient-amount" data-original-amount=""></span> Seasoning</li>
                 <li><span class="ingredient-amount" data-original-amount="3">3</span> Tortilla Wraps</li>
-                <li><span class="ingredient-amount" data-original-amount="50">50g</span> Mozarella</li>
+                <li><span class="ingredient-amount" data-original-amount="50kg">50kg</span> Mozarella</li>
                 <li><span class="ingredient-amount" data-original-amount=""></span> Mayonnaise</li>
                 <!-- add more ingredients dynamically -->
             </ul>
@@ -56,13 +84,13 @@
 
         <!-- Recipe Info -->
         <div>
-            <h2>Ultimate Burritos</h2>
+            <h2>Ultimate Burritos <?php echo $calories; ?></h2>
 
             <p>Description: A burrito with a rice base filled with your own choice of meat, vegetables, cheese, sauce and seasoning but always made with love.</p>
 
             <p>Number of Servings: 3 | Cooking Time (minutes): 45 | Calories: idk bro</p>
 
-            <p>Price: € | Rating: 4.5 stars</p>
+            <p>Price range: € | Rating: ★★★★★</p>
 
             <!-- Instructions -->
             <div>
@@ -112,7 +140,7 @@
     }
 
     function decreaseServings() {
-        if (servings > 1) {
+        if (newServings > 1) {
             newServings--;
             document.getElementById('servings').textContent = newServings;
             adjustIngredientAmounts(newServings);
@@ -124,9 +152,10 @@
         ingredientElements.forEach(function(ingredient) {
             var originalAmount = ingredient.dataset.originalAmount;
             if (originalAmount !== "") {
+                var includesG = originalAmount.includes('g');
                 originalAmount = parseInt(originalAmount);
                 var newAmount = originalAmount * newServings / servings;
-                ingredient.textContent = parseFloat(newAmount.toFixed(2)) + 'g';
+                ingredient.textContent = includesG ? parseFloat(newAmount.toFixed(2)) + 'g' : parseFloat(newAmount.toFixed(2));
             }
         });
     }
