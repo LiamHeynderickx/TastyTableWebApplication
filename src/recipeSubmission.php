@@ -18,8 +18,8 @@
     <label for="recipe_name">Recipe Name:</label><br>
     <input type="text" id="recipe_name" name="recipe_name" required><br><br>
 
-    <label for="type">Meal Type:</label><br>
-    <select id="type" name="type">
+    <label for="recipe_type">Meal Type:</label><br>
+    <select id="recipe_type" name="recipe_type">
         <option value="breakfast">Breakfast</option>
         <option value="lunch">Lunch</option>
         <option value="dinner">Dinner</option>
@@ -43,6 +43,15 @@
     <label for="calories">Calories:</label><br>
     <input type="number" id="calories" name="calories" pattern="\d+(\.\d+)?"><br><br>
 
+    <label for="fats">Fats:</label><br>
+    <input type="number" id="fats" name="fats" pattern="\d+(\.\d+)?"><br><br>
+
+    <label for="carbs">Carbs:</label><br>
+    <input type="number" id="carbs" name="carbs" pattern="\d+(\.\d+)?"><br><br>
+
+    <label for="proteins">Proteins:</label><br>
+    <input type="number" id="proteins" name="proteins" pattern="\d+(\.\d+)?"><br><br>
+
     <label>Price Range:</label><br>
     <input type="radio" id="price_1" name="price_range" value="€" checked>
     <label for="price_1">€</label>
@@ -57,16 +66,22 @@
     <label for="ingredients">Ingredients:</label><br>
     <div id="ingredients_list">
         <div class="ingredient">
-            <input type="text" name="ingredient[]" placeholder="Ingredient">
+            <input type="text" name="ingredient[]" placeholder="Ingredient" required>
             <input type="text" name="quantity[]" placeholder="Quantity" pattern="\d+(\.\d+)?">
             <input type="text" name="unit[]" placeholder="Unit">
         </div>
-        <!-- maybe concatenate the 3 as one string to make it easier to store and retrieve in the database -->
     </div>
     <button type="button" onclick="addIngredient()">Add Ingredient</button><br><br>
 
     <label for="instructions">Instructions:</label><br>
-    <textarea id="instructions" name="instructions" rows="8" cols="50" required></textarea><br><br>
+    <div id="instructions_list">
+        <div class="instruction">
+            <span>Step 1:</span><br>
+            <textarea name="instruction[]" rows="2" cols="50" required></textarea>
+        </div>
+    </div>
+    <button type="button" onclick="addInstruction()">Add Step</button><br><br>
+
 
     <button type="submit">Submit Recipe</button><br><br>
 
@@ -88,11 +103,28 @@
         newIngredient.classList.add('ingredient');
         newIngredient.innerHTML = `
                 <input type="text" name="ingredient[]" placeholder="Ingredient" required>
-                <input type="text" name="quantity[]" placeholder="Quantity" pattern="\d+(\.\d+)?">
+                <input type="text" name="quantity[]" placeholder="Quantity" >
                 <input type="text" name="unit[]" placeholder="Unit" >
             `;
         ingredientsList.appendChild(newIngredient);
     }
+
+    var step = 2;
+    function addInstruction() {
+        var instructionsList = document.getElementById('instructions_list');
+        var lastInstruction = instructionsList.lastElementChild;
+        var newStep = step++;
+
+        var newInstruction = document.createElement('div');
+        newInstruction.classList.add('instruction');
+        newInstruction.innerHTML = `
+        <span>Step ${newStep}:</span><br>
+        <textarea name="instruction[]" rows="2" cols="50" ></textarea>
+    `;
+        instructionsList.appendChild(newInstruction);
+    }
+
+
 
 </script>
 </body>

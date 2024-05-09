@@ -4,7 +4,7 @@ global $db;
 require_once 'DB.php'; // include the database connection
 
 // Fetch recipe data from the database
-$query = $db->prepare('SELECT * FROM recipes WHERE recipeId = 1');
+$query = $db->prepare('SELECT * FROM recipes WHERE recipeId = 6');
 $query->execute();
 $recipeData = $query->fetch(PDO::FETCH_ASSOC);
 
@@ -13,10 +13,15 @@ if ($recipeData) {
     // Access individual fields
     $recipeName = $recipeData['recipeName'];
     $recipeDescription = $recipeData['recipeDescription'];
+    $recipeImage = $recipeData['recipeImage'];
+    $recipeType = $recipeData['type'];
     $servings = $recipeData['servings'];
     $time = $recipeData['time'];
     $calories = $recipeData['calories'];
-    $instructions = $recipeData['instructions'];
+    $fats = $recipeData['fats'];
+    $carbs = $recipeData['carbs'];
+    $proteins = $recipeData['proteins'];
+    $instructions = json_decode($recipeData['instructions'], true);
     $ingredients = json_decode($recipeData['ingredients'], true);
     $quantities = json_decode($recipeData['ingredientsQuantity'], true);
     $units = json_decode($recipeData['amountUnits'], true);
@@ -45,29 +50,49 @@ if ($recipeData) {
     <div class="container">
         <!-- Recipe Image -->
         <aside>
-            <img src="../public/burrito.jpg" alt="Recipe Image" style="width: 220px; height: 220px;">
+            <?php
+            // Check if recipe image data is available
+            if ($recipeImage !== null) {
+                // Convert binary image data to base64 format
+                $base64Image = base64_encode($recipeImage);
+                // Create an image tag with base64-encoded image data
+                echo "<img src='data:image/jpeg;base64,$base64Image' alt='Recipe Image' style='width: 220px; height: 220px;'>";
+            } else {
+                // If no image data is available, display a placeholder image
+                echo "<img src='../public/placeholder.jpg' alt='Recipe Image' style='width: 220px; height: 220px;'>";
+            }
+            ?>
 
-        <!-- Ingredients -->
+            <!-- Ingredients -->
         <div class="ingredients">
-            <h3>Ingredients</h3>
+            <h3>Servings</h3>
+            <!-- Servings calculator -->
             <div>
                 <button onclick="decreaseServings()">-</button>
-                Servings: <span id="servings">3</span>
+                <span id="servings"><?php echo $servings ?></span>
                 <button onclick="increaseServings()">+</button>
             </div>
-            <ul>
-                <li><span class="ingredient-amount" data-original-amount="125g">125g</span> Rice</li>
-                <li><span class="ingredient-amount" data-original-amount="350g">350g</span> Minced meat </li>
-                <li><span class="ingredient-amount" data-original-amount="75g">75g</span> Mushrooms</li>
-                <li><span class="ingredient-amount" data-original-amount="2">2</span> Onions</li>
-                <li><span class="ingredient-amount" data-original-amount="2">2</span> Tomatoes</li>
-                <li><span class="ingredient-amount" data-original-amount="3">3</span> Lettuce leaves</li>
-                <li><span class="ingredient-amount" data-original-amount=""></span> Seasoning</li>
-                <li><span class="ingredient-amount" data-original-amount="3">3</span> Tortilla Wraps</li>
-                <li><span class="ingredient-amount" data-original-amount="50kg">50kg</span> Mozarella</li>
-                <li><span class="ingredient-amount" data-original-amount=""></span> Mayonnaise</li>
-                <!-- add more ingredients dynamically -->
-            </ul>
+            <!-- List ingredient info from database -->
+            <?php
+            // Check if $ingredients is not empty
+            if(!empty($ingredients)) {
+                echo "<h2>Ingredients:</h2>";
+                echo "<ul>";
+
+                // Loop through each index
+                for($i = 0; $i < count($ingredients); $i++) {
+                    $ingredient = $ingredients[$i];
+                    $quantity = $quantities[$i];
+                    $unit = $units[$i];
+
+                    echo "<li><span class='ingredient-amount' data-original-amount='$quantity'>$quantity</span>$unit $ingredient</li>";
+                }
+
+                echo "</ul>";
+            } else {
+            echo "No ingredients found.";
+            }
+            ?>
         </div>
         <!-- Comments Section -->
         <div>
@@ -84,34 +109,41 @@ if ($recipeData) {
 
         <!-- Recipe Info -->
         <div>
-            <h2>Ultimate Burritos <?php echo $calories; ?></h2>
+            <h2><?php echo $recipeName ?></h2>
 
-            <p>Description: A burrito with a rice base filled with your own choice of meat, vegetables, cheese, sauce and seasoning but always made with love.</p>
+            <p><?php echo $recipeDescription ?></p>
 
-            <p>Number of Servings: 3 | Cooking Time (minutes): 45 | Calories: idk bro</p>
+            <p>Cooking Time: <?php echo $time ?> minutes | Calories: <?php echo $calories ?> kcal</p>
+
+            <p>Fats: <?php echo $fats ?>g | Carbs: <?php echo $carbs ?>g | Proteins: <?php echo $proteins ?></p>
 
             <p>Price range: € | Rating: ★★★★★</p>
 
             <!-- Instructions -->
             <div>
                 <h3>Instructions</h3>
-                <p>
-                    <b>Step 1</b><br>
-                    Start cooking the meat in a pan with your favourite seasoning.<br><br>
-                    <b>Step 2</b><br>
-                    Start cooking rice in a pot next to the pan.<br><br>
-                    <b>Step 3</b><br>
-                    Add your diced onions, garlic and mushrooms inside the pan and remember to mix every so often.<br><br>
-                    <b>Step 4</b><br>
-                    When finished with both strain the rice and mix both into the pot.<br><br>
-                    <b>Step 5</b><br>
-                    Cut up some tomatoes and lettuce and add them to the mix.<br><br>
-                    <b>Step 6</b><br>
-                    Toast the tortilla to make it warm and crunchy.<br><br>
-                    <b>Step 7</b><br>
-                    Spread mozzarella on the hot tortilla and then add the mix into it and some sauces, ready to devour.
-                </p>
+                <?php
+                // Check if $instructions is not empty
+                if (!empty($instructions)) {
+                    // Initialize an empty string to store the instructions
+                    $instructionList = '';
+
+                    // Loop through each instruction
+                    for ($i = 0; $i < count($instructions); $i++) {
+                        $stepNumber = $i + 1;
+                        // Concatenate the step number, line break, and instruction to the instruction list
+                        $instructionList .= "<strong>Step $stepNumber:</strong><br>" . $instructions[$i] . "<br><br>";
+                    }
+
+                    // Output the instruction list without bullet points
+                    echo "<div>$instructionList</div>";
+                } else {
+                    echo "No instructions found.";
+                }
+                ?>
+
             </div>
+
 
             <!-- Buttons to like recipe and mark as done -->
             <div>
@@ -131,8 +163,10 @@ if ($recipeData) {
         $("#footer").load("Footer.html");
     });
 
+
     let servings = parseInt(document.getElementById('servings').textContent);
     let newServings = servings;
+
     function increaseServings() {
         newServings++;
         document.getElementById('servings').textContent = newServings;
@@ -155,7 +189,7 @@ if ($recipeData) {
                 var includesG = originalAmount.includes('g');
                 originalAmount = parseInt(originalAmount);
                 var newAmount = originalAmount * newServings / servings;
-                ingredient.textContent = includesG ? parseFloat(newAmount.toFixed(2)) + 'g' : parseFloat(newAmount.toFixed(2));
+                ingredient.textContent = includesG ? parseFloat(newAmount.toFixed(0)) + 'g' : parseFloat(newAmount.toFixed(0));
             }
         });
     }
