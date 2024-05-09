@@ -1,7 +1,7 @@
 footer {
     background-color: rgba(220, 126, 77, 0.82);
     color: white;
-    padding: 20px;
+    padding: 15px;
     display: flex;
     align-items: center;
     position: fixed;
@@ -11,10 +11,19 @@ footer {
 }
 
 p1{
-
-
+    margin-left: 10px;
 }
 
 p2{
+    margin-left: auto;
+}
 
+p3{
+    margin-left: 5px;
+    margin_right: 5px;
+}
+
+p4{
+    margin-left: 5px;
+    margin-right: 4%;
 }
