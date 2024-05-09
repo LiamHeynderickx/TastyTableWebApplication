@@ -4,7 +4,7 @@ global $db;
 require_once 'DB.php'; // include the database connection
 
 // Fetch recipe data from the database
-$query = $db->prepare('SELECT * FROM recipes WHERE recipeId = 6');
+$query = $db->prepare('SELECT * FROM recipes WHERE recipeId = 1');
 $query->execute();
 $recipeData = $query->fetch(PDO::FETCH_ASSOC);
 
@@ -50,74 +50,79 @@ if ($recipeData) {
     <div class="container">
         <!-- Recipe Image -->
         <aside>
-            <?php
-            // Check if recipe image data is available
-            if ($recipeImage !== null) {
-                // Convert binary image data to base64 format
-                $base64Image = base64_encode($recipeImage);
-                // Create an image tag with base64-encoded image data
-                echo "<img src='data:image/jpeg;base64,$base64Image' alt='Recipe Image' style='width: 220px; height: 220px;'>";
-            } else {
-                // If no image data is available, display a placeholder image
-                echo "<img src='../public/placeholder.jpg' alt='Recipe Image' style='width: 220px; height: 220px;'>";
-            }
-            ?>
-
-            <!-- Ingredients -->
-        <div class="ingredients">
-            <h3>Servings</h3>
-            <!-- Servings calculator -->
-            <div>
-                <button onclick="decreaseServings()">-</button>
-                <span id="servings"><?php echo $servings ?></span>
-                <button onclick="increaseServings()">+</button>
-            </div>
-            <!-- List ingredient info from database -->
-            <?php
-            // Check if $ingredients is not empty
-            if(!empty($ingredients)) {
-                echo "<h2>Ingredients:</h2>";
-                echo "<ul>";
-
-                // Loop through each index
-                for($i = 0; $i < count($ingredients); $i++) {
-                    $ingredient = $ingredients[$i];
-                    $quantity = $quantities[$i];
-                    $unit = $units[$i];
-
-                    echo "<li><span class='ingredient-amount' data-original-amount='$quantity'>$quantity</span>$unit $ingredient</li>";
+            <div class="image">
+                <?php
+                // Check if recipe image data is available
+                if ($recipeImage !== null) {
+                    // Convert binary image data to base64 format
+                    $base64Image = base64_encode($recipeImage);
+                    // Create an image tag with base64-encoded image data
+                    echo "<img src='data:image/jpeg;base64,$base64Image' alt='Recipe Image' style='width: 300px; height: 300px;'>";
+                } else {
+                    // If no image data is available, display a placeholder image
+                    echo "<img src='No image.jpeg' alt='Recipe Image' style='width: 300px; height: 300px;'>";
                 }
+                ?>
+            </div>
+            <!-- Servings calculator -->
+            <div class="below-image">
+                <div class ="servings">
+                    <h2>Servings</h2>
+                    <button onclick="decreaseServings()">-</button>
+                    <span id="servings"><?php echo $servings ?></span>
+                    <button onclick="increaseServings()">+</button>
+                </div>
+                <!-- Ingredients -->
+                <div class="ingredients">
+                    <!-- List ingredient info from database -->
+                    <?php
+                    // Check if $ingredients is not empty
+                    if(!empty($ingredients)) {
+                        echo "<h2>Ingredients:</h2>";
+                        echo "<ul>";
 
-                echo "</ul>";
-            } else {
-            echo "No ingredients found.";
-            }
-            ?>
-        </div>
-        <!-- Comments Section -->
-        <div>
-            <h3>Comments</h3>
-            <p>Okay that shit was bussin fr fr<br>
-                -Chewbacca's uncle<br>
-            </p>
-            <!-- Display comments dynamically here -->
-            <!-- Add your own comment -->
-            <textarea id="comment" placeholder="Add your comment"></textarea><br>
-            <button onclick="addComment()">Add Comment</button>
-        </div>
+                        // Loop through each index
+                        for($i = 0; $i < count($ingredients); $i++) {
+                            $ingredient = $ingredients[$i];
+                            $quantity = $quantities[$i];
+                            $unit = $units[$i];
+
+                            echo "<li><span class='ingredient-amount' data-original-amount='$quantity'>$quantity</span>$unit $ingredient</li>";
+                        }
+
+                        echo "</ul>";
+                    } else {
+                        echo "No ingredients found.";
+                    }
+                    ?>
+                </div>
+                <!-- Comments Section -->
+                <div>
+                    <h3>Comments</h3>
+                    <p>Okay that shit was bussin fr fr<br>
+                        -Chewbacca's uncle<br>
+                    </p>
+                    <!-- Display comments dynamically here -->
+                    <!-- Add your own comment -->
+                    <textarea id="comment" placeholder="Add your comment"></textarea><br>
+                    <button onclick="addComment()">Add Comment</button>
+                </div>
+            </div>
         </aside>
 
         <!-- Recipe Info -->
-        <div>
-            <h2><?php echo $recipeName ?></h2>
+        <div class="right-side">
+            <div class="recipeInfo">
+                <h2><?php echo $recipeName ?></h2>
 
-            <p><?php echo $recipeDescription ?></p>
+                <p><?php echo $recipeDescription ?></p>
 
-            <p>Cooking Time: <?php echo $time ?> minutes | Calories: <?php echo $calories ?> kcal</p>
+                <p>Cooking Time: <?php echo $time ?> minutes &nbsp; | &nbsp; Calories: <?php echo $calories ?> kcal</p>
 
-            <p>Fats: <?php echo $fats ?>g | Carbs: <?php echo $carbs ?>g | Proteins: <?php echo $proteins ?></p>
+                <p>Fats: <?php echo $fats ?>g &nbsp; | &nbsp; Carbs: <?php echo $carbs ?>g &nbsp; | &nbsp; Proteins: <?php echo $proteins ?></p>
 
-            <p>Price range: € | Rating: ★★★★★</p>
+                <p>Price range: € &nbsp; | &nbsp; Rating: ★★★★★</p>
+            </div>
 
             <!-- Instructions -->
             <div>
