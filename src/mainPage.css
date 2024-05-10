@@ -1,8 +1,8 @@
 body {
-font-family: Arial, sans-serif;
-margin: 0;
-padding: 0;
-background-color: white;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: white;
 }
 
 
@@ -112,4 +112,8 @@ main {
 .rate > input:checked ~ label:hover ~ label,
 .rate > label:hover ~ input:checked ~ label {
     color: #c59b08;
+}
+
+#footer {
+    margin-bottom: 0;
 }

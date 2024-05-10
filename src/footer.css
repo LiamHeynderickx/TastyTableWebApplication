@@ -1,10 +1,10 @@
 footer {
     background-color: rgba(220, 126, 77, 0.82);
     color: white;
-    padding: 15px;
+    padding-top: 15px;
+    padding-bottom: 15px;
     display: flex;
     align-items: center;
-    position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;
