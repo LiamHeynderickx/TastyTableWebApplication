@@ -1,13 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" href="{{ asset('style/index.css') }}">
-    <script src="https://kit.fontawesome.com/4c4c8749b1.js" crossorigin="anonymous"></script> <!--special icon library-->
-</head>
-<body>
-<div class = "container">
+
+{% extends 'base.html.twig' %}
+{% block title %}TastyTable{% endblock %}
+{% block body %}
+
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('style/index.css') }}">
+    {% endblock %}
+
+
+    <div class = "container">
     <div class = "form-box">
         <h1>Login</h1>
         <form>
@@ -39,5 +40,4 @@
 
     }
 </script>
-</body>
-</html>
+{% endblock %}
