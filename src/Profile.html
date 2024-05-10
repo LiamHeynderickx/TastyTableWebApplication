@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--  JqueryImport-->
+    <script
+            src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasty Table</title>
+    <link rel="stylesheet" href="Profile.css">
+    <script src="https://kit.fontawesome.com/4c4c8749b1.js" crossorigin="anonymous"></script>
+
+    <script>
+        $(function(){
+            $("#header").load("Header.html");
+            $("#footer").load("Footer.html");
+        });
+    </script>
+</head>
+<body>
+
+<div id="header"></div>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasty Table - Profile</title>
+    <link rel="stylesheet" href="Profile.css">
+    <script src="https://kit.fontawesome.com/4c4c8749b1.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class = "container">
+    <main>
+        <div class="profile-info">
+            <h2>Esadimo's Saved Recipes</h2>
+            <div class="dietary-preferences">
+                <p>Dietary Preferences: Vegetarian</p>
+            </div>
+        </div>
+
+        <div class="saved-recipes">
+            <div class="recipe-card">
+                <img src="../assets/styles/mascot%202.jpg" alt="Recipe 1">
+                <h3>Recipe 1</h3>
+                <p>A brief description of Recipe 1.</p>
+            </div>
+            <div class="recipe-card">
+                <img src="../assets/styles/mascot%201.jpg" alt="Recipe 2">
+                <h3>Recipe 2</h3>
+                <p>A brief description of Recipe 2.</p>
+            </div>
+            <!-- Add more recipe cards here -->
+        </div>
+    </main>
+    <aside>
+        <div class="profile-stats">
+            <div class="followers">
+                <h3>Followers</h3>
+                <ul>
+                    <li><a href="#">Romano</a></li>
+                    <li><a href="#">Liam</a></li>
+                    <!-- Add more follower usernames here -->
+                </ul>
+            </div>
+            <div class="following">
+                <h3>Following</h3>
+                <ul>
+                    <li><a href="#">Mithil</a></li>
+                    <li><a href="#">Ramce</a></li>
+                    <!-- Add more following usernames here -->
+                </ul>
+            </div>
+        </div>
+    </aside>
+
+</div>
+<div id="footer"></div>
+</body>
+</html>
