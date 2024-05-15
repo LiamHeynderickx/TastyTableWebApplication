@@ -1,0 +1,39 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+}
+
+.reels-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    overflow-y: auto;
+    height: 100vh;
+}
+
+.reel {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 400px;
+    overflow: hidden;
+    position: relative;
+}
+
+.reel iframe {
+    width: 100%;
+    height: 300px;
+    border: none;
+}
+
+.reel h3 {
+    padding: 10px;
+    margin: 0;
+    font-size: 1em;
+    background: #fff;
+    border-top: 1px solid #ddd;
+}

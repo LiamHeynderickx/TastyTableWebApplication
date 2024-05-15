@@ -1,0 +1,70 @@
+
+{% extends 'base.html.twig' %}
+{% block title %}TastyTable{% endblock %}
+{% block body %}
+
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('style/Profile.css') }}">
+    {% endblock %}
+
+<div class = "container">
+    <main>
+        <div class="profile-info">
+            <h2>Esat Caglayan</h2>
+            <ul>
+                <i class="fa-solid fa-users"></i>
+                <li><a href="#">Followers</a></li>
+                <span class="separator"> / </span>
+                <li><a href="#">Following</a></li>
+            </ul>
+            <hr class="rounded">
+            <div id="preferencesModal" class="modal">
+                <div class="modal-content">
+                    <h3>Dietary Preferences</h3>
+                    <div class="preferences-options">
+                        <label><input type="checkbox" name="preference" value="vegetarian"> Vegetarian</label>
+                        <label><input type="checkbox" name="preference" value="vegan"> Vegan</label>
+                        <label><input type="checkbox" name="preference" value="gluten-free"> Gluten-free</label>
+                        <label><input type="checkbox" name="preference" value="alcohol-free"> Alcohol-free</label>
+                        <!-- Add more dietary preferences checkboxes as needed -->
+                    </div>
+                    <button id="applyPreferencesBtn">Apply</button>
+                </div>
+            </div>
+        </div>
+        <hr class="rounded">
+        <div class="breadcrumb">
+            <a href="#">Saved Recipes</a>
+            <span class="separator"> / </span>
+            <a href="#">My Recipes</a>
+        </div>
+        <div class="saved-recipes">
+            <div class="recipe-card">
+                <img src="../assets/styles/mascot%202.jpg" alt="Recipe 1">
+                <h3>Recipe 1</h3>
+                <p>A brief description of Recipe 1.</p>
+            </div>
+            <div class="recipe-card">
+                <img src="../assets/styles/mascot%201.jpg" alt="Recipe 2">
+                <h3>Recipe 2</h3>
+                <p>A brief description of Recipe 2.</p>
+            </div>
+            <div class="recipe-card">
+                <img src="../assets/styles/mascot%202.jpg" alt="Recipe 1">
+                <h3>Recipe 1</h3>
+                <p>A brief description of Recipe 1.</p>
+            </div>
+            <div class="recipe-card">
+                <img src="../assets/styles/mascot%201.jpg" alt="Recipe 2">
+                <h3>Recipe 2</h3>
+                <p>A brief description of Recipe 2.</p>
+            </div>
+            <div class="recipe-card">
+                <img src="../assets/styles/mascot%202.jpg" alt="Recipe 1">
+                <h3>Recipe 1</h3>
+                <p>A brief description of Recipe 1.</p>
+            </div>
+            <!-- Add more recipe cards here -->
+        </div>
+    </main>
+</div>

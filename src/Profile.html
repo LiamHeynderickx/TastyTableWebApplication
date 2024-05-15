@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--  JqueryImport-->
+    <script
+            src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasty Table</title>
+    <link rel="stylesheet" href="../public/style/Profile.css">
+    <script src="https://kit.fontawesome.com/4c4c8749b1.js" crossorigin="anonymous"></script>
+
+    <script>
+        $(function(){
+            $("#header").load("Header.html");
+            $("#footer").load("Footer.html");
+        });
+    </script>
+</head>
+<body>
+
+<div id="header"></div>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasty Table - Profile</title>
+    <link rel="stylesheet" href="../public/style/Profile.css">
+    <script src="https://kit.fontawesome.com/4c4c8749b1.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="dropdown">
+    <button class="dropbtn"><i class="fa fa-bars"></i></button>
+    <div class="dropdown-content">
+        <a href="mainPage.html">Homepage</a>
+        <a href="#">Reels</a>
+        <a href="#">Recipes</a>
+        <a href="Profile.html">Profile</a>
+        <a href="AboutUs.html">About Us/Contact</a>
+    </div>
+</div>
+<div class = "container">
+    <main>
+        <div class="profile-info">
+            <h2>Esat Caglayan</h2>
+            <ul>
+                <i class="fa-solid fa-users"></i>
+                <li><a href="#">Followers</a></li>
+                <span class="separator"> / </span>
+                <li><a href="#">Following</a></li>
+            </ul>
+            <hr class="rounded">
+
+            <!--Dropdown-->
+            <nav>
+                <input id="toggle" type="checkbox" checked>
+                <h2>Dietary Preferences</h2>
+                <ul>
+                    <li><input type="checkbox" id="none" name="none"><label for="none">None</label></li>
+                    <li><input type="checkbox" id="lacto-vegetarian" name="diet"><label for="lacto-vegetarian">Lacto Vegetarian</label></li>
+                    <li><input type="checkbox" id="ovo-vegetarian" name="diet"><label for="ovo-vegetarian">Ovo Vegetarian</label></li>
+                    <li><input type="checkbox" id="ovolacto-vegetarian" name="diet"><label for="ovolacto-vegetarian">Ovo-Lacto Vegetarian</label></li>
+                    <li><input type="checkbox" id="pescatarian" name="diet"><label for="pescatarian">Pescatarian</label></li>
+                    <li><input type="checkbox" id="vegan" name="diet"><label for="vegan">Vegan</label></li>
+                    <li><input type="checkbox" id="vegetarian" name="diet"><label for="vegetarian">Vegetarian</label></li>
+                </ul>
+            </nav>
+        </div>
+        <hr class="rounded">
+        <div class="breadcrumb">
+            <a href="#">Saved Recipes</a>
+            <span class="separator"> / </span>
+            <a href="#">My Recipes</a>
+        </div>
+        <div class="saved-recipes">
+            <div class="recipe-card">
+                <img src="../assets/styles/mascot%202.jpg" alt="Recipe 1">
+                <h3>Recipe 1</h3>
+                <p>A brief description of Recipe 1.</p>
+            </div>
+            <div class="recipe-card">
+                <img src="../assets/styles/mascot%201.jpg" alt="Recipe 2">
+                <h3>Recipe 2</h3>
+                <p>A brief description of Recipe 2.</p>
+            </div>
+            <div class="recipe-card">
+                <img src="../assets/styles/mascot%202.jpg" alt="Recipe 1">
+                <h3>Recipe 1</h3>
+                <p>A brief description of Recipe 1.</p>
+            </div>
+            <div class="recipe-card">
+                <img src="../assets/styles/mascot%201.jpg" alt="Recipe 2">
+                <h3>Recipe 2</h3>
+                <p>A brief description of Recipe 2.</p>
+            </div>
+            <div class="recipe-card">
+                <img src="../assets/styles/mascot%202.jpg" alt="Recipe 1">
+                <h3>Recipe 1</h3>
+                <p>A brief description of Recipe 1.</p>
+            </div>
+            <!-- Add more recipe cards here -->
+        </div>
+    </main>
+</div>
+<div id="footer"></div>
+</body>
+</html>

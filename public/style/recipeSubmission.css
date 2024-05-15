@@ -1,0 +1,8 @@
+form {
+    font-family: 'Poppins', sans-serif;
+    width: 50%;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}

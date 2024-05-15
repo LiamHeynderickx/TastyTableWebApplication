@@ -1,0 +1,57 @@
+header {
+    background-color: rgba(225, 129, 58, 0.78);
+    color: white;
+    padding: 20px;
+    display: flex;
+    align-items: center; /* Center elements vertically */
+}
+
+.logo {
+    display: flex; /* Arrange logo and title horizontally */
+    justify-content: left;
+    align-items: center;
+}
+
+header img {
+    width: 75px; /* Adjust the width as needed */
+    border-radius: 10px;
+}
+
+h1 {
+    margin-left: 5px;
+}
+
+.search-bar {
+    position: absolute;
+    left: 35%;
+    display: flex;
+    align-items: center; /* Center items vertically */
+    justify-content: center;
+}
+
+input[type="search"] {
+    padding: 10px;
+    width: 500px;
+    horiz-align: center;
+    vertical-align: center;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.5); /* Set a slightly transparent white background */
+    border: none; /* Remove the border */
+    border-radius: 10px;
+    outline: none;
+    align-content: center;
+}
+
+.search-bar .fa-search {
+    margin-left: 5px;
+}
+
+.user {
+    margin-left: auto; /* Push the user icon to the right */
+    margin-right: 20px;
+}
+
+.fa-user {
+    color: white; /* Set the color of the user icon */
+    font-size: 35px; /* Adjust the size of the user icon */
+}

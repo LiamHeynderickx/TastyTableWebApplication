@@ -3,110 +3,108 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\UX\Turbo\Attribute\Broadcast;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[Broadcast]
+#[ORM\Table('user')]
 class User
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\Column, GeneratedValue]
+    private int $id;
+
     #[ORM\Column]
-    private ?int $id = null;
+    private string $email;
 
-    #[ORM\Column(length: 100)]
-    private ?string $username = null;
+    #[ORM\Column]
+    private string $password;
 
-    #[ORM\Column(length: 100)]
-    private ?string $email = null;
+    #[ORM\Column]
+    private string $username;
 
-    #[ORM\Column(length: 100)]
-    private ?string $password = null;
+    #[ORM\Column]
+    private string $name;
 
-    #[ORM\Column(length: 100, nullable: true)]
-    private ?string $name = null;
+    #[ORM\Column]
+    private string $surname;
 
-    #[ORM\Column(length: 100, nullable: true)]
-    private ?string $surname = null;
+    #[ORM\Column(name:"dietPreference")]
+    private string $dietPreference;
 
-    #[ORM\Column(type: "integer", nullable: true)]
-    private ?int $dietPreference = null;
-
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getUsername(): ?string
-    {
-        return $this->username;
-    }
-
-    public function setUsername(string $username): self
-    {
-        $this->username = $username;
-
-        return $this;
-    }
-
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
 
-    public function setEmail(string $email): self
+    public function setEmail(string $email): User
     {
         $this->email = $email;
-
         return $this;
     }
 
-    public function getPassword(): ?string
+    public function getPassword(): string
     {
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(string $password): User
     {
         $this->password = $password;
-
         return $this;
     }
 
-    public function getName(): ?string
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): User
+    {
+        $this->username = $username;
+        return $this;
+    }
+
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function setName(?string $name): self
+    public function setName(string $name): User
     {
         $this->name = $name;
-
         return $this;
     }
 
-    public function getSurname(): ?string
+    public function getSurname(): string
     {
         return $this->surname;
     }
 
-    public function setSurname(?string $surname): self
+    public function setSurname(string $surname): User
     {
         $this->surname = $surname;
-
         return $this;
     }
 
-    public function getDietPreference(): ?int
+    public function getDietPreference(): string
     {
         return $this->dietPreference;
     }
 
-    public function setDietPreference(?int $dietPreference): self
+    public function setDietPreference(string $dietPreference): User
     {
         $this->dietPreference = $dietPreference;
-
         return $this;
     }
+
+
+
 }
