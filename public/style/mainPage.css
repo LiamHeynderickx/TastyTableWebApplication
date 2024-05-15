@@ -10,7 +10,9 @@ main {
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
+    margin-inside: auto;
     margin-right: 250px;
+    margin-bottom: 87px;
     padding: 20px;
 }
 
