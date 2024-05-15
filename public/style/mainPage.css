@@ -8,13 +8,19 @@ body {
 
 main {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     margin-top: 20px;
-    margin-right: 250px;
     padding: 20px;
 }
 
 /* Dropdown Button */
+.dropdown {
+    width: fit-content;
+    height: fit-content;
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
 .dropbtn {
     background-color: #63b676;
     color: white;
@@ -51,26 +57,34 @@ main {
 /* Change the background color of the dropdown button when the dropdown content is shown */
 .dropdown:hover .dropbtn {background-color: #3e8e41;}
 
+.recipes {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    width: 90%;
+}
+
 .recipe-card {
-    background: white;
-    border: 1px solid #ddd;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    padding: 10px;
-    width: 300px;
-    text-align: center;
+    flex-basis: calc(30% - 40px); /* Set width for three cards per row */
+    margin: 10px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .recipe-card img {
     width: 100%;
-    height: auto;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 10px;
 }
 
-.recipe-card h2 {
-    color: #333;
-}
-
-.recipe-card p {
-    color: #666;
+.recipe-card h3 {
+    margin-bottom: 5px;
 }
 
 /* 5 Star Rating */
@@ -112,8 +126,4 @@ main {
 .rate > input:checked ~ label:hover ~ label,
 .rate > label:hover ~ input:checked ~ label {
     color: #c59b08;
-}
-
-#footer {
-    margin-bottom: 0;
 }
