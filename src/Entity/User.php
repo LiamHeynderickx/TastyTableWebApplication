@@ -5,33 +5,32 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\Table;
+use Doctrine\ORM\Mapping as ORM;
 
-#[Entity]
-#[Table('user')]
+#[ORM\Entity]
+#[ORM\Table('user')]
 class User
 {
-    #[Id]
-    #[Column, GeneratedValue]
+    #[ORM\Id]
+    #[ORM\Column, GeneratedValue]
     private int $id;
 
-    #[Column]
+    #[ORM\Column]
     private string $email;
 
-    #[Column]
+    #[ORM\Column]
     private string $password;
 
-    #[Column]
+    #[ORM\Column]
     private string $username;
 
-    #[Column]
+    #[ORM\Column]
     private string $name;
 
-    #[Column]
+    #[ORM\Column]
     private string $surname;
 
-    #[Column]
+    #[ORM\Column]
     private string $dietPreference;
 
     public function getId(): int
