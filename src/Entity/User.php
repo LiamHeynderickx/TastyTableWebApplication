@@ -31,7 +31,7 @@ class User
     #[ORM\Column]
     private string $surname;
 
-    #[ORM\Column]
+    #[ORM\Column(name:"dietPreference")]
     private string $dietPreference;
 
     public function getId(): int

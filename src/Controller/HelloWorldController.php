@@ -1,6 +1,6 @@
 <?php
-// src/Controller/TastyTableController.php
-// src/Controller/TastyTableController.php
+// src/Controller/HelloWorldController.php
+// src/Controller/HelloWorldController.php
 
 namespace App\Controller;
 
@@ -12,13 +12,11 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class TastyTableController extends AbstractController
+class HelloWorldController extends AbstractController
 {
 
 
-    /**
-     * @Route("/User", name="user")
-     */
+
 
     public function show(UserRepository $userRepository, $id)
     {
@@ -28,16 +26,21 @@ class TastyTableController extends AbstractController
             throw $this->createNotFoundException('No user found for id '.$id);
         }
 
-        return $this->render('Pages/index.html.twig', [
-            'user' => $user,
-        ]);
+        return $this->render('Pages/index.html.twig', array(
+            "user" => $user,
+        ));
     }
 
 
 
-    #[Route('/',name:'logIn')]
-    public function homePage(): Response
+    #[Route('/{id}',name:'logIn')]
+    public function homePage(UserRepository $userRepository, $id): Response
     {
+        $user = $userRepository->find($id);
+
+        if (!$user) {
+            throw $this->createNotFoundException('No user found for id '.$id);
+        }
 
         $tracks=[['name'=>'ramazan','surname'=>'yetismis'],
             ['name'=>'ramo','surname'=>'yetismis'],
@@ -45,6 +48,7 @@ class TastyTableController extends AbstractController
 
            ];
         return $this->render('Pages/index.html.twig',[
+            "user" => $user,
            'title'=> 'Ramazan and Ramo',
             'tracks'=>$tracks,
         ]);
