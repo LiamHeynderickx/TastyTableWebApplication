@@ -7,10 +7,12 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table('user')]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\Column, GeneratedValue]
@@ -104,7 +106,25 @@ class User
         $this->dietPreference = $dietPreference;
         return $this;
     }
+    // Implement UserInterface methods
+    public function getRoles(): array
+    {
+        // For simplicity, returning a static role
+        return ['ROLE_USER'];
+    }
 
+    public function getSalt(): ?string
+    {
+        // Not needed when using bcrypt or sodium
+        return null;
+    }
 
-
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+    }
+    public function getUserIdentifier(): string
+    {
+        return $this->username;
+    }
 }

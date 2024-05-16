@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class MithilTestController extends AbstractController
 {
     // Route for displaying the form
@@ -39,24 +40,38 @@ class MithilTestController extends AbstractController
     }
 
 
-    #[Route('/rr',name:'SignIn')]
-    public function register(Request $request, EntityManagerInterface $em): Response
+    #[Route('/register',name:'SignIn')]
+    public function register(Request $request, EntityManagerInterface $em,UserPasswordHasherInterface $passwordHasher): Response
     {
         $person=new User();
 
 
         $form = $this->createFormBuilder($person)
-            ->add('email', EmailType::class)
-            ->add('password', PasswordType::class)
-            ->add('username', TextType::class)
-            ->add('name', TextType::class)
-            ->add('surname', TextType::class)
-            ->add('save', SubmitType::class, ['label' => 'Register'])
+            ->add('username', TextType::class, [
+                'attr' => ['id' => 'username', 'placeholder' => 'Username']
+            ])
+            ->add('name', TextType::class, [
+                'attr' => ['id' => 'name', 'placeholder' => 'Name']
+            ])
+            ->add('surname', TextType::class, [
+                'attr' => ['id' => 'surname', 'placeholder' => 'Surname']
+            ])
+            ->add('email', EmailType::class, [
+                'attr' => ['id' => 'nameField', 'placeholder' => 'Email']
+            ])
+            ->add('password', PasswordType::class, [
+                'attr' => ['id' => 'passwordField', 'placeholder' => 'Password']
+            ])
+            ->add('save', SubmitType::class, [
+                'label' => 'Register',
+                'attr' => ['id' => 'register', 'class' => 'btn-field']
+            ])
             ->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             // Encode the password (you need to inject the password encoder)
-            $encodedPassword =  $person->getPassword();
+            $encodedPassword = $passwordHasher->hashPassword($person, $person->getPassword());
+
             $person->setPassword($encodedPassword);
 
             // Persist the user to the database
@@ -68,18 +83,59 @@ class MithilTestController extends AbstractController
             return $this->redirectToRoute('logIn', ['id' => $userId]);
         }
 
-
-
-
-
-
-
-        return $this->render('mithil_test/index.html.twig',[
+        return $this->render('Pages/register.html.twig',[
             'form' => $form->createView()
         ]);
     }
 
+/*
+    #[Route('/login',name:'logIn')]
+    public function login(Request $request, EntityManagerInterface $em,UserPasswordHasherInterface $passwordHasher): Response
+    {
+        $person=new User();
 
+
+        $form = $this->createFormBuilder($person)
+            ->add('username', TextType::class, [
+                'attr' => ['id' => 'username', 'placeholder' => 'Username']
+            ])
+            ->add('name', TextType::class, [
+                'attr' => ['id' => 'name', 'placeholder' => 'Name']
+            ])
+            ->add('surname', TextType::class, [
+                'attr' => ['id' => 'surname', 'placeholder' => 'Surname']
+            ])
+            ->add('email', EmailType::class, [
+                'attr' => ['id' => 'nameField', 'placeholder' => 'Email']
+            ])
+            ->add('password', PasswordType::class, [
+                'attr' => ['id' => 'passwordField', 'placeholder' => 'Password']
+            ])
+            ->add('save', SubmitType::class, [
+                'label' => 'Register',
+                'attr' => ['id' => 'register', 'class' => 'btn-field']
+            ])
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Encode the password (you need to inject the password encoder)
+            $encodedPassword = $passwordHasher->hashPassword($person, $person->getPassword());
+            $person->setPassword($encodedPassword);
+
+            // Persist the user to the database
+            $em->persist($person);
+            $em->flush();
+
+            $userId = $person->getId();
+            // Redirect to a thank you page or login page
+            return $this->redirectToRoute('logIn', ['id' => $userId]);
+        }
+
+        return $this->render('Pages/lo.html.twig',[
+            'form' => $form->createView()
+        ]);
+    }
+*/
 }
 
 
