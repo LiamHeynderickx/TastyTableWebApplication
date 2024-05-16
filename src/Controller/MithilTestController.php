@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use App\Service\SpoonacularApiService;
 class MithilTestController extends AbstractController
 {
     // Route for displaying the form
@@ -127,6 +128,30 @@ class MithilTestController extends AbstractController
 
         return $this->render('pages/index.html.twig', [
             'form' => $form->createView()
+        ]);
+    }
+
+
+    #[Route('/search-recipes', name: 'search_recipes')]
+    public function searchRecipes(Request $request, SpoonacularApiService $apiService): Response
+    {
+        $params = [
+            'minCarbs' => $request->query->get('minCarbs', 10),
+            'maxCarbs' => $request->query->get('maxCarbs', 50),
+            'minProtein' => $request->query->get('minProtein', 10),
+            'maxProtein' => $request->query->get('maxProtein', 50),
+            'minFat' => $request->query->get('minFat', 10),
+            'maxFat' => $request->query->get('maxFat', 50)
+        ];
+
+        try {
+            $recipes = $apiService->searchRecipesByNutrients($params);
+        } catch (\Exception $e) {
+            return new Response('Error: ' . $e->getMessage());
+        }
+
+        return $this->render('Pages/search.html.twig', [
+            'recipes' => $recipes
         ]);
     }
 
