@@ -33,6 +33,7 @@ class HelloWorldController extends AbstractController
 
 */
 
+    /*
     #[Route('/user/{id}',name:'logIn')]
     public function homePage(UserRepository $userRepository, $id): Response
     {
@@ -61,6 +62,8 @@ class HelloWorldController extends AbstractController
     }
 */
 
+    /*
+
     #[Route('/register',name:'SignIn')]
     public function register(): Response
     {
@@ -75,6 +78,7 @@ class HelloWorldController extends AbstractController
             'tracks'=>$tracks,
         ]);
     }
+    */
 
 }
 

@@ -80,62 +80,59 @@ class MithilTestController extends AbstractController
 
             $userId = $person->getId();
             // Redirect to a thank you page or login page
-            return $this->redirectToRoute('logIn', ['id' => $userId]);
+            return $this->redirectToRoute('logIn');
         }
 
         return $this->render('Pages/register.html.twig',[
             'form' => $form->createView()
         ]);
     }
-
-/*
-    #[Route('/login',name:'logIn')]
-    public function login(Request $request, EntityManagerInterface $em,UserPasswordHasherInterface $passwordHasher): Response
+    #[Route('/login', name: 'LogIn')]
+    public function login(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
     {
-        $person=new User();
-
+        $person = new User();
 
         $form = $this->createFormBuilder($person)
-            ->add('username', TextType::class, [
-                'attr' => ['id' => 'username', 'placeholder' => 'Username']
-            ])
-            ->add('name', TextType::class, [
-                'attr' => ['id' => 'name', 'placeholder' => 'Name']
-            ])
-            ->add('surname', TextType::class, [
-                'attr' => ['id' => 'surname', 'placeholder' => 'Surname']
-            ])
             ->add('email', EmailType::class, [
-                'attr' => ['id' => 'nameField', 'placeholder' => 'Email']
+                'attr' => ['id' => 'email', 'placeholder' => 'Email']
             ])
             ->add('password', PasswordType::class, [
                 'attr' => ['id' => 'passwordField', 'placeholder' => 'Password']
             ])
-            ->add('save', SubmitType::class, [
-                'label' => 'Register',
-                'attr' => ['id' => 'register', 'class' => 'btn-field']
+            ->add('login', SubmitType::class, [
+                'label' => 'Login',
+                'attr' => ['id' => 'loginBtn', 'class' => 'btn-field']
             ])
             ->getForm();
+
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            // Encode the password (you need to inject the password encoder)
-            $encodedPassword = $passwordHasher->hashPassword($person, $person->getPassword());
-            $person->setPassword($encodedPassword);
+            $email = $person->getEmail();
+            $password = $person->getPassword();
 
-            // Persist the user to the database
-            $em->persist($person);
-            $em->flush();
+            // Retrieve user by email
+            $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
 
-            $userId = $person->getId();
-            // Redirect to a thank you page or login page
-            return $this->redirectToRoute('logIn', ['id' => $userId]);
+            if (!$user || !$passwordHasher->isPasswordValid($user, $password)) {
+                // Add an error message or handle invalid login
+                $this->addFlash('error', 'Invalid credentials.');
+                return $this->redirectToRoute('SignIn');
+            }
+
+            // Log the user in (you may want to handle sessions or use Symfony Security component for real authentication)
+            // For demonstration, we'll just redirect to the profile page
+            return $this->redirectToRoute('SignIn');
         }
 
-        return $this->render('Pages/lo.html.twig',[
+        return $this->render('pages/index.html.twig', [
             'form' => $form->createView()
         ]);
     }
-*/
+
+
+
+
 }
 
 
