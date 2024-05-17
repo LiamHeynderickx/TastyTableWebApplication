@@ -37,22 +37,27 @@ class TastyTableController extends AbstractController
             ])
             ->getForm();
 
+        $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $email = $person->getEmail();
             $password = $person->getPassword();
 
+            $hashedPw = $passwordHasher->hashPassword($person, $person->getPassword());
+
             // Retrieve user by email
             $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
 
-            if (!$user || !$passwordHasher->isPasswordValid($user, $password)) {
+            if ($passwordHasher->isPasswordValid($user, $password)) {
                 // Add an error message or handle invalid login
                 $this->addFlash('error', 'Invalid credentials.');
-                return $this->redirectToRoute('register');
+                return $this->redirectToRoute('homePage');
             }
-
-            // Log the user in (you may want to handle sessions or use Symfony Security component for real authentication)
-            // For demonstration, we'll just redirect to the profile page
-            return $this->redirectToRoute('register');
+            else{
+                // Log the user in (you may want to handle sessions or use Symfony Security component for real authentication)
+                // For demonstration, we'll just redirect to the profile page
+                return $this->redirectToRoute('index');
+            }
         }
 
         return $this->render('Pages/index.html.twig', [
