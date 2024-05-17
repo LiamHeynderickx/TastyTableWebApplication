@@ -20,10 +20,10 @@ class TastyTableController extends AbstractController
     // Route for displaying the form
 
     // Route for handling form submission
-    #[Route('/',name:'index')]
-    public function index(Request $request, EntityManagerInterface $em,UserPasswordHasherInterface $passwordHasher): Response
+    #[Route('/', name: 'index')]
+    public function index(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
     {
-        $person=new User();
+        $person = new User();
         $form = $this->createFormBuilder($person)
             ->add('email', EmailType::class, [
                 'attr' => ['id' => 'nameField', 'placeholder' => 'Email']
@@ -37,14 +37,15 @@ class TastyTableController extends AbstractController
             ])
             ->getForm();
 
-        return $this->render('Pages/index.html.twig',[
+        return $this->render('Pages/index.html.twig', [
             'form' => $form->createView()
         ]);
     }
-    #[Route('/register',name:'SignIn')]
-    public function register(Request $request, EntityManagerInterface $em,UserPasswordHasherInterface $passwordHasher): Response
+
+    #[Route('/register', name: 'SignIn')]
+    public function register(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
     {
-        $person=new User();
+        $person = new User();
 
 
         $form = $this->createFormBuilder($person)
@@ -86,10 +87,11 @@ class TastyTableController extends AbstractController
             return $this->redirectToRoute('LogIn');
         }
 
-        return $this->render('Pages/register.html.twig',[
+        return $this->render('Pages/register.html.twig', [
             'form' => $form->createView()
         ]);
     }
+
     #[Route('/login', name: 'LogIn')]
     public function login(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
     {
@@ -168,9 +170,14 @@ class TastyTableController extends AbstractController
         ]);
     }
 
+    #[Route('/profile', name: 'profile')]
+    public function profile(Request $request, SpoonacularApiService $apiService): Response
+    {
 
-}
 
+        return $this->render('Pages/Profile.html.twig', [
 
-
+        ]);
+    }
+    }
 
