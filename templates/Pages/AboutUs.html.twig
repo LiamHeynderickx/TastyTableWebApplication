@@ -1,0 +1,159 @@
+{% extends 'base.html.twig' %}
+{% block title %}TastyTable{% endblock %}
+{% block body %}
+
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('style/AboutUs.css') }}">
+    {% endblock %}
+
+    <div class="dropdown">
+        <button class="dropbtn"><i class="fa fa-bars"></i></button>
+        <div class="dropdown-content">
+            <a href="../templates/Pages/homePage.html.twig">Homepage</a>
+            <a href="#">Reels</a>
+            <a href="#">Recipes</a>
+            <a href="Profile.html">Profile</a>
+            <a href="AboutUs.html">About Us/Contact</a>
+        </div>
+    </div>
+
+    <div class="about-section">
+        <h1>About Us</h1>
+        <p>Some text about who we are and what we do.</p>
+        <p>Resize the browser window to see that this page is responsive by the way.</p>
+    </div>
+
+    <!-- Slideshow container -->
+    <div class="slideshow-container">
+        <!-- Full-width images with number and caption text -->
+        <div class="mySlides fade">
+            <div class="numbertext">1 / 4</div>
+            <img src="{{ asset('style/images/tastyTableTeam_1.jpg') }}" style="width:100%">
+        </div>
+
+        <div class="mySlides fade">
+            <div class="numbertext">2 / 4</div>
+            <img src="{{ asset('style/images/tastyTableTeam_2.jpg') }}" style="width:100%">
+        </div>
+
+        <div class="mySlides fade">
+            <div class="numbertext">3 / 4</div>
+            <img src="{{ asset('style/images/tastyTableTeam_3.jpg') }}" style="width:100%">
+        </div>
+
+        <div class="mySlides fade">
+            <div class="numbertext">4 / 4</div>
+            <img src="{{ asset('style/images/tastyTableTeam_4.jpg') }}" style="width:100%">
+        </div>
+
+        <!-- Next and previous buttons -->
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+    </div>
+    <br>
+    <!-- The dots/circles -->
+    <div style="text-align:center">
+        <span class="dot" onclick="currentSlide(1)"></span>
+        <span class="dot" onclick="currentSlide(2)"></span>
+        <span class="dot" onclick="currentSlide(3)"></span>
+        <span class="dot" onclick="currentSlide(4)"></span>
+    </div>
+
+    <script>
+        let slideIndex = 1;
+        showSlides(slideIndex);
+
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
+
+        function showSlides(n) {
+            let i;
+            let slides = document.getElementsByClassName("mySlides");
+            let dots = document.getElementsByClassName("dot");
+            if (n > slides.length) {slideIndex = 1}
+            if (n < 1) {slideIndex = slides.length}
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            slides[slideIndex-1].style.display = "block";
+            dots[slideIndex-1].className += " active";
+        }
+    </script>
+
+    <h2 style="text-align: center">Meet Our Team</h2>
+    <div class="row">
+        <!-- Roman -->
+        <div class="column">
+            <div class="card">
+                <img src="{{ asset('style/images/roman_webtech.jpg') }}" alt="Roman" style="width:100%">
+                <div class="container">
+                    <h2>Roman Laurent Benfeghoul</h2>
+                    <p class="title">Mascot & Clown</p>
+                    <p>Best cook in his studio.</p>
+                    <p>romanbenfeghoul@gmail.com</p>
+                    <p><a href="mailto:romanbenfeghoul@gmail.com"><button class="button">Contact</button></a></p>
+                </div>
+            </div>
+        </div>
+        <!-- Esat -->
+        <div class="column">
+            <div class="card">
+                <img src="{{ asset('style/images/esat_webtech.jpg') }}" alt="Esat" style="width:100%">
+                <div class="container">
+                    <h2>Esat Caglayan</h2>
+                    <p class="title">Janitor</p>
+                    <p>Doesn't know how to cook.</p>
+                    <p>esatt.caglayan@gmail.com</p>
+                    <p><a href="mailto:esatt.caglayan@gmail.com"><button class="button">Contact</button></a></p>
+                </div>
+            </div>
+        </div>
+        <!-- Mithil -->
+        <div class="column">
+            <div class="card">
+                <img src="{{ asset('style/images/mithil_webtech.jpg') }}" alt="Mithil" style="width:100%">
+                <div class="container">
+                    <h2>Mithil Pidigacandy</h2>
+                    <p class="title">Designer</p>
+                    <p>He doesn't need to cook</p>
+                    <p>mithill2002@gmail.com</p>
+                    <p><a href="mailto:mithill2002@gmail.com"><button class="button">Contact</button></a></p>
+                </div>
+            </div>
+        </div>
+        <!-- Ramazan -->
+        <div class="column">
+            <div class="card">
+                <img src="{{ asset('style/images/ramazan_webtech.jpg') }}" alt="Ramazan" style="width:100%">
+                <div class="container">
+                    <h2>Ramazan Yetismis</h2>
+                    <p class="title">Megamind</p>
+                    <p>Let him cook.</p>
+                    <p>Yetismisramazan34@gmail.com</p>
+                    <p><a href="mailto:Yetismisramazan34@gmail.com"><button class="button">Contact</button></a></p>
+                </div>
+            </div>
+        </div>
+        <!-- Liam -->
+        <div class="column">
+            <div class="card">
+                <img src="{{ asset('style/images/mascot 2.jpg') }}" alt="Liam" style="width:100%">
+                <div class="container">
+                    <h2>Liam Heynderickx</h2>
+                    <p class="title">Designer</p>
+                    <p>Some text that describes me lorem ipsum ipsum lorem.</p>
+                    <p>john@example.com</p>
+                    <p><a href="mailto:john@example.com"><button class="button">Contact</button></a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

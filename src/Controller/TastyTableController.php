@@ -179,5 +179,16 @@ class TastyTableController extends AbstractController
 
         ]);
     }
+
+    #[Route('/aboutUs', name: 'aboutUs')]
+    public function aboutUs(Request $request, EntityManagerInterface $em): Response
+    {
+
+        $form = $this->createFormBuilder()->getForm();
+
+        return $this->render('Pages/AboutUs.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
+}
 
