@@ -11,7 +11,7 @@ class SpoonacularApiService
 
     public function __construct(HttpClientInterface $client)
     {
-        $this->client = $client;
+        $this->clint = $client;
         $this->apiKey = '19d88678c40e403bae96298037a292bc';
     }
 
