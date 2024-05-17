@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\MithilTest;
+
+use App\Entity\SavedRecipes;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -211,6 +213,29 @@ class TastyTableController extends AbstractController
 
         return $this->render('Pages/AboutUs.html.twig', [
             'form' => $form->createView()
+        ]);
+    }
+
+    #[Route('/saved-recipes', name: 'saved_recipes')]
+    public function getSavedRecipes(Request $request, EntityManagerInterface $em,SpoonacularApiService $apiService): Response
+    {
+        // Fetch saved recipes from the database
+        $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi(9, 1);
+
+        if (!empty($recipeIds)) {
+            // return new Response('No saved recipes found.');
+
+            try {
+                $recipes = $apiService->getRecipesInformationBulk($recipeIds);
+            } catch (\Exception $e) {
+                return new Response('Error: ' . $e->getMessage());
+            }
+            return $this->render('Pages/saved.html.twig', [
+                'recipes' => $recipes
+            ]);
+        }
+        return $this->render('Pages/saved.html.twig', [
+            'recipes' => []
         ]);
     }
 }
