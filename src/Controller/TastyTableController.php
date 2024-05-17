@@ -177,8 +177,8 @@ class TastyTableController extends AbstractController
         ]);
     }
 
-    #[Route('/mainpage', name: 'mainPage')]
-    public function mainPage(Request $request, EntityManagerInterface $em): Response
+    #[Route('/homePage', name: 'homePage')]
+    public function homePage(Request $request, EntityManagerInterface $em): Response
     {
 
         $form = $this->createFormBuilder()->getForm();
