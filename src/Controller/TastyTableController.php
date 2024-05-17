@@ -20,10 +20,10 @@ class TastyTableController extends AbstractController
     // Route for displaying the form
 
     // Route for handling form submission
-    #[Route('/',name:'index')]
-    public function index(Request $request, EntityManagerInterface $em,UserPasswordHasherInterface $passwordHasher): Response
+    #[Route('/', name: 'index')]
+    public function index(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
     {
-        $person=new User();
+        $person = new User();
         $form = $this->createFormBuilder($person)
             ->add('email', EmailType::class, [
                 'attr' => ['id' => 'nameField', 'placeholder' => 'Email']
@@ -37,14 +37,33 @@ class TastyTableController extends AbstractController
             ])
             ->getForm();
 
-        return $this->render('Pages/index.html.twig',[
+        if ($form->isSubmitted() && $form->isValid()) {
+            $email = $person->getEmail();
+            $password = $person->getPassword();
+
+            // Retrieve user by email
+            $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
+
+            if (!$user || !$passwordHasher->isPasswordValid($user, $password)) {
+                // Add an error message or handle invalid login
+                $this->addFlash('error', 'Invalid credentials.');
+                return $this->redirectToRoute('register');
+            }
+
+            // Log the user in (you may want to handle sessions or use Symfony Security component for real authentication)
+            // For demonstration, we'll just redirect to the profile page
+            return $this->redirectToRoute('register');
+        }
+
+        return $this->render('Pages/index.html.twig', [
             'form' => $form->createView()
         ]);
     }
-    #[Route('/register',name:'SignIn')]
-    public function register(Request $request, EntityManagerInterface $em,UserPasswordHasherInterface $passwordHasher): Response
+
+    #[Route('/register', name: 'register')]
+    public function register(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
     {
-        $person=new User();
+        $person = new User();
 
 
         $form = $this->createFormBuilder($person)
@@ -83,55 +102,56 @@ class TastyTableController extends AbstractController
 
             $userId = $person->getId();
             // Redirect to a thank you page or login page
-            return $this->redirectToRoute('LogIn');
+            return $this->redirectToRoute('index');
         }
 
-        return $this->render('Pages/register.html.twig',[
+        return $this->render('Pages/register.html.twig', [
             'form' => $form->createView()
         ]);
     }
-    #[Route('/login', name: 'LogIn')]
-    public function login(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
-    {
-        $person = new User();
 
-        $form = $this->createFormBuilder($person)
-            ->add('email', EmailType::class, [
-                'attr' => ['id' => 'email', 'placeholder' => 'Email']
-            ])
-            ->add('password', PasswordType::class, [
-                'attr' => ['id' => 'passwordField', 'placeholder' => 'Password']
-            ])
-            ->add('login', SubmitType::class, [
-                'label' => 'Login',
-                'attr' => ['id' => 'loginBtn', 'class' => 'btn-field']
-            ])
-            ->getForm();
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $email = $person->getEmail();
-            $password = $person->getPassword();
-
-            // Retrieve user by email
-            $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
-
-            if (!$user || !$passwordHasher->isPasswordValid($user, $password)) {
-                // Add an error message or handle invalid login
-                $this->addFlash('error', 'Invalid credentials.');
-                return $this->redirectToRoute('SignIn');
-            }
-
-            // Log the user in (you may want to handle sessions or use Symfony Security component for real authentication)
-            // For demonstration, we'll just redirect to the profile page
-            return $this->redirectToRoute('SignIn');
-        }
-
-        return $this->render('pages/index.html.twig', [
-            'form' => $form->createView()
-        ]);
-    }
+//    #[Route('/login', name: 'LogIn')]
+//    public function login(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
+//    {
+//        $person = new User();
+//
+//        $form = $this->createFormBuilder($person)
+//            ->add('email', EmailType::class, [
+//                'attr' => ['id' => 'email', 'placeholder' => 'Email']
+//            ])
+//            ->add('password', PasswordType::class, [
+//                'attr' => ['id' => 'passwordField', 'placeholder' => 'Password']
+//            ])
+//            ->add('login', SubmitType::class, [
+//                'label' => 'Login',
+//                'attr' => ['id' => 'loginBtn', 'class' => 'btn-field']
+//            ])
+//            ->getForm();
+//
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            $email = $person->getEmail();
+//            $password = $person->getPassword();
+//
+//            // Retrieve user by email
+//            $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
+//
+//            if (!$user || !$passwordHasher->isPasswordValid($user, $password)) {
+//                // Add an error message or handle invalid login
+//                $this->addFlash('error', 'Invalid credentials.');
+//                return $this->redirectToRoute('register');
+//            }
+//
+//            // Log the user in (you may want to handle sessions or use Symfony Security component for real authentication)
+//            // For demonstration, we'll just redirect to the profile page
+//            return $this->redirectToRoute('register');
+//        }
+//
+//        return $this->render('pages/index.html.twig', [
+//            'form' => $form->createView()
+//        ]);
+//    }
 
 
     #[Route('/search-recipes', name: 'search_recipes')]
@@ -157,11 +177,25 @@ class TastyTableController extends AbstractController
         ]);
     }
 
+    #[Route('/homePage', name: 'homePage')]
+    public function homePage(Request $request, EntityManagerInterface $em): Response
+    {
+
+        $form = $this->createFormBuilder()->getForm();
+
+        return $this->render('Pages/homePage.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    #[Route('/profile', name: 'profile')]
+    public function profile(Request $request, SpoonacularApiService $apiService): Response
+    {
 
 
+        return $this->render('Pages/Profile.html.twig', [
 
-}
-
-
-
+        ]);
+    }
+    }
 
