@@ -15,11 +15,11 @@ class Comments
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $userId = null;
+    #[ORM\Column]
+    private ?int $userId = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $postId = null;
+    #[ORM\Column]
+    private ?int $postId = null;
 
     #[ORM\Column(length: 255)]
     private ?string $comment = null;
@@ -29,24 +29,24 @@ class Comments
         return $this->id;
     }
 
-    public function getUserId(): ?string
+    public function getUserId(): ?int
     {
         return $this->userId;
     }
 
-    public function setUserId(string $userId): static
+    public function setUserId(int $userId): static
     {
         $this->userId = $userId;
 
         return $this;
     }
 
-    public function getPostId(): ?string
+    public function getPostId(): ?int
     {
         return $this->postId;
     }
 
-    public function setPostId(string $postId): static
+    public function setPostId(int $postId): static
     {
         $this->postId = $postId;
 

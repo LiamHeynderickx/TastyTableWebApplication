@@ -15,35 +15,35 @@ class Following
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 100)]
-    private ?string $userId = null;
+    #[ORM\Column]
+    private ?int $userId = null;
 
-    #[ORM\Column(length: 100)]
-    private ?string $followingId = null;
+    #[ORM\Column]
+    private ?int $followingId = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUserId(): ?string
+    public function getUserId(): ?int
     {
         return $this->userId;
     }
 
-    public function setUserId(string $userId): static
+    public function setUserId(int $userId): static
     {
         $this->userId = $userId;
 
         return $this;
     }
 
-    public function getFollowingId(): ?string
+    public function getFollowingId(): ?int
     {
         return $this->followingId;
     }
 
-    public function setFollowingId(string $followingId): static
+    public function setFollowingId(int $followingId): static
     {
         $this->followingId = $followingId;
 

@@ -15,35 +15,35 @@ class Followers
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 100)]
-    private ?string $userId = null;
+    #[ORM\Column]
+    private ?int $userId = null;
 
-    #[ORM\Column(length: 100)]
-    private ?string $followerId = null;
+    #[ORM\Column]
+    private ?int $followerId = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUserId(): ?string
+    public function getUserId(): ?int
     {
         return $this->userId;
     }
 
-    public function setUserId(string $userId): static
+    public function setUserId(int $userId): static
     {
         $this->userId = $userId;
 
         return $this;
     }
 
-    public function getFollowerId(): ?string
+    public function getFollowerId(): ?int
     {
         return $this->followerId;
     }
 
-    public function setFollowerId(string $followerId): static
+    public function setFollowerId(int $followerId): static
     {
         $this->followerId = $followerId;
 
