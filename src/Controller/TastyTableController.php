@@ -203,6 +203,7 @@ class TastyTableController extends AbstractController
         ]);
     }
 
+    // about us page
     #[Route('/aboutUs', name: 'aboutUs')]
     public function aboutUs(Request $request, EntityManagerInterface $em): Response
     {
