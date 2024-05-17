@@ -64,13 +64,15 @@ input{
     width: 100%;
     display: flex;
     justify-content: center;
+    flex-direction: column; /* Change to column layout */
+    align-items: center;
 }
 
 .btn-field button{
     flex-basis: 48%;
     background: #F5863ECC;
     color: #fff;
-    height: 40px;
+    height: 400px;
     border-radius: 20px;
     border: 0;
     outline: 0;
@@ -78,6 +80,14 @@ input{
     transition: background 1s;
     margin-bottom: 10px;
 }
+
+.button-label {
+    display: inline-block; /* Ensure label behaves like a block element */
+    text-align: center; /* Center text horizontally */
+    line-height: 100px; /* Match button height for vertical centering */
+    width: 200px; /* Adjust width as needed */
+}
+
 
 #accountExist {
     font-size: small;

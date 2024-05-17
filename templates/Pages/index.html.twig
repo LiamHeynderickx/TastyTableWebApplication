@@ -23,7 +23,7 @@
                 <p>Forgot Password?</p>
             </div>
             <div class="btn-field">
-                {{ form_widget(form.login) }}
+                {{ form_widget(form.login, {'attr': {'class': 'button-label'}}) }}
             </div>
             <a id="accountExist" href="{{ path('register') }}">No account? Register</a>
             {{ form_end(form) }}
