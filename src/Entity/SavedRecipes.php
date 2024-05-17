@@ -24,6 +24,19 @@ class SavedRecipes
     #[ORM\Column]
     private ?bool $isApi = null;
 
+    #[ORM\Column]
+    private ?bool $isMyRecipe = null;
+
+    public function getIsMyRecipe(): ?bool
+    {
+        return $this->isMyRecipe;
+    }
+
+    public function setIsMyRecipe(?bool $isMyRecipe): void
+    {
+        $this->isMyRecipe = $isMyRecipe;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

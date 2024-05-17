@@ -13,11 +13,13 @@
         {% block stylesheetsFooter %}
             <link rel="stylesheet" href="{{ asset('style/footer.css') }}">
         {% endblock %}
+        <script>
 
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
 
+        {% endblock %}
+        </script>
         <script src="https://kit.fontawesome.com/4c4c8749b1.js" crossorigin="anonymous"></script>
     </head>
 

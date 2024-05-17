@@ -44,14 +44,16 @@ class SavedRecipesRepository extends ServiceEntityRepository
     //    }
 
 
-    public function findRecipeIdsByUserAndIsApi(int $userId, int $isApi): array
+    public function findRecipeIdsByUserAndIsApi(int $userId, int $isApi,int $isMyRecipe): array
     {
         $qb = $this->createQueryBuilder('sr')
             ->select('sr.recipeId')
             ->where('sr.userId = :userId')
             ->andWhere('sr.isApi = :isApi')
+            ->andWhere('sr.isMyRecipe = :isMyRecipe')
             ->setParameter('userId', $userId)
-            ->setParameter('isApi', $isApi);
+            ->setParameter('isApi', $isApi)
+            ->setParameter('isMyRecipe', $isMyRecipe);
 
         return array_column($qb->getQuery()->getArrayResult(), 'recipeId');
     }

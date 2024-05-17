@@ -6,6 +6,9 @@
         <link rel="stylesheet" href="{{ asset('style/Profile.css') }}">
     {% endblock %}
 
+
+
+
 {% block body %}
     <div class="dropdown">
         <button class="dropbtn"><i class="fa fa-bars"></i></button>
@@ -44,36 +47,21 @@
             </div>
             <hr class="rounded">
             <div class="breadcrumb">
-                <a href="#">Saved Recipes</a>
+                <a href="{{ path('profile', { type: 'saved' }) }}">Saved Recipes</a>
                 <span class="separator"> / </span>
-                <a href="#">My Recipes</a>
+                <a href="{{ path('profile', { type: 'my' }) }}">My Recipes</a>
             </div>
+
             <div class="saved-recipes">
+                {% for recipe in recipes %}
                 <div class="recipe-card">
-                    <img src="../assets/styles/mascot%202.jpg" alt="Recipe 1">
-                    <h3>Recipe 1</h3>
-                    <p>A brief description of Recipe 1.</p>
+                    <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
+                    <h3>{{ recipe.title }}</h3>
+                    <p>{{ recipe.readyInMinutes }} minutes </p>
+                    <p >Servings: {{ recipe.servings }}</p>
                 </div>
-                <div class="recipe-card">
-                    <img src="../assets/styles/mascot%201.jpg" alt="Recipe 2">
-                    <h3>Recipe 2</h3>
-                    <p>A brief description of Recipe 2.</p>
-                </div>
-                <div class="recipe-card">
-                    <img src="../assets/styles/mascot%202.jpg" alt="Recipe 1">
-                    <h3>Recipe 1</h3>
-                    <p>A brief description of Recipe 1.</p>
-                </div>
-                <div class="recipe-card">
-                    <img src="../assets/styles/mascot%201.jpg" alt="Recipe 2">
-                    <h3>Recipe 2</h3>
-                    <p>A brief description of Recipe 2.</p>
-                </div>
-                <div class="recipe-card">
-                    <img src="../assets/styles/mascot%202.jpg" alt="Recipe 1">
-                    <h3>Recipe 1</h3>
-                    <p>A brief description of Recipe 1.</p>
-                </div>
+                {% endfor %}
+
                 <!-- Add more recipe cards here -->
             </div>
         </main>

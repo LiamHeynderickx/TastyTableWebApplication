@@ -195,17 +195,7 @@ class TastyTableController extends AbstractController
         ]);
     }
 
-    #[Route('/profile', name: 'profile')]
-    public function profile(Request $request, SpoonacularApiService $apiService): Response
-    {
 
-
-        return $this->render('Pages/Profile.html.twig', [
-
-        ]);
-    }
-
-    // about us page
     #[Route('/aboutUs', name: 'aboutUs')]
     public function aboutUs(Request $request, EntityManagerInterface $em): Response
     {
@@ -217,25 +207,63 @@ class TastyTableController extends AbstractController
         ]);
     }
 
-    #[Route('/saved-recipes', name: 'saved_recipes')]
+    #[Route('/profile', name: 'profile')]
     public function getSavedRecipes(Request $request, EntityManagerInterface $em,SpoonacularApiService $apiService): Response
     {
-        // Fetch saved recipes from the database
-        $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi(9, 1);
 
-        if (!empty($recipeIds)) {
-            // return new Response('No saved recipes found.');
+        $type = $request->query->get('type');
 
-            try {
-                $recipes = $apiService->getRecipesInformationBulk($recipeIds);
-            } catch (\Exception $e) {
-                return new Response('Error: ' . $e->getMessage());
+        //if it is saved recipies
+        if ($type === 'saved') {
+            // Fetch saved recipes from the database
+            $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi(9, 1,0);
+            if (!empty($recipeIds)) {
+                // return new Response('No saved recipes found.');
+
+                try {
+                    $recipes = $apiService->getRecipesInformationBulk($recipeIds);
+                } catch (\Exception $e) {
+                    return new Response('Error: ' . $e->getMessage());
+                }
+                return $this->render('Pages/Profile.html.twig', [
+                    'recipes' => $recipes
+                ]);
             }
-            return $this->render('Pages/saved.html.twig', [
-                'recipes' => $recipes
-            ]);
+
+        }elseif ($type === 'my'){
+            // Fetch my recipes from the database
+            $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi(9, 1,1);
+            if (!empty($recipeIds)) {
+                // return new Response('No saved recipes found.');
+
+                try {
+                    $recipes = $apiService->getRecipesInformationBulk($recipeIds);
+                } catch (\Exception $e) {
+                    return new Response('Error: ' . $e->getMessage());
+                }
+                return $this->render('Pages/Profile.html.twig', [
+                    'recipes' => $recipes
+
+                ]);
+            }
         }
-        return $this->render('Pages/saved.html.twig', [
+        else{
+            $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi(9, 1,0);
+            if (!empty($recipeIds)) {
+                // return new Response('No saved recipes found.');
+
+                try {
+                    $recipes = $apiService->getRecipesInformationBulk($recipeIds);
+                } catch (\Exception $e) {
+                    return new Response('Error: ' . $e->getMessage());
+                }
+                return $this->render('Pages/Profile.html.twig', [
+                    'recipes' => $recipes
+                ]);
+            }
+
+        }
+        return $this->render('Pages/Profile.html.twig', [
             'recipes' => []
         ]);
     }
