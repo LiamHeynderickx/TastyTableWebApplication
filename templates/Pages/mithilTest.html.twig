@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MithilTest</title>
+</head>
+<body>
+<!-- This form will now POST to the same route but triggers the POST method handler in the controller -->
+<form action="{{ path('app_create') }}" method="post">
+    <label for="col1">Enter value for col1:</label>
+    <input type="text" id="col1" name="col1" required>
+    <button type="submit">Submit</button>
+</form>
+</body>
+</html>
+

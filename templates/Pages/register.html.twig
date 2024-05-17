@@ -6,32 +6,39 @@
         <link rel="stylesheet" href="{{ asset('style/signUp.css') }}">
     {% endblock %}
 
-<div class = "container">
-    <div class = "form-box">
-        <h1>Sign Up</h1>
-        <form>
-            <div class="input-group" style>
+    <div class="container">
+        <div class="form-box">
+            <h1>Sign Up</h1>
+            {{ form_start(form) }}
+            <div class="input-group">
                 <div class="input-field" id="username">
-                    <i class="fa-solid fa-user"></i><!--declaring icon-->
-                    <input type="username" placeholder="Username">
+                    <i class="fa-solid fa-user"></i>
+                    {{ form_widget(form.username, {'attr': {'placeholder': 'Username'}}) }}
+                </div>
+                <div class="input-field" id="name">
+                    <i class="fa-solid fa-user"></i>
+                    {{ form_widget(form.name, {'attr': {'placeholder': 'Name'}}) }}
+                </div>
+                <div class="input-field" id="surname">
+                    <i class="fa-solid fa-user"></i>
+                    {{ form_widget(form.surname, {'attr': {'placeholder': 'Surname'}}) }}
                 </div>
                 <div class="input-field" id="nameField">
-                    <i class="fa-solid fa-envelope"></i> <!--declaring icon-->
-                    <input type="email" placeholder="Email">
+                    <i class="fa-solid fa-envelope"></i>
+                    {{ form_widget(form.email, {'attr': {'placeholder': 'Email'}}) }}
                 </div>
                 <div class="input-field" id="passwordField">
                     <i class="fa-solid fa-lock"></i>
-                    <input type="password" placeholder="Password">
+                    {{ form_widget(form.password, {'attr': {'placeholder': 'Password'}}) }}
                 </div>
             </div>
             <div class="btn-field">
-                <button type="button" id="register">Register</button>
+                {{ form_widget(form.save) }}
             </div>
-            <a id = "accountExist" href="{{ path('logIn') }}">Already have an account? Login</a>
-        </form>
-
+            <a id="accountExist" href="{{ path('LogIn') }}">Already have an account? Login</a>
+            {{ form_end(form) }}
+        </div>
     </div>
-</div>
 <script>
     let loginBtn = document.getElementById("loginBtn");
     let nameField = document.getElementById("nameField");

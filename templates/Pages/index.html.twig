@@ -1,4 +1,3 @@
-
 {% extends 'base.html.twig' %}
 {% block title %}TastyTable{% endblock %}
 {% block body %}
@@ -8,36 +7,36 @@
     {% endblock %}
 
 
-    <div class = "container">
-    <div class = "form-box">
-        <h1>Login</h1>
-        <form>
-            <div class="input-group" style>
-                <div class="input-field" id="nameField">
-                    <i class="fa-solid fa-envelope"></i> <!--declaring icon-->
-                    <input type="email" placeholder="Email">
+    <div class="container">
+        <div class="form-box">
+            <h1>Login</h1>
+            {{ form_start(form) }}
+            <div class="input-group">
+                <div class="input-field" id="emailField">
+                    <i class="fa-solid fa-envelope"></i>
+                    {{ form_widget(form.email, {'attr': {'placeholder': 'Email'}}) }}
                 </div>
                 <div class="input-field" id="passwordField">
                     <i class="fa-solid fa-lock"></i>
-                    <input type="password" placeholder="Password">
+                    {{ form_widget(form.password, {'attr': {'placeholder': 'Password'}}) }}
                 </div>
                 <p>Forgot Password?</p>
             </div>
             <div class="btn-field">
-                <button type="button" id="loginBtn">Login</button>
+                {{ form_widget(form.login) }}
             </div>
-            <a id = "accountExist" href="{{ path('SignIn') }}">No account Register</a>
-        </form>
-
+            <a id="accountExist" href="{{ path('SignIn') }}">No account? Register</a>
+            {{ form_end(form) }}
+        </div>
     </div>
-</div>
-<script>
-    let loginBtn = document.getElementById("loginBtn");
-    let nameField = document.getElementById("nameField");
-    let passwordField = document.getElementById("passwordField");
 
-    loginBtn.onClick = function (){
+    <script>
+        let loginBtn = document.getElementById("loginBtn");
+        let emailField = document.getElementById("emailField");
+        let passwordField = document.getElementById("passwordField");
 
-    }
-</script>
+        loginBtn.onclick = function () {
+            // Custom JavaScript logic can be added here
+        }
+    </script>
 {% endblock %}

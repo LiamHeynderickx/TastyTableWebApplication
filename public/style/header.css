@@ -31,7 +31,7 @@ h1 {
 
 input[type="search"] {
     padding: 10px;
-    width: 500px; /* Set a fixed width for the search bar */
+    width: 500px;
     horiz-align: center;
     vertical-align: center;
     text-align: center;

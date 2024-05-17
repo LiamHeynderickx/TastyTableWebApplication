@@ -135,6 +135,14 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/twig/extra-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/twig/twig" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/webmozart/assert" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/jms/metadata" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/jms/serializer" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/jms/serializer-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/lcobucci/clock" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/lcobucci/jwt" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/stella-maris/clock" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/mercure" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/mercure-bundle" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

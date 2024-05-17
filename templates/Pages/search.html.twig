@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recipe Search{% endblock %}
+
+{% block body %}
+    <h1>Recipe Search Results</h1>
+
+    {% if recipes is empty %}
+        <p>No recipes found.</p>
+    {% else %}
+        <ul>
+            {% for recipe in recipes %}
+                <li>
+                    <h2>{{ recipe.title }}</h2>
+                    <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
+                    <p>Calories: {{ recipe.calories }}</p>
+                    <p>Carbs: {{ recipe.carbs }}</p>
+                    <p>Protein: {{ recipe.protein }}</p>
+                    <p>Fat: {{ recipe.fat }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
