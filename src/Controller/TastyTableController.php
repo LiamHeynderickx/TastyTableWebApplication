@@ -15,32 +15,32 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Service\SpoonacularApiService;
-class MithilTestController extends AbstractController
+class TastyTableController extends AbstractController
 {
     // Route for displaying the form
-    #[Route('/', name: 'app_', methods: ['GET'])]
-    public function index(): Response
-    {
-        return $this->render('mithil_test/index.html.twig');
-    }
 
     // Route for handling form submission
-    #[Route('/', name: 'app_create', methods: ['POST'])]
-    public function createEntry(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/',name:'index')]
+    public function index(Request $request, EntityManagerInterface $em,UserPasswordHasherInterface $passwordHasher): Response
     {
-        $col1 = $request->request->get('col1'); // Get the col1 value from the form
+        $person=new User();
+        $form = $this->createFormBuilder($person)
+            ->add('email', EmailType::class, [
+                'attr' => ['id' => 'nameField', 'placeholder' => 'Email']
+            ])
+            ->add('password', PasswordType::class, [
+                'attr' => ['id' => 'passwordField', 'placeholder' => 'Password']
+            ])
+            ->add('login', SubmitType::class, [
+                'label' => 'Login',
+                'attr' => ['id' => 'loginBtn', 'class' => 'btn-field']
+            ])
+            ->getForm();
 
-        $entry = new MithilTest();
-        $entry->setCol1($col1);
-
-        // Persist the new entry
-        $entityManager->persist($entry);
-        $entityManager->flush();
-
-        return new Response('Saved new entry with col1: '.$entry->getCol1());
+        return $this->render('Pages/index.html.twig',[
+            'form' => $form->createView()
+        ]);
     }
-
-
     #[Route('/register',name:'SignIn')]
     public function register(Request $request, EntityManagerInterface $em,UserPasswordHasherInterface $passwordHasher): Response
     {
@@ -157,7 +157,16 @@ class MithilTestController extends AbstractController
         ]);
     }
 
+    #[Route('/mainpage', name: 'mainPage')]
+    public function mainPage(Request $request, EntityManagerInterface $em): Response
+    {
 
+        $form = $this->createFormBuilder()->getForm();
+
+        return $this->render('Pages/homePage.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
 
 
 }
