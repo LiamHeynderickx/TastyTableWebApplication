@@ -21,7 +21,7 @@ class MithilTestController extends AbstractController
     #[Route('/', name: 'app_', methods: ['GET'])]
     public function index(): Response
     {
-        return $this->render('mithil_test/index.html.twig');
+        return $this->render('Pages/Profile.html.twig');
     }
 
     // Route for handling form submission
@@ -81,7 +81,7 @@ class MithilTestController extends AbstractController
 
             $userId = $person->getId();
             // Redirect to a thank you page or login page
-            return $this->redirectToRoute('logIn');
+            return $this->redirectToRoute('LogIn');
         }
 
         return $this->render('Pages/register.html.twig',[

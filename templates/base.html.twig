@@ -16,18 +16,42 @@
     </head>
 
     <body>
+    <header>
+        {% block header %}
+
+                    <div class ="logo">
+                        <a href="mainPage.html"><img src="{{ asset('style/images/WebTech Mascot.jpg') }}"></a>
+                        <h1>Tasty Table</h1>
+                    </div>
+                    <div class ="search-bar">
+                        <input type="search" placeholder="Find a recipe or ingredient">
+                        <i class="fa fa-search"></i>
+                    </div>
+                    <div class="user">
+                        <a href="Profile.html"><i class="fa fa-user"></i></a>
+                    </div>
+
+        {% endblock %}
+    </header>
+        {% block stylesheetsHeader %}
+            <link rel="stylesheet" href="{{ asset('style/header.css') }}">
+        {% endblock %}
+
         {% block body %}{% endblock %}
 
-    </body>
+        <footer>
+        {% block footer %}
 
-    <footer>
-    {% block footer %}
-        <p1>TastyTable.inc</p1>
-        <p2>About</p2> <p3>|</p3> <p4>Help</p4>
-    {% endblock %}
+                <p class="footer-left">TastyTable.inc</p>
+                <div class="footer-right">
+                    <a href="AboutUs.html">About | Contact</a>
+                </div>
+
+        {% endblock %}
+        </footer>
         {% block stylesheetsFooter %}
             <link rel="stylesheet" href="{{ asset('style/footer.css') }}">
         {% endblock %}
-    </footer>
+    </body>
 
 </html>
