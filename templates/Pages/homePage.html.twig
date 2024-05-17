@@ -6,16 +6,14 @@
       <link rel="stylesheet" href="{{ asset('style/homePage.css') }}">
     {% endblock %}
 
-    <div class="dropdown">
-      <button class="dropbtn"><i class="fa fa-bars"></i></button>
-      <div class="dropdown-content">
-        <a href="mainPage.html">Homepage</a>
-        <a href="#">Reels</a>
-        <a href="#">Recipes</a>
-        <a href="../../src/Profile.html">Profile</a>
-        <a href="../../src/AboutUs.html">About Us/Contact</a>
-      </div>
+  <div class="dropdown">
+    <button class="dropbtn"><i class="fa fa-bars"></i></button>
+    <div class="dropdown-content">
+      <a href="{{ path('homePage') }}">Homepage</a>
+      <a href="{{ path('profile') }}">Profile</a>
+      <a href="{{ path('aboutUs') }}">About Us/Contact</a>
     </div>
+  </div>
     <div class="filter-section">
       <h3>Filter Recipes</h3>
       <form>
