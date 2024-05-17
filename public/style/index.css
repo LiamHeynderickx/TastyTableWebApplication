@@ -76,3 +76,10 @@ input{
     cursor: pointer;
     transition: background 1s;
 }
+
+.button-label {
+    display: inline-block; /* Ensure label behaves like a block element */
+    text-align: center; /* Center text horizontally */
+    line-height: 100px; /* Match button height for vertical centering */
+    width: 200px; /* Adjust width as needed */
+}

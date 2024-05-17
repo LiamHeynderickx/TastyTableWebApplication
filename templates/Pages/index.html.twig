@@ -32,20 +32,20 @@
                 <p>Forgot Password?</p>
             </div>
             <div class="btn-field">
-                {{ form_widget(form.login) }}
+                {{ form_widget(form.login, {'attr': {'class': 'button-label'}}) }}
             </div>
-            <a id="accountExist" href="{{ path('SignIn') }}">No account? Register</a>
+            <a id="accountExist" href="{{ path('register') }}">No account? Register</a>
             {{ form_end(form) }}
         </div>
     </div>
 
-    <script>
-        let loginBtn = document.getElementById("loginBtn");
-        let emailField = document.getElementById("emailField");
-        let passwordField = document.getElementById("passwordField");
+{#    <script>#}
+{#        let loginBtn = document.getElementById("loginBtn");#}
+{#        let emailField = document.getElementById("emailField");#}
+{#        let passwordField = document.getElementById("passwordField");#}
 
-        loginBtn.onclick = function () {
-            // Custom JavaScript logic can be added here
-        }
-    </script>
+{#        loginBtn.onclick = function () {#}
+{#            // Custom JavaScript logic can be added here#}
+{#        }#}
+{#    </script>#}
 {% endblock %}

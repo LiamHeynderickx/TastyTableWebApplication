@@ -43,9 +43,9 @@
                 </div>
             </div>
             <div class="btn-field">
-                {{ form_widget(form.save) }}
+                {{ form_widget(form.save, {'attr': {'class': 'button-label'}}) }}
             </div>
-            <a id="accountExist" href="{{ path('LogIn') }}">Already have an account? Login</a>
+            <a id="accountExist" href="{{ path('index') }}">Already have an account? Login</a>
             {{ form_end(form) }}
         </div>
     </div>
