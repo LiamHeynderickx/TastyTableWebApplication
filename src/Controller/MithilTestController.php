@@ -69,6 +69,8 @@ class MithilTestController extends AbstractController
             ])
             ->getForm();
         $form->handleRequest($request);
+
+        //check if form is valid (filled in or not)
         if ($form->isSubmitted() && $form->isValid()) {
             // Encode the password (you need to inject the password encoder)
             $encodedPassword = $passwordHasher->hashPassword($person, $person->getPassword());
@@ -81,7 +83,7 @@ class MithilTestController extends AbstractController
 
             $userId = $person->getId();
             // Redirect to a thank you page or login page
-            return $this->redirectToRoute('logIn');
+            return $this->redirectToRoute('LogIn');
         }
 
         return $this->render('Pages/register.html.twig',[
