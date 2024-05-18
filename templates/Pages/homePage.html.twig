@@ -29,7 +29,7 @@
     </div>
     <main>
       <div class="recipes">
-{#        <section class="recipe-card">#}
+        <section class="recipe-card">
 {#          <img src="../assets/styles/mascot%201.jpg" alt="Golden Butter Rice">#}
 {#          <h2>Golden Butter Rice</h2>#}
 {#          <div class="rate">#}
@@ -54,25 +54,15 @@
 {#          <img src="../assets/styles/mascot%202.jpg" alt="Purple Cabbage Salad">#}
 {#          <h2>Purple Cabbage Salad</h2>#}
 {#          <p>★★★★☆ 25 Ratings</p>#}
-{#        </section>#}
 
 
-        <script>
+          <img src="{{ recipe[1] }}">
+          <h2>{{ recipe[0] }}</h2>
 
-        </script>
+        </section>
 
-{#        <div class="saved-recipes">#}
-{#          {% for recipe in recipes %}#}
-{#            <div class="recipe-card">#}
-{#              <img src="{{ recipe.image }}" alt="{{ recipe.title }}">#}
-{#              <h3>{{ recipe.title }}</h3>#}
-{#              <p>{{ recipe.readyInMinutes }} minutes </p>#}
-{#              <p>Servings: {{ recipe.servings }}</p>#}
-{#            </div>#}
-{#          {% endfor %}#}
 
-          <!-- Add more recipe cards here -->
-        </div>
+
 
       </div>
     </main>
