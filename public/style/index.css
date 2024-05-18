@@ -50,9 +50,7 @@ input{
     color: #999;
 }
 
-.input-group{
-    height: 200px;
-}
+
 
 .btn-field button.disable{
     background: #eaeaea;
@@ -81,6 +79,6 @@ input{
 .button-label {
     display: inline-block; /* Ensure label behaves like a block element */
     text-align: center; /* Center text horizontally */
-    line-height: 100px; /* Match button height for vertical centering */
     width: 200px; /* Adjust width as needed */
+    border: 20px;
 }
