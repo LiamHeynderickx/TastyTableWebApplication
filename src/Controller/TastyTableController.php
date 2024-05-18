@@ -194,10 +194,16 @@ class TastyTableController extends AbstractController
     */
 
     #[Route('/homePage', name: 'homePage')]
-    public function homePage(Request $request, EntityManagerInterface $em): Response
+    public function homePage(Request $request, EntityManagerInterface $em, SessionInterface $session,SpoonacularApiService $apiService): Response
     {
 
         $form = $this->createFormBuilder()->getForm();
+
+//        echo $apiService->getRandomRecipe()[0];
+//        echo $apiService->getRandomRecipe()[1];
+
+        $recipe = $apiService->getRandomRecipe();
+
 
         return $this->render('Pages/homePage.html.twig', [
             'form' => $form->createView()
@@ -310,5 +316,7 @@ class TastyTableController extends AbstractController
 
         ]);
     }
+
+
 }
 
