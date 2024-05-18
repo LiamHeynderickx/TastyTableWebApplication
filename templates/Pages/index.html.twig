@@ -15,8 +15,16 @@
         <link rel="stylesheet" href="{{ asset('style/index.css') }}">
     {% endblock %}
 
+    {% if alertMessage%}
+        <script>
+            window.onload = function() {
+                alert("{{ alertMessage }}");
+            };
+        </script>
+    {% endif %}
 
     <div class="container">
+
         <div class="form-box">
             <h1>Login</h1>
             {{ form_start(form) }}
@@ -38,6 +46,8 @@
             {{ form_end(form) }}
         </div>
     </div>
+
+
 
 {#    <script>#}
 {#        let loginBtn = document.getElementById("loginBtn");#}

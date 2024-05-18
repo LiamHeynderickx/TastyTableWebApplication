@@ -21,7 +21,7 @@
     <div class = "container">
         <main>
             <div class="profile-info">
-                <h2>Esat Caglayan</h2>
+                <h2>{{ app.session.get('username') }}</h2>
                 <ul>
                     <i class="fa-solid fa-users"></i>
                     <li><a href="#">Followers</a></li>
