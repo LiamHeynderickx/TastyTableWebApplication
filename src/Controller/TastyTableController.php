@@ -7,6 +7,7 @@ use App\Entity\MithilTest;
 use App\Entity\SavedRecipes;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +25,7 @@ class TastyTableController extends AbstractController
 
     // Route for handling form submission
     #[Route('/', name: 'index')]
-    public function index(Request $request, EntityManagerInterface $em, SessionInterface $session,UserPasswordHasherInterface $passwordHasher): Response
+    public function index(Request $request, EntityManagerInterface $em, SessionInterface $session,LoggerInterface $logger,UserPasswordHasherInterface $passwordHasher): Response
     {
         $alertMessage = null;
         $person = new User();
@@ -73,6 +74,14 @@ class TastyTableController extends AbstractController
                 $session->set('isOnline', true);
                 $session->set('username', $user->getUsername());
                 $session->set('mail', $user->getEmail());
+
+                $session->set('userId', $user->getId());
+
+      //          $logger->info('User logged in', [
+        //            'userId' => $user->getId(),
+          //          'username' => $user->getUsername(),
+            //        'email' => $user->getEmail(),
+              //  ]);
                 return $this->redirectToRoute('homePage');
             }
         }
@@ -130,6 +139,7 @@ class TastyTableController extends AbstractController
                 $session->set('isOnline', true);
                 $session->set('username', $person->getUsername());
                 $session->set('mail', $person->getEmail());
+                $session->set('userId', $person->getId());
 
                 // Redirect to a thank you page or login page
                 return $this->redirectToRoute('homePage');
@@ -144,6 +154,15 @@ class TastyTableController extends AbstractController
         }
 
         return $this->render('Pages/register.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+    #[Route('/LogOut', name: 'logOut')]
+    public function LogOut(Request $request, EntityManagerInterface $em, SessionInterface $session,UserPasswordHasherInterface $passwordHasher): Response
+    {
+        $form = $this->createFormBuilder()->getForm();
+        $session->clear();
+        return $this->render('Pages/homePage.html.twig', [
             'form' => $form->createView()
         ]);
     }
@@ -205,28 +224,50 @@ class TastyTableController extends AbstractController
             return $this->redirectToRoute('index');
         }
 
+
+        $dietaryPreferences = [
+            'none' => 'None',
+            'lacto-vegetarian' => 'Lacto Vegetarian',
+            'ovo-vegetarian' => 'Ovo Vegetarian',
+            'ovolacto-vegetarian' => 'Ovo-Lacto Vegetarian',
+            'pescatarian' => 'Pescatarian',
+            'vegan' => 'Vegan',
+            'vegetarian' => 'Vegetarian'
+        ];
+
+
+        $selectedDiets = $request->query->all('diets');
         $type = $request->query->get('type');
+        $UserID=$session->get('userId');
+
 
         //if it is saved recipies
         if ($type === 'saved') {
-            // Fetch saved recipes from the database
-            $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi(9, 1,0);
+            // Fetch saved recipes from the API & DB
+            $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($UserID, 1,0);
             if (!empty($recipeIds)) {
                 // return new Response('No saved recipes found.');
 
+
+                //From the API
                 try {
                     $recipes = $apiService->getRecipesInformationBulk($recipeIds);
                 } catch (\Exception $e) {
                     return new Response('Error: ' . $e->getMessage());
                 }
+                //Add Here DB recipies part
+                //concatenate them together
+
                 return $this->render('Pages/Profile.html.twig', [
+                    'dietaryPreferences' => $dietaryPreferences,
+                    'selectedDiets' => $selectedDiets,
                     'recipes' => $recipes
                 ]);
             }
 
         }elseif ($type === 'my'){
-            // Fetch my recipes from the database
-            $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi(9, 1,1);
+            // Fetch my recipes from the DB and set is my TRUE
+            $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($UserID, 1,1);
             if (!empty($recipeIds)) {
                 // return new Response('No saved recipes found.');
 
@@ -236,13 +277,16 @@ class TastyTableController extends AbstractController
                     return new Response('Error: ' . $e->getMessage());
                 }
                 return $this->render('Pages/Profile.html.twig', [
+                    'dietaryPreferences' => $dietaryPreferences,
+                    'selectedDiets' => $selectedDiets,
                     'recipes' => $recipes
+
 
                 ]);
             }
         }
         else{
-            $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi(9, 1,0);
+            $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($UserID, 1,0);
             if (!empty($recipeIds)) {
                 // return new Response('No saved recipes found.');
 
@@ -252,13 +296,18 @@ class TastyTableController extends AbstractController
                     return new Response('Error: ' . $e->getMessage());
                 }
                 return $this->render('Pages/Profile.html.twig', [
+                    'dietaryPreferences' => $dietaryPreferences,
+                    'selectedDiets' => $selectedDiets,
                     'recipes' => $recipes
                 ]);
             }
 
         }
         return $this->render('Pages/Profile.html.twig', [
+            'dietaryPreferences' => $dietaryPreferences,
+            'selectedDiets' => $selectedDiets,
             'recipes' => []
+
         ]);
     }
 }
