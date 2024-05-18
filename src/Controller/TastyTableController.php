@@ -202,15 +202,16 @@ class TastyTableController extends AbstractController
 //        echo $apiService->getRandomRecipe()[0];
 //        echo $apiService->getRandomRecipe()[1];
 
-        $recipe = $apiService->getRandomRecipe();
-//        echo $recipe[0];
-//        echo $recipe[1];
+        $recipes = array();
+        for ($x = 0; $x <= 9; $x++) {
+            $recipes[] = $apiService->getRandomRecipe();
+        }
 
 
 
         return $this->render('Pages/homePage.html.twig', [
             'form' => $form->createView(),
-            'recipe' => $recipe
+            'recipes' => $recipes
         ]);
     }
 

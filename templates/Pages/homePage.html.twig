@@ -29,7 +29,7 @@
     </div>
     <main>
       <div class="recipes">
-        <section class="recipe-card">
+{#        <section class="recipe-card">#}
 {#          <img src="../assets/styles/mascot%201.jpg" alt="Golden Butter Rice">#}
 {#          <h2>Golden Butter Rice</h2>#}
 {#          <div class="rate">#}
@@ -54,15 +54,54 @@
 {#          <img src="../assets/styles/mascot%202.jpg" alt="Purple Cabbage Salad">#}
 {#          <h2>Purple Cabbage Salad</h2>#}
 {#          <p>★★★★☆ 25 Ratings</p>#}
+{#        </section>#}
 
 
-          <img src="{{ recipe[1] }}">
-          <h2>{{ recipe[0] }}</h2>
+{#        <script>#}
+{#          for (let i=0; i<9; i++){#}
+{#            <section class="recipe-card">#}
+{#              <h2>{{recipes[i][0]}}</h2>#}
+{#              <img src="{{ recipe[i][0] }}">#}
+{#            </section>#}
+{#          }#}
+{#        </script>#}
 
+        <section class="recipe-card">
+          <img src="{{ recipes[0][1] }}">
+          <h2>{{ recipes[0][0] }}</h2>
         </section>
-
-
-
+        <section class="recipe-card">
+          <img src="{{ recipes[1][1] }}">
+          <h2>{{ recipes[1][0] }}</h2>
+        </section>
+        <section class="recipe-card">
+          <img src="{{ recipes[2][1] }}">
+          <h2>{{ recipes[2][0] }}</h2>
+        </section>
+        <section class="recipe-card">
+          <img src="{{ recipes[3][1] }}">
+          <h2>{{ recipes[3][0] }}</h2>
+        </section>
+        <section class="recipe-card">
+          <img src="{{ recipes[4][1] }}">
+          <h2>{{ recipes[4][0] }}</h2>
+        </section>
+        <section class="recipe-card">
+          <img src="{{ recipes[5][1] }}">
+          <h2>{{ recipes[5][0] }}</h2>
+        </section>
+        <section class="recipe-card">
+          <img src="{{ recipes[6][1] }}">
+          <h2>{{ recipes[6][0] }}</h2>
+        </section>
+        <section class="recipe-card">
+          <img src="{{ recipes[7][1] }}">
+          <h2>{{ recipes[7][0] }}</h2>
+        </section>
+        <section class="recipe-card">
+          <img src="{{ recipes[8][1] }}">
+          <h2>{{ recipes[8][0] }}</h2>
+        </section>
 
       </div>
     </main>
