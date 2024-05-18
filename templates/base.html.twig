@@ -5,13 +5,21 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
         {% block stylesheets %}
-
         {% endblock %}
+
+        {% block stylesheetsHeader %}
+            <link rel="stylesheet" href="{{ asset('style/header.css') }}">
+        {% endblock %}
+        {% block stylesheetsFooter %}
+            <link rel="stylesheet" href="{{ asset('style/footer.css') }}">
+        {% endblock %}
+        <script>
 
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
 
+        {% endblock %}
+        </script>
         <script src="https://kit.fontawesome.com/4c4c8749b1.js" crossorigin="anonymous"></script>
     </head>
 
@@ -20,22 +28,24 @@
         {% block header %}
 
                     <div class ="logo">
-                        <a href="mainPage.html"><img src="{{ asset('style/images/WebTech Mascot.jpg') }}"></a>
+                        <a href="{{ path('homePage') }}"><img src="{{ asset('style/images/WebTech Mascot.jpg') }}"></a>
                         <h1>Tasty Table</h1>
                     </div>
                     <div class ="search-bar">
+                        {% block search_bar %}
                         <input type="search" placeholder="Find a recipe or ingredient">
                         <i class="fa fa-search"></i>
+                        {% endblock %}
                     </div>
                     <div class="user">
-                        <a href="Profile.html"><i class="fa fa-user"></i></a>
+                        {% block profile_user %}
+                        <a href="{{ path('profile') }}"><i class="fa fa-user"></i></a>
+                        {% endblock %}
                     </div>
 
         {% endblock %}
     </header>
-        {% block stylesheetsHeader %}
-            <link rel="stylesheet" href="{{ asset('style/header.css') }}">
-        {% endblock %}
+
 
         {% block body %}{% endblock %}
 
@@ -44,14 +54,11 @@
 
                 <p class="footer-left">TastyTable.inc</p>
                 <div class="footer-right">
-                    <a href="AboutUs.html">About | Contact</a>
+                    <a href="{{ path('aboutUs') }}">About | Contact</a>
                 </div>
 
         {% endblock %}
         </footer>
-        {% block stylesheetsFooter %}
-            <link rel="stylesheet" href="{{ asset('style/footer.css') }}">
-        {% endblock %}
     </body>
 
 </html>

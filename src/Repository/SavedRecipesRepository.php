@@ -6,6 +6,8 @@ use App\Entity\SavedRecipes;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+
+
 /**
  * @extends ServiceEntityRepository<SavedRecipes>
  */
@@ -40,4 +42,19 @@ class SavedRecipesRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+
+    public function findRecipeIdsByUserAndIsApi(int $userId, int $isApi,int $isMyRecipe): array
+    {
+        $qb = $this->createQueryBuilder('sr')
+            ->select('sr.recipeId')
+            ->where('sr.userId = :userId')
+            ->andWhere('sr.isApi = :isApi')
+            ->andWhere('sr.isMyRecipe = :isMyRecipe')
+            ->setParameter('userId', $userId)
+            ->setParameter('isApi', $isApi)
+            ->setParameter('isMyRecipe', $isMyRecipe);
+
+        return array_column($qb->getQuery()->getArrayResult(), 'recipeId');
+    }
 }

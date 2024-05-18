@@ -51,10 +51,6 @@ input{
     color: #999;
 }
 
-.input-group{
-    height: 200px;
-}
-
 .btn-field button.disable{
     background: #eaeaea;
     color: #999999;
@@ -76,7 +72,13 @@ input{
     outline: 0;
     cursor: pointer;
     transition: background 1s;
-    margin-bottom: 10px;
+}
+
+.button-label {
+    display: inline-block; /* Ensure label behaves like a block element */
+    text-align: center; /* Center text horizontally */
+    width: 200px; /* Adjust width as needed */
+    border: 20px;
 }
 
 #accountExist {

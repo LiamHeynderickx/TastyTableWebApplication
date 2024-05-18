@@ -1,6 +1,16 @@
 {% extends 'base.html.twig' %}
 {% block title %}TastyTable{% endblock %}
+
+{% block search_bar %}
+    <!-- Overriding and making it invisible -->
+{% endblock %}
+
+{% block profile_user %}
+    <!-- Overriding and making it invisible -->
+{% endblock %}
+
 {% block body %}
+
 
     {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('style/signUp.css') }}">
@@ -33,7 +43,7 @@
                 </div>
             </div>
             <div class="btn-field">
-                {{ form_widget(form.save) }}
+                {{ form_widget(form.save, {'attr': {'class': 'button-label'}}) }}
             </div>
             <a id="accountExist" href="{{ path('index') }}">Already have an account? Login</a>
             {{ form_end(form) }}

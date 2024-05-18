@@ -6,30 +6,14 @@
       <link rel="stylesheet" href="{{ asset('style/homePage.css') }}">
     {% endblock %}
 
-    <body>
-
-    <div id="header"></div>
-
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Tasty Table - Homepage</title>
-      <link rel="stylesheet" href="../../public/style/homePage.css">
-      <script src="https://kit.fontawesome.com/4c4c8749b1.js" crossorigin="anonymous"></script>
-    </head>
-    <body>
-    <div class="dropdown">
-      <button class="dropbtn"><i class="fa fa-bars"></i></button>
-      <div class="dropdown-content">
-        <a href="mainPage.html">Homepage</a>
-        <a href="#">Reels</a>
-        <a href="#">Recipes</a>
-        <a href="../../src/Profile.html">Profile</a>
-        <a href="../../src/AboutUs.html">About Us/Contact</a>
-      </div>
+  <div class="dropdown">
+    <button class="dropbtn"><i class="fa fa-bars"></i></button>
+    <div class="dropdown-content">
+      <a href="{{ path('homePage') }}">Homepage</a>
+      <a href="{{ path('profile') }}">Profile</a>
+      <a href="{{ path('aboutUs') }}">About Us/Contact</a>
     </div>
+  </div>
     <div class="filter-section">
       <h3>Filter Recipes</h3>
       <form>
@@ -45,36 +29,80 @@
     </div>
     <main>
       <div class="recipes">
+{#        <section class="recipe-card">#}
+{#          <img src="../assets/styles/mascot%201.jpg" alt="Golden Butter Rice">#}
+{#          <h2>Golden Butter Rice</h2>#}
+{#          <div class="rate">#}
+{#            <input type="radio" id="star5" name="rate" value="5" />#}
+{#            <label for="star5" title="text">5 stars</label>#}
+{#            <input type="radio" id="star4" name="rate" value="4" />#}
+{#            <label for="star4" title="text">4 stars</label>#}
+{#            <input type="radio" id="star3" name="rate" value="3" />#}
+{#            <label for="star3" title="text">3 stars</label>#}
+{#            <input type="radio" id="star2" name="rate" value="2" />#}
+{#            <label for="star2" title="text">2 stars</label>#}
+{#            <input type="radio" id="star1" name="rate" value="1" />#}
+{#            <label for="star1" title="text">1 star</label>#}
+{#          </div>#}
+{#        </section>#}
+{#        <section class="recipe-card">#}
+{#          <img src="../assets/styles/WebTech%20Mascot.jpg" alt="Green Beans with Cherry Tomatoes">#}
+{#          <h2>Green Beans with Cherry Tomatoes</h2>#}
+{#          <p>★★★★★ 983 Ratings</p>#}
+{#        </section>#}
+{#        <section class="recipe-card">#}
+{#          <img src="../assets/styles/mascot%202.jpg" alt="Purple Cabbage Salad">#}
+{#          <h2>Purple Cabbage Salad</h2>#}
+{#          <p>★★★★☆ 25 Ratings</p>#}
+{#        </section>#}
+
+
+{#        <script>#}
+{#          for (let i=0; i<9; i++){#}
+{#            <section class="recipe-card">#}
+{#              <h2>{{recipes[i][0]}}</h2>#}
+{#              <img src="{{ recipe[i][0] }}">#}
+{#            </section>#}
+{#          }#}
+{#        </script>#}
+
         <section class="recipe-card">
-          <img src="../assets/styles/mascot%201.jpg" alt="Golden Butter Rice">
-          <h2>Golden Butter Rice</h2>
-          <div class="rate">
-            <input type="radio" id="star5" name="rate" value="5" />
-            <label for="star5" title="text">5 stars</label>
-            <input type="radio" id="star4" name="rate" value="4" />
-            <label for="star4" title="text">4 stars</label>
-            <input type="radio" id="star3" name="rate" value="3" />
-            <label for="star3" title="text">3 stars</label>
-            <input type="radio" id="star2" name="rate" value="2" />
-            <label for="star2" title="text">2 stars</label>
-            <input type="radio" id="star1" name="rate" value="1" />
-            <label for="star1" title="text">1 star</label>
-          </div>
+          <img src="{{ recipes[0][1] }}">
+          <h2>{{ recipes[0][0] }}</h2>
         </section>
         <section class="recipe-card">
-          <img src="../assets/styles/WebTech%20Mascot.jpg" alt="Green Beans with Cherry Tomatoes">
-          <h2>Green Beans with Cherry Tomatoes</h2>
-          <p>★★★★★ 983 Ratings</p>
+          <img src="{{ recipes[1][1] }}">
+          <h2>{{ recipes[1][0] }}</h2>
         </section>
         <section class="recipe-card">
-          <img src="../assets/styles/mascot%202.jpg" alt="Purple Cabbage Salad">
-          <h2>Purple Cabbage Salad</h2>
-          <p>★★★★☆ 25 Ratings</p>
+          <img src="{{ recipes[2][1] }}">
+          <h2>{{ recipes[2][0] }}</h2>
         </section>
+        <section class="recipe-card">
+          <img src="{{ recipes[3][1] }}">
+          <h2>{{ recipes[3][0] }}</h2>
+        </section>
+        <section class="recipe-card">
+          <img src="{{ recipes[4][1] }}">
+          <h2>{{ recipes[4][0] }}</h2>
+        </section>
+        <section class="recipe-card">
+          <img src="{{ recipes[5][1] }}">
+          <h2>{{ recipes[5][0] }}</h2>
+        </section>
+        <section class="recipe-card">
+          <img src="{{ recipes[6][1] }}">
+          <h2>{{ recipes[6][0] }}</h2>
+        </section>
+        <section class="recipe-card">
+          <img src="{{ recipes[7][1] }}">
+          <h2>{{ recipes[7][0] }}</h2>
+        </section>
+        <section class="recipe-card">
+          <img src="{{ recipes[8][1] }}">
+          <h2>{{ recipes[8][0] }}</h2>
+        </section>
+
       </div>
     </main>
-
-    </body>
-    <div id="footer"></div>
-    </html>
 {% endblock %}

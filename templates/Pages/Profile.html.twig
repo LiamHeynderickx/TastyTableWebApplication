@@ -1,24 +1,23 @@
-
 {% extends 'base.html.twig' %}
 {% block title %}TastyTable{% endblock %}
 
-    {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('style/Profile.css') }}">
-    {% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('style/Profile.css') }}">
+{% endblock %}
 
 {% block body %}
     <div class="dropdown">
         <button class="dropbtn"><i class="fa fa-bars"></i></button>
         <div class="dropdown-content">
-            <a href="homePage.html.twig">Homepage</a>
-            <a href="Profile.html">Profile</a>
-            <a href="AboutUs.html">About Us/Contact</a>
+            <a href="{{ path('homePage') }}">Homepage</a>
+            <a href="{{ path('profile') }}">Profile</a>
+            <a href="{{ path('aboutUs') }}">About Us/Contact</a>
         </div>
     </div>
-    <div class = "container">
+    <div class="container">
         <main>
             <div class="profile-info">
-                <h2>Esat Caglayan</h2>
+                <h2>{{ app.session.get('username') }}</h2>
                 <ul>
                     <i class="fa-solid fa-users"></i>
                     <li><a href="#">Followers</a></li>
@@ -29,53 +28,83 @@
 
                 <!--Dropdown-->
                 <nav>
-                    <input id="toggle" type="checkbox" checked>
-                    <h2>Dietary Preferences</h2>
-                    <ul>
-                        <li><input type="checkbox" id="none" name="none"><label for="none">None</label></li>
-                        <li><input type="checkbox" id="lacto-vegetarian" name="diet"><label for="lacto-vegetarian">Lacto Vegetarian</label></li>
-                        <li><input type="checkbox" id="ovo-vegetarian" name="diet"><label for="ovo-vegetarian">Ovo Vegetarian</label></li>
-                        <li><input type="checkbox" id="ovolacto-vegetarian" name="diet"><label for="ovolacto-vegetarian">Ovo-Lacto Vegetarian</label></li>
-                        <li><input type="checkbox" id="pescatarian" name="diet"><label for="pescatarian">Pescatarian</label></li>
-                        <li><input type="checkbox" id="vegan" name="diet"><label for="vegan">Vegan</label></li>
-                        <li><input type="checkbox" id="vegetarian" name="diet"><label for="vegetarian">Vegetarian</label></li>
+                    <button class="dropbtn" onclick="toggleDropdown()" style="background-color: #00aaff; color: white; padding: 10px 20px; border: none; border-radius: 5px;">
+                        Dietary Preferences <i class="fa fa-chevron-down"></i>
+                    </button>
+                    <ul id="dietaryDropdown" class="dropdown-content" style="display: none;">
+                        {% for key, label in dietaryPreferences %}
+                            <li>
+                                <input type="checkbox" id="{{ key }}" name="diet" value="{{ key }}"
+                                       {% if key in selectedDiets %}checked{% endif %}>
+                                <label for="{{ key }}">{{ label }}</label>
+                            </li>
+                        {% endfor %}
                     </ul>
                 </nav>
             </div>
             <hr class="rounded">
             <div class="breadcrumb">
-                <a href="#">Saved Recipes</a>
+                <a href="{{ path('profile', { type: 'saved' }) }}">Saved Recipes</a>
                 <span class="separator"> / </span>
-                <a href="#">My Recipes</a>
+                <a href="{{ path('profile', { type: 'my' }) }}">My Recipes</a>
             </div>
+
+            <!-- Display Selected Dietary Preferences -->
+            <div class="selected-diets">
+                <h3>Selected Dietary Preferences:</h3>
+                <ul>
+                    {% for key, diet in selectedDiets %}
+                        <li>{{ dietaryPreferences[key] }}</li>
+                    {% else %}
+                        <li>No dietary preferences selected.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
             <div class="saved-recipes">
-                <div class="recipe-card">
-                    <img src="../assets/styles/mascot%202.jpg" alt="Recipe 1">
-                    <h3>Recipe 1</h3>
-                    <p>A brief description of Recipe 1.</p>
-                </div>
-                <div class="recipe-card">
-                    <img src="../assets/styles/mascot%201.jpg" alt="Recipe 2">
-                    <h3>Recipe 2</h3>
-                    <p>A brief description of Recipe 2.</p>
-                </div>
-                <div class="recipe-card">
-                    <img src="../assets/styles/mascot%202.jpg" alt="Recipe 1">
-                    <h3>Recipe 1</h3>
-                    <p>A brief description of Recipe 1.</p>
-                </div>
-                <div class="recipe-card">
-                    <img src="../assets/styles/mascot%201.jpg" alt="Recipe 2">
-                    <h3>Recipe 2</h3>
-                    <p>A brief description of Recipe 2.</p>
-                </div>
-                <div class="recipe-card">
-                    <img src="../assets/styles/mascot%202.jpg" alt="Recipe 1">
-                    <h3>Recipe 1</h3>
-                    <p>A brief description of Recipe 1.</p>
-                </div>
+                {% for recipe in recipes %}
+                    <div class="recipe-card">
+                        <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
+                        <h3>{{ recipe.title }}</h3>
+                        <p>{{ recipe.readyInMinutes }} minutes </p>
+                        <p>Servings: {{ recipe.servings }}</p>
+                    </div>
+                {% endfor %}
+
                 <!-- Add more recipe cards here -->
             </div>
         </main>
     </div>
+
+    <script>
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dietaryDropdown');
+            if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+                dropdown.style.display = 'block';
+            } else {
+                dropdown.style.display = 'none';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const dietCheckboxes = document.querySelectorAll('input[name="diet"]');
+            dietCheckboxes.forEach(function(checkbox) {
+                checkbox.addEventListener('change', function() {
+                    const selectedDiets = Array.from(dietCheckboxes)
+                        .filter(cb => cb.checked)
+                        .reduce((acc, cb) => {
+                            acc[cb.value] = cb.value;
+                            return acc;
+                        }, {});
+
+                    const params = new URLSearchParams();
+                    for (const [key, value] of Object.entries(selectedDiets)) {
+                        params.append('diets[' + key + ']', value);
+                    }
+
+                    window.location.search = params.toString();
+                });
+            });
+        });
+    </script>
 {% endblock %}

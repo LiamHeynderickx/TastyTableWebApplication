@@ -1,13 +1,30 @@
 {% extends 'base.html.twig' %}
 {% block title %}TastyTable{% endblock %}
+
+{% block search_bar %}
+    <!-- Overriding and making it invisible -->
+{% endblock %}
+
+{% block profile_user %}
+    <!-- Overriding and making it invisible -->
+{% endblock %}
+
 {% block body %}
 
     {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('style/index.css') }}">
     {% endblock %}
 
+    {% if alertMessage%}
+        <script>
+            window.onload = function() {
+                alert("{{ alertMessage }}");
+            };
+        </script>
+    {% endif %}
 
     <div class="container">
+
         <div class="form-box">
             <h1>Login</h1>
             {{ form_start(form) }}
@@ -23,20 +40,22 @@
                 <p>Forgot Password?</p>
             </div>
             <div class="btn-field">
-                {{ form_widget(form.login) }}
+                {{ form_widget(form.login, {'attr': {'class': 'button-label'}}) }}
             </div>
             <a id="accountExist" href="{{ path('register') }}">No account? Register</a>
             {{ form_end(form) }}
         </div>
     </div>
 
-    <script>
-        let loginBtn = document.getElementById("loginBtn");
-        let emailField = document.getElementById("emailField");
-        let passwordField = document.getElementById("passwordField");
 
-        loginBtn.onclick = function () {
-            // Custom JavaScript logic can be added here
-        }
-    </script>
+
+{#    <script>#}
+{#        let loginBtn = document.getElementById("loginBtn");#}
+{#        let emailField = document.getElementById("emailField");#}
+{#        let passwordField = document.getElementById("passwordField");#}
+
+{#        loginBtn.onclick = function () {#}
+{#            // Custom JavaScript logic can be added here#}
+{#        }#}
+{#    </script>#}
 {% endblock %}
