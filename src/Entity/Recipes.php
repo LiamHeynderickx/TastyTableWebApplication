@@ -33,8 +33,17 @@ class Recipes
     #[ORM\Column]
     private ?int $cost = null;
 
-    #[ORM\Column]
-    private array $ingredients = [];
+    #[ORM\Column(type: 'json', nullable: true)]
+    private ?array $ingredients = [];
+
+    #[ORM\Column(type: 'json', nullable: true)]
+    private ?array $ingredientsAmounts = [];
+
+    #[ORM\Column(type: 'json', nullable: true)]
+    private ?array $ingredientsUnits = [];
+
+    #[ORM\Column(type: 'json', nullable: true)]
+    private ?array $instructions = [];
 
     #[ORM\Column]
     private ?int $time = null;
@@ -136,14 +145,50 @@ class Recipes
         return $this;
     }
 
-    public function getIngredients(): array
+    public function getIngredients(): ?array
     {
         return $this->ingredients;
     }
 
-    public function setIngredients(array $ingredients): static
+    public function setIngredients(?array $ingredients): static
     {
         $this->ingredients = $ingredients;
+
+        return $this;
+    }
+
+    public function getIngredientsAmounts(): ?array
+    {
+        return $this->ingredientsAmounts;
+    }
+
+    public function setIngredientsAmounts(?array $ingredientsAmounts): static
+    {
+        $this->ingredientsAmounts = $ingredientsAmounts;
+
+        return $this;
+    }
+
+    public function getIngredientsUnits(): ?array
+    {
+        return $this->ingredientsUnits;
+    }
+
+    public function setIngredientsUnits(?array $ingredientsUnits): static
+    {
+        $this->ingredientsUnits = $ingredientsUnits;
+
+        return $this;
+    }
+
+    public function getInstructions(): ?array
+    {
+        return $this->instructions;
+    }
+
+    public function setInstructions(?array $instructions): static
+    {
+        $this->instructions = $instructions;
 
         return $this;
     }

@@ -6,3 +6,60 @@ form {
     border: 1px solid #ccc;
     border-radius: 10px;
 }
+
+/* Adjust space between labels and input fields */
+form label {
+    display: block;
+    margin-bottom: 10px; /* Adjust as needed */
+}
+
+/* Ingredient/Amount/Unit Boxes Side by Side */
+.ingredient {
+    display: flex;
+    gap: 10px; /* Adjust space between fields */
+    align-items: center;
+    margin-bottom: 10px; /* Adjust as needed */
+}
+
+.ingredient input[type="text"],
+.ingredient input[type="number"],
+.ingredient input[type="text"] {
+    width: 33%; /* Adjust width as needed */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Price Range Choices Side by Side */
+.cost-field {
+    display: flex;
+    gap: 10px; /* Adjust space between fields */
+    align-items: center;
+    margin-bottom: 10px; /* Adjust as needed */
+}
+
+.cost-field label {
+    margin-bottom: 0; /* Remove margin from label */
+}
+
+.cost-field input[type="radio"] {
+    margin-right: 5px; /* Adjust space between radio buttons */
+}
+
+/* Adjust styling for buttons */
+form button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Optional: Adjust style for form headings */
+form h1 {
+    text-align: center;
+    margin-bottom: 20px; /* Adjust as needed */
+}

@@ -4,11 +4,18 @@ namespace App\Controller;
 
 use App\Entity\MithilTest;
 
+use App\Entity\Recipes;
 use App\Entity\SavedRecipes;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -19,6 +26,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Service\SpoonacularApiService;
+
 class TastyTableController extends AbstractController
 {
     // Route for displaying the form
@@ -322,6 +330,126 @@ class TastyTableController extends AbstractController
         ]);
     }
 
+    #[Route('/recipeSubmission', name: 'recipeSubmission')]
+    public function recipeSubmission(Request $request, EntityManagerInterface $em)
+    {
+        $recipe = new Recipes();
+
+        $form = $this->createFormBuilder($recipe)
+            ->add('recipeName', TextType::class, [
+                'label' => 'Recipe Name',
+            ])
+            ->add('recipeDescription', TextareaType::class, [
+                'label' => 'Recipe Description',
+                'required' => false,
+            ])
+            ->add('picture', FileType::class, [
+                'label' => 'Recipe Image',
+                'required' => false,
+            ])
+            ->add('cost', ChoiceType::class, [
+                'choices' => [
+                    '€' => '€',
+                    '€€' => '€€',
+                    '€€€' => '€€€',
+                ],
+                'expanded' => true, // If you want radio buttons
+                'multiple' => false, // If you want only one option to be selected
+            ])
+            ->add('ingredients', TextType::class, [
+                'label' => 'Ingredients (JSON)',
+                'required' => true,
+            ])
+            ->add('ingredientsAmounts', TextType::class, [
+                'label' => 'Ingredients Amounts (JSON)',
+                'required' => false,
+            ])
+            ->add('ingredientsUnits', TextType::class, [
+                'label' => 'Ingredients Units (JSON)',
+                'required' => false,
+            ])
+            ->add('instructions', TextType::class, [
+                'label' => 'Instructions (JSON)',
+                'required' => false,
+            ])
+            ->add('time', IntegerType::class, [
+                'label' => 'Cooking Time (minutes)',
+            ])
+            ->add('calories', IntegerType::class, [
+                'label' => 'Calories',
+                'required' => false,
+            ])
+            ->add('fat', IntegerType::class, [
+                'label' => 'Fat',
+                'required' => false,
+            ])
+            ->add('carbs', IntegerType::class, [
+                'label' => 'Carbohydrates',
+                'required' => false,
+            ])
+            ->add('protein', IntegerType::class, [
+                'label' => 'Protein',
+                'required' => false,
+            ])
+            ->add('servings', IntegerType::class, [
+                'label' => 'Number of Servings',
+            ])
+            ->add('diet', TextType::class, [
+                'label' => 'Diet',
+            ])
+            ->add('type', TextType::class, [
+                'label' => 'Meal Type',
+            ])
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Handle file upload
+            $pictureFile = $form->get('picture')->getData();
+            if ($pictureFile) {
+                $newFilename = uniqid() . '.' . $pictureFile->guessExtension();
+
+                try {
+                    $pictureFile->move(
+                        $this->getParameter('recipes_images_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // Handle file upload error
+                }
+
+                $recipe->setPicture($newFilename);
+            }
+
+            // Set additional fields
+            // Example: Assuming logged in user, set userId
+            // $recipe->setUserId($this->getUser()->getId());
+
+            // Convert JSON inputs to arrays
+            $ingredients = json_decode($form->get('ingredients')->getData(), true);
+            $recipe->setIngredients($ingredients);
+
+            $ingredientsAmounts = json_decode($form->get('ingredientsAmounts')->getData(), true);
+            $recipe->setIngredientsAmounts($ingredientsAmounts);
+
+            $ingredientsUnits = json_decode($form->get('ingredientsUnits')->getData(), true);
+            $recipe->setIngredientsUnits($ingredientsUnits);
+
+            $instructions = json_decode($form->get('instructions')->getData(), true);
+            $recipe->setInstructions($instructions);
+
+            $em->persist($recipe);
+            $em->flush();
+
+            // Redirect to success page or home page
+            return $this->redirectToRoute('homePage');
+        }
+
+        return $this->render('Pages/recipeSubmission.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
 
 }
 
