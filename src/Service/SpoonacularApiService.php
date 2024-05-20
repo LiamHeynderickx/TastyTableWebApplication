@@ -18,9 +18,29 @@ class SpoonacularApiService
         $this->apiKey = 'face680489cd4b5fbbb1faca74e6ca22';
     }
 
-    public function getRandomRecipe() {
-        $urlRandom = "https://api.spoonacular.com/recipes/random?number=1&apiKey=" . $this->apiKey;
-        $response = file_get_contents($urlRandom);
+    public function getRandomRecipe($filters) {
+
+        $tags = [];
+
+        if (!empty($filters['vegetarian'])) {
+            $tags[] = 'vegetarian';
+        }
+        if (!empty($filters['vegan'])) {
+            $tags[] = 'vegan';
+        }
+        if (!empty($filters['gluten-free'])) {
+            $tags[] = 'glutenFree';
+        }
+        if (!empty($filters['dairy-free'])) {
+            $tags[] = 'dairyFree';
+        }
+
+        $tagsString = implode(',', $tags);
+        $url = "https://api.spoonacular.com/recipes/random?number=1&include-tags={$tagsString}&apiKey={$this->apiKey}";
+
+        echo $url;
+
+        $response = file_get_contents($url);
 
         // Decode the JSON response into a stdClass object
         $data = json_decode($response);

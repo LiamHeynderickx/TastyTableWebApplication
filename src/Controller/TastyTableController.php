@@ -206,12 +206,20 @@ class TastyTableController extends AbstractController
     public function homePage(Request $request, EntityManagerInterface $em, SessionInterface $session,SpoonacularApiService $apiService): Response
     {
 
+        // Get filter criteria from the request
+        $filters = [
+            'vegetarian' => $request->query->get('vegetarian'),
+            'vegan' => $request->query->get('vegan'),
+            'gluten-free' => $request->query->get('gluten-free'),
+            'dairy-free' => $request->query->get('dairy-free')
+        ];
+
         $form = $this->createFormBuilder()->getForm();
 
         $recipes = array();
         for ($x = 0; $x < 1; $x++) { //change loop limit to change number of recipes displayed in home
             //display less recipes to save key usage for testing
-            $recipes[] = $apiService->getRandomRecipe();
+            $recipes[] = $apiService->getRandomRecipe($filters);
         }
 
 //        $recipeID = new Integer();
@@ -225,7 +233,8 @@ class TastyTableController extends AbstractController
 
         return $this->render('Pages/homePage.html.twig', [
             'form' => $form->createView(),
-            'recipes' => $recipes
+            'recipes' => $recipes,
+            'filters' => $filters
         ]);
     }
 
