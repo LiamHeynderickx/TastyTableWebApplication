@@ -21,7 +21,8 @@ class SpoonacularApiService
     public function getRandomRecipe($filters) {
 
         $tags = [];
-        $tags2 = [];
+        $glutenFree = "";
+        $dairyFree = "";
 
         if (!empty($filters['vegetarian'])) {
             $tags[] = 'vegetarian';
@@ -30,15 +31,14 @@ class SpoonacularApiService
             $tags[] = 'vegan';
         }
         if (!empty($filters['gluten-free'])) {
-            $tags2[] = 'glutenFree';
+            $glutenFree = "true";
         }
         if (!empty($filters['dairy-free'])) {
-            $tags2[] = 'dairyFree';
+            $dairyFree = "true";
         }
 
         $diet = implode(',', $tags);
-        $intolerance = implode(',', $tags2);
-        $url = "https://api.spoonacular.com/recipes/random?number=1&include-tags={$diet}&intolerances={$intolerance}&apiKey={$this->apiKey}";
+        $url = "https://api.spoonacular.com/recipes/random?number=1&include-tags={$diet}&apiKey={$this->apiKey}";
 
         echo $url;
 
