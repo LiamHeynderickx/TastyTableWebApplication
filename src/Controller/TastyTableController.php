@@ -209,7 +209,8 @@ class TastyTableController extends AbstractController
         $form = $this->createFormBuilder()->getForm();
 
         $recipes = array();
-        for ($x = 0; $x < 9; $x++) {
+        for ($x = 0; $x < 1; $x++) { //change loop limit to change number of recipes displayed in home
+            //display less recipes to save key usage for testing
             $recipes[] = $apiService->getRandomRecipe();
         }
 
