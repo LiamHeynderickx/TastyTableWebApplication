@@ -34,7 +34,7 @@
 
         {% for recipe in recipes %}
           <section class="recipe-card">
-            <a href="{{ path('recipeDisplayer', { id: recipe[4] })  }}">
+            <a href="{{ path('recipeDisplayAPI', { id: recipe[4] })  }}">
               <img src="{{ recipe[1] }}">
               <h2>{{ recipe[0] }}</h2>
               <br>

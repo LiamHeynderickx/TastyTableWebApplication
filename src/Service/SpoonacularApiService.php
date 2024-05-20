@@ -38,7 +38,7 @@ class SpoonacularApiService
         $tagsString = implode(',', $tags);
         $url = "https://api.spoonacular.com/recipes/random?number=1&include-tags={$tagsString}&apiKey={$this->apiKey}";
 
-        echo $url;
+//        echo $url;
 
         $response = file_get_contents($url);
 
@@ -65,19 +65,26 @@ class SpoonacularApiService
         $data = json_decode($response);
 
         if ($data === null || !isset($data->title)) {
-            // Handle the case where the API response is not what you expected
-            return ['No title available', 'style/images/WebTech Mascot.jpg', 'Unknown', 'No rating', null];
+            return [
+                'title' => 'No title available',
+                'image' => 'default_image.png',
+                'readyInMinutes' => 'Unknown',
+                'spoonacularScore' => 'No rating',
+                'id' => null
+            ];
         }
 
-        // Access properties directly since the response is a single recipe object
-        $title = $data->title ?? 'No title available';
-        $image = $data->image ?? 'style/images/WebTech Mascot.jpg';
-        $readyInMinutes = $data->readyInMinutes ?? 'Unknown';
-        $spoonacularScore = isset($data->spoonacularScore) ? intval($data->spoonacularScore) : 0;
-        $recipeId = $data->id ?? null;
-        $summary = $data->summary ?? "null";
+        return [
+            'recipeName' => $data->title ?? 'No title available',
+            'picture' => $data->image ?? 'default_image.png',
+            'time' => $data->readyInMinutes ?? 'Unknown',
+            'spoonacularScore' => isset($data->spoonacularScore) ? intval($data->spoonacularScore) : 0,
+            'id' => $data->id ?? null,
+            'servings' => $data->servings ?? null,
+            'ingredients' => '',
+            'recipeDescription' => $data->summary ?? null,
 
-        return [$title, $image, $readyInMinutes, $spoonacularScore, $recipeId, $summary];
+        ];
     }
 
     public function searchRecipesByNutrients(array $params)

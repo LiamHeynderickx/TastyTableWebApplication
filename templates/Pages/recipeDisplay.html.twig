@@ -14,7 +14,7 @@
             <aside>
                 <div class="image">
                     {% if recipe.picture %}
-                        <img src="{{ asset('uploads/recipes/' ~ recipe.picture) }}" alt="Recipe Image" style="width: 280px; height: 280px;">
+                        <img src="{{ recipe.picture }}" alt="Recipe Image" style="width: 280px; height: 280px;">
                     {% else %}
                         <img src="{{ asset('style/images/placeholderImage.jpeg') }}" alt="Recipe Image" style="width: 280px; height: 280px;">
                     {% endif %}
@@ -61,23 +61,23 @@
                 <div class="recipeInfo">
                     <h2>{{ recipe.recipeName }}</h2>
                     <p>{{ recipe.recipeDescription }}</p>
-                    <p>Cooking Time: {{ recipe.time }} minutes &nbsp; | &nbsp; Calories: {{ recipe.calories }} kcal</p>
-                    <p>Fats: {{ recipe.fat }}g &nbsp; | &nbsp; Carbs: {{ recipe.carbs }}g &nbsp; | &nbsp; Proteins: {{ recipe.protein }}</p>
+                    <p>Cooking Time: {{ recipe.time }} minutes &nbsp; | &nbsp; Calories: XXXX kcal</p>
+{#                    <p>Fats: {{ recipe.fat }}g &nbsp; | &nbsp; Carbs: {{ recipe.carbs }}g &nbsp; | &nbsp; Proteins: {{ recipe.protein }}</p>#}
                     <p>Price range: € &nbsp; | &nbsp; Rating: ★★★★★</p>
                 </div>
 
                 <!-- Instructions -->
                 <div>
                     <h2>Instructions</h2>
-                    {% if recipe.instructions %}
-                        <div>
-                            {% for step in recipe.instructions %}
-                                <strong>Step {{ loop.index }}:</strong><br>{{ step }}<br><br>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        <p>No instructions found.</p>
-                    {% endif %}
+{#                    {% if recipe.instructions %}#}
+{#                        <div>#}
+{#                            {% for step in recipe.instructions %}#}
+{#                                <strong>Step {{ loop.index }}:</strong><br>{{ step }}<br><br>#}
+{#                            {% endfor %}#}
+{#                        </div>#}
+{#                    {% else %}#}
+{#                        <p>No instructions found.</p>#}
+{#                    {% endif %}#}
                 </div>
 
                 <!-- Buttons to like recipe and mark as done -->
