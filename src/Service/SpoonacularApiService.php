@@ -54,8 +54,9 @@ class SpoonacularApiService
         $readyInMinutes = $data->readyInMinutes ?? 'Unknown';
         $spoonacularScore = isset($data->spoonacularScore) ? intval($data->spoonacularScore) : 0;
         $recipeId = $data->id ?? null;
+        $summary = $data->summary ?? "null";
 
-        return [$title, $image, $readyInMinutes, $spoonacularScore, $recipeId];
+        return [$title, $image, $readyInMinutes, $spoonacularScore, $recipeId, $summary];
     }
 
     public function searchRecipesByNutrients(array $params)
