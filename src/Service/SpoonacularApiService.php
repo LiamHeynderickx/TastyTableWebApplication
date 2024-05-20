@@ -12,8 +12,8 @@ class SpoonacularApiService
     public function __construct(HttpClientInterface $client)
     {
         $this->client = $client;
-//        $this->apiKey = '19d88678c40e403bae96298037a292bc';
-        $this->apiKey =   'c032d39ece4346bdb75d5e9ac3d6b903';
+        $this->apiKey = '19d88678c40e403bae96298037a292bc';
+//        $this->apiKey =   'c032d39ece4346bdb75d5e9ac3d6b903';
         // api key &apiKey=a97f080d485740608c87a17ef0957691
     }
 
@@ -24,8 +24,14 @@ class SpoonacularApiService
         // Decode the JSON response into a stdClass object
         $data = json_decode($response);
 
+        if(!isset($data->recipes[0]->image)){ //overwrite image with default
+            $image = $data->recipes[0]->image ?? 'style/images/WebTech Mascot.jpg';
+            return array($data->recipes[0]->title, $image);
+        }
+        else{
+            return array($data->recipes[0]->title, $data->recipes[0]->image);
+        }
         // Access the properties of the object
-        return array($data->recipes[0]->title, $data->recipes[0]->image);
     }
 
     public function searchRecipesByNutrients(array $params)
