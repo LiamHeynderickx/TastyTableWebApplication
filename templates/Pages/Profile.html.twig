@@ -65,12 +65,22 @@
             </div>
 
             <div class="saved-recipes">
-                {% for recipe in recipes %}
+                {% for recipe in API_recipes %}
                     <div class="recipe-card">
                         <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
                         <h3>{{ recipe.title }}</h3>
                         <p>{{ recipe.readyInMinutes }} minutes </p>
                         <p>Servings: {{ recipe.servings }}</p>
+                    </div>
+                {% endfor %}
+
+                {% for recipeDb in Db_recipes %}
+                    <div class="recipe-card">
+                        {% if recipeDb.picture %}
+                            <img src="data:image/png;base64,{{ recipeDb.base64Picture }}" alt="{{ recipeDb.recipeName }}">                        {% endif %}
+                        <h3>{{ recipeDb.recipeName }}</h3>
+                        <p>{{ recipeDb.recipeDescription }} minutes </p>
+                        <p>Servings: {{ recipeDb.servings  }}</p>
                     </div>
                 {% endfor %}
 

@@ -321,69 +321,66 @@ class TastyTableController extends AbstractController
         if ($type === 'saved') {
             // Fetch saved recipes from the API & DB
             $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($UserID, 1,0);
+            $ApiRecipes=[];
             if (!empty($recipeIds)) {
                 // return new Response('No saved recipes found.');
-
-
                 //From the API
                 try {
-                    $recipes = $apiService->getRecipesInformationBulk($recipeIds);
+                    $ApiRecipes = $apiService->getRecipesInformationBulk($recipeIds);
                 } catch (\Exception $e) {
-                    return new Response('Error: ' . $e->getMessage());
+                    //return new Response('Error: ' . $e->getMessage());
                 }
-                //Add Here DB recipies part
-                //concatenate them together
-
-                return $this->render('Pages/Profile.html.twig', [
-                    'dietaryPreferences' => $dietaryPreferences,
-                    'selectedDiets' => $selectedDiets,
-                    'recipes' => $recipes
-                ]);
             }
+            $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($UserID, 0,0);
+            $DbRecipes = $em->getRepository(Recipes::class)->findBy(['id' => $recipeIds]);
+
+            foreach ($DbRecipes as $recipe) {
+                if ($recipe->getPicture()) {
+                    $pictureStream = stream_get_contents($recipe->getPicture());
+                    $recipe->base64Picture = base64_encode($pictureStream);
+                } else {
+                    $recipe->base64Picture = null;
+                }
+            }
+
+            return $this->render('Pages/Profile.html.twig', [
+                'dietaryPreferences' => $dietaryPreferences,
+                'selectedDiets' => $selectedDiets,
+                'API_recipes' => $ApiRecipes,
+                'Db_recipes'=>$DbRecipes
+            ]);
 
         }elseif ($type === 'my'){
             // Fetch my recipes from the DB and set is my TRUE
-            $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($UserID, 1,1);
-            if (!empty($recipeIds)) {
-                // return new Response('No saved recipes found.');
+            $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($UserID, 0,1);
+            $DbRecipes = $em->getRepository(Recipes::class)->findBy(['id' => $recipeIds]);
 
-                try {
-                    $recipes = $apiService->getRecipesInformationBulk($recipeIds);
-                } catch (\Exception $e) {
-                    return new Response('Error: ' . $e->getMessage());
-                }
+
                 return $this->render('Pages/Profile.html.twig', [
                     'dietaryPreferences' => $dietaryPreferences,
                     'selectedDiets' => $selectedDiets,
-                    'recipes' => $recipes
+                    'API_recipes' => [],
+                    'Db_recipes'=>$DbRecipes
 
                 ]);
-            }
+
         }
         else{
-            $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($UserID, 1,0);
-            if (!empty($recipeIds)) {
-                // return new Response('No saved recipes found.');
+            // Fetch my recipes from the DB and set is my TRUE
+            $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($UserID, 0,1);
+            $DbRecipes = $em->getRepository(Recipes::class)->findBy(['id' => $recipeIds]);
 
-                try {
-                    $recipes = $apiService->getRecipesInformationBulk($recipeIds);
-                } catch (\Exception $e) {
-                    return new Response('Error: ' . $e->getMessage());
-                }
-                return $this->render('Pages/Profile.html.twig', [
-                    'dietaryPreferences' => $dietaryPreferences,
-                    'selectedDiets' => $selectedDiets,
-                    'recipes' => $recipes
-                ]);
-            }
+
+            return $this->render('Pages/Profile.html.twig', [
+                'dietaryPreferences' => $dietaryPreferences,
+                'selectedDiets' => $selectedDiets,
+                'API_recipes' => [],
+                'Db_recipes'=>$DbRecipes
+
+            ]);
 
         }
-        return $this->render('Pages/Profile.html.twig', [
-            'dietaryPreferences' => $dietaryPreferences,
-            'selectedDiets' => $selectedDiets,
-            'recipes' => []
 
-        ]);
     }
 
     #[Route('/recipeSubmission', name: 'recipeSubmission')]
