@@ -31,7 +31,8 @@ class SpoonacularApiService
         }
         else{
             return array($data->recipes[0]->title, $data->recipes[0]->image,
-                $data->recipes[0]->readyInMinutes, intval($data->recipes[0]->spoonacularScore));
+                $data->recipes[0]->readyInMinutes, intval($data->recipes[0]->spoonacularScore),
+                $data->recipes[0]->id);
         }
         // Access the properties of the object
     }
