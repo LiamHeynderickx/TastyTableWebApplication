@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+{% block title %}TastyTable{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('style/Follows.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>{{ user.username }}'s Profile</h1>
+        <p><strong>Name:</strong> {{ user.name }}</p>
+        <p><strong>Surname:</strong> {{ user.surname }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Diet Preference:</strong> {% if user.dietPreference %} {{ user.dietPreference }} {% endif %} </p>
+        <!-- Add more fields as needed -->
+    </div>
+{% endblock %}

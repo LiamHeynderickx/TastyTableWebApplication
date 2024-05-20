@@ -17,7 +17,10 @@
     <div class="container">
         <main>
             <div class="profile-info">
-                <h2>{{ app.session.get('username') }}</h2>
+                <h2>{{ app.session.get('username') }}'s Profile</h2>
+                <p><strong>Name:</strong> {{ app.session.get('name') }}</p>
+                <p><strong>Surname:</strong> {{ app.session.get('surname') }}</p>
+                <p><strong>Email:</strong> {{ app.session.get('email') }}</p>
             </div>
             <hr class="rounded">
             <div class="breadcrumb">

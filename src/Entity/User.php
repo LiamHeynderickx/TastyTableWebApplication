@@ -68,6 +68,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->userFollowers = new ArrayCollection();
         $this->userPosts = new ArrayCollection();
         $this->userComments = new ArrayCollection();
+        $this->setDietPreference('0');
     }
 
     public function getId(): int

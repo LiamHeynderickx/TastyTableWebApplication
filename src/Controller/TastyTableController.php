@@ -500,8 +500,11 @@ class TastyTableController extends AbstractController
             throw $this->createNotFoundException('User not found');
         }
 
+        if ($user->getDietPreference() === null) {
+            $user -> setDietPreference('');
+        }
         // Render the user profile template
-        return $this->render('user/Profile.html.twig', [
+        return $this->render('Pages/User.html.twig', [
             'user' => $user,
         ]);
     }

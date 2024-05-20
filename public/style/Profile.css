@@ -8,6 +8,8 @@ body {
 main {
     flex: 1;
     padding: 20px;
+    width: 80%; /* Set the width of the main section to 80% */
+    margin: 0 auto; /* Center the main section horizontally */
 }
 
 .main-container {
@@ -51,13 +53,19 @@ main {
 }
 
 /* Change color of dropdown links on hover */
-.dropdown-content a:hover {background-color: #ddd;}
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
 
 /* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {display: block;}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
 
 /* Change the background color of the dropdown button when the dropdown content is shown */
-.dropdown:hover .dropbtn {background-color: #3e8e41;}
+.dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+}
 
 .container {
     display: flex;
@@ -66,7 +74,7 @@ main {
     align-items: center;
     background-color: white;
     padding: 20px;
-    width: 80%;
+    width: 100%; /* Set the width of the container to 100% */
     margin: auto; /* Center the container horizontally */
 }
 
@@ -112,7 +120,7 @@ hr.rounded {
 nav {
     margin: auto;
     position: relative;
-    width: clamp(320px, 50vw ,100%);
+    width: clamp(320px, 50vw, 100%);
 }
 
 nav h2 {
@@ -134,7 +142,7 @@ nav h2 {
 nav:hover h2 {
     transform: translateY(-2px);
     box-shadow: 2px 2px 5px -1px rgba(0, 0, 0, 0.35);
-    transistion: all 0.4s;
+    transition: all 0.4s;
 }
 
 #toggle {
@@ -148,7 +156,7 @@ nav:hover h2 {
     height: 40px;
 }
 
-h2::before{
+h2::before {
     position: absolute;
     right: 0;
     top: 0;
@@ -167,7 +175,7 @@ h2::before{
     transform: rotate(0deg) scale(0.75);
 }
 
-#toggle:focus ~ h2{
+#toggle:focus ~ h2 {
     background: #e1823a;
     transition: background 0.45s;
 }
@@ -182,7 +190,6 @@ h2::before{
     transition: opacity 0.3s ease-in-out;
 }
 
-
 nav ul {
     padding-left: 0;
     padding-top: 1rem;
@@ -196,6 +203,7 @@ nav ul {
     position: absolute;
     flex-direction: column; /* Change to column layout */
 }
+
 nav ul li {
     border-radius: 2px;
     position: relative;
@@ -257,7 +265,7 @@ nav ul a {
 }
 
 .recipe-card {
-    flex-basis: calc(30% - 40px); /* Set width for two cards per row */
+    flex-basis: calc(30% - 40px); /* Set width for three cards per row */
     margin-right: 20px;
     margin-bottom: 20px;
     background-color: #f9f9f9;
@@ -277,4 +285,3 @@ nav ul a {
 .recipe-card h3 {
     margin-bottom: 5px;
 }
-
