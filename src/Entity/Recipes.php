@@ -42,6 +42,7 @@ class Recipes
     #[ORM\Column(type: 'json', nullable: true)]
     private ?array $ingredientsUnits = [];
 
+
     #[ORM\Column(type: 'json', nullable: true)]
     private ?array $instructions = [];
 

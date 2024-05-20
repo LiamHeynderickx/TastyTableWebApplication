@@ -1,0 +1,139 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}TastyTable{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('style/recipeDisplay.css') }}">
+{% endblock %}
+
+{% block body %}
+    <main>
+        <div class="container">
+            <!-- Recipe Image -->
+            <aside>
+                <div class="image">
+                    {% if recipe.picture %}
+                        <img src="{{ asset('uploads/recipes/' ~ recipe.picture) }}" alt="Recipe Image" style="width: 280px; height: 280px;">
+                    {% else %}
+                        <img src="{{ asset('style/images/placeholderImage.jpeg') }}" alt="Recipe Image" style="width: 280px; height: 280px;">
+                    {% endif %}
+                </div>
+                <!-- Servings calculator -->
+                <div class="below-image">
+                    <div class="servings">
+                        <h2>Servings</h2>
+                        <button onclick="decreaseServings()"><i class="fas fa-minus"></i></button>
+                        <span id="servings">{{ recipe.servings }}</span>
+                        <button onclick="increaseServings()"><i class="fas fa-plus"></i></button>
+                    </div>
+                    <!-- Ingredients -->
+                    <div class="ingredients">
+                        {% if recipe.ingredients %}
+                            <h2>Ingredients:</h2>
+                            <ul>
+                                {% for ingredient, quantity, unit in recipe.ingredients %}
+                                    <li>
+                                        <span class="ingredient-amount" data-original-amount="{{ quantity }}">{{ quantity }}</span>{{ unit }} {{ ingredient }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p>No ingredients found.</p>
+                        {% endif %}
+                    </div>
+                    <!-- Comments Section -->
+                    <div>
+                        <h2>Comments</h2>
+                        <p>Okay that shit was bussin fr fr<br>
+                            -Chewbacca's uncle<br>
+                        </p>
+                        <!-- Display comments dynamically here -->
+                        <!-- Add your own comment -->
+                        <textarea id="comment" placeholder="Add your comment"></textarea><br>
+                        <button onclick="addComment()">Add Comment</button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Recipe Info -->
+            <div class="right-side">
+                <div class="recipeInfo">
+                    <h2>{{ recipe.recipeName }}</h2>
+                    <p>{{ recipe.recipeDescription }}</p>
+                    <p>Cooking Time: {{ recipe.time }} minutes &nbsp; | &nbsp; Calories: {{ recipe.calories }} kcal</p>
+                    <p>Fats: {{ recipe.fat }}g &nbsp; | &nbsp; Carbs: {{ recipe.carbs }}g &nbsp; | &nbsp; Proteins: {{ recipe.protein }}</p>
+                    <p>Price range: € &nbsp; | &nbsp; Rating: ★★★★★</p>
+                </div>
+
+                <!-- Instructions -->
+                <div>
+                    <h2>Instructions</h2>
+                    {% if recipe.instructions %}
+                        <div>
+                            {% for step in recipe.instructions %}
+                                <strong>Step {{ loop.index }}:</strong><br>{{ step }}<br><br>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p>No instructions found.</p>
+                    {% endif %}
+                </div>
+
+                <!-- Buttons to like recipe and mark as done -->
+                <div>
+                    <button onclick="likeRecipe()">Like</button>
+                    <button onclick="markAsDone()">Mark as Done</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer"></div>
+
+    <script>
+        $(function(){
+            $("#header").load("Header.html");
+            $("#footer").load("Footer.html");
+        });
+
+        let servings = parseInt(document.getElementById('servings').textContent);
+        let newServings = servings;
+
+        function increaseServings() {
+            newServings++;
+            document.getElementById('servings').textContent = newServings;
+            adjustIngredientAmounts(newServings);
+        }
+
+        function decreaseServings() {
+            if (newServings > 1) {
+                newServings--;
+                document.getElementById('servings').textContent = newServings;
+                adjustIngredientAmounts(newServings);
+            }
+        }
+
+        function adjustIngredientAmounts(newServings) {
+            var ingredientElements = document.querySelectorAll('.ingredient-amount');
+            ingredientElements.forEach(function(ingredient) {
+                var originalAmount = ingredient.dataset.originalAmount;
+                if (originalAmount !== "") {
+                    var includesG = originalAmount.includes('g');
+                    originalAmount = parseInt(originalAmount);
+                    var newAmount = originalAmount * newServings / servings;
+                    ingredient.textContent = includesG ? parseFloat(newAmount.toFixed(0)) + 'g' : parseFloat(newAmount.toFixed(0));
+                }
+            });
+        }
+
+        function likeRecipe() {
+            alert('Recipe liked!');
+        }
+
+        function markAsDone() {
+            alert('Recipe marked as done!');
+        }
+    </script>
+{% endblock %}
+
