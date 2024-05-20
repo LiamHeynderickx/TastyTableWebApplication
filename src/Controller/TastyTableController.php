@@ -7,6 +7,8 @@ use App\Entity\MithilTest;
 use App\Entity\Recipes;
 use App\Entity\SavedRecipes;
 use App\Entity\User;
+use App\Entity\Followers;
+use App\Entity\Following;
 use Doctrine\ORM\EntityManagerInterface;
 use phpDocumentor\Reflection\Types\Integer;
 use Psr\Log\LoggerInterface;
@@ -251,6 +253,33 @@ class TastyTableController extends AbstractController
         ]);
     }
 
+    #[Route('/follows', name: 'follows')]
+    public function follows(Request $request, EntityManagerInterface $em, SessionInterface $session): Response
+    {
+        if (!$session->get('isOnline')) {
+            return $this->redirectToRoute('index');
+        }
+
+        $userId = $session->get('userId');
+        $type = $request->query->get('type');
+
+        if ($type === 'followers') {
+            $followers = $em->getRepository(Followers::class)->findBy(['userId' => $userId]);
+            $followData = array_map(fn($follower) => $follower->getFollowerId(), $followers);
+        } elseif ($type === 'following') {
+            $following = $em->getRepository(Following::class)->findBy(['userId' => $userId]);
+            $followData = array_map(fn($following) => $following->getFollowingId(), $following);
+        } else {
+            $followData = [];
+        }
+
+        return $this->render('Pages/Follows.html.twig', [
+            'follows' => $followData,
+            'type' => $type,
+        ]);
+    }
+
+
 
     #[Route('/aboutUs', name: 'aboutUs')]
     public function aboutUs(Request $request, EntityManagerInterface $em): Response
@@ -459,5 +488,23 @@ class TastyTableController extends AbstractController
             'recipe' => $recipe,
         ]);
     }
+
+    #[Route('/profile/{username}', name: 'user_profile')]
+    public function showUserProfile(EntityManagerInterface $entityManager, string $username): Response
+    {
+        // Find the user by username
+        $user = $entityManager->getRepository(User::class)->findOneBy(['username' => $username]);
+
+        // If user not found, throw an exception or handle the error as needed
+        if (!$user) {
+            throw $this->createNotFoundException('User not found');
+        }
+
+        // Render the user profile template
+        return $this->render('user/Profile.html.twig', [
+            'user' => $user,
+        ]);
+    }
+
 }
 

@@ -20,9 +20,9 @@
                 <h2>{{ app.session.get('username') }}</h2>
                 <ul>
                     <i class="fa-solid fa-users"></i>
-                    <li><a href="#">Followers</a></li>
+                    <li><a href="{{ path('follows') }}">Followers</a></li>
                     <span class="separator"> / </span>
-                    <li><a href="#">Following</a></li>
+                    <li><a href="{{ path('follows') }}">Following</a></li>
                 </ul>
                 <hr class="rounded">
 

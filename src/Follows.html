@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--  JqueryImport-->
+    <script
+            src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasty Table</title>
+    <link rel="stylesheet" href="../public/style/Profile.css">
+    <script src="https://kit.fontawesome.com/4c4c8749b1.js" crossorigin="anonymous"></script>
+
+    <script>
+        $(function(){
+            $("#header").load("Header.html");
+            $("#footer").load("Footer.html");
+        });
+    </script>
+</head>
+
+<div id="header"></div>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasty Table - Follows</title>
+    <link rel="stylesheet" href="../public/style/Follows.css">
+    <script src="https://kit.fontawesome.com/4c4c8749b1.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="dropdown">
+    <button class="dropbtn"><i class="fa fa-bars"></i></button>
+    <div class="dropdown-content">
+        <a href="../templates/Pages/homePage.html.twig">Homepage</a>
+        <a href="Profile.html">Profile</a>
+        <a href="AboutUs.html">About Us/Contact</a>
+    </div>
+</div>
+<div class = "container">
+    <main>
+        <div class="profile-info">
+            <h2>Esat Caglayan</h2>
+        </div>
+        <hr class="rounded">
+        <div class="breadcrumb">
+            <a href="{{ path('profile', { type: 'followers' }) }}">Followers</a>
+            <span class="separator"> / </span>
+            <a href="{{ path('profile', { type: 'following' }) }}">Following</a>
+        </div>
+
+        <!-- Display Selected Option -->
+        <div class="follow-information">
+            {% for recipe in recipes %}
+            <div class="recipe-card">
+                <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
+                <h3>{{ recipe.title }}</h3>
+                <p>{{ recipe.readyInMinutes }} minutes </p>
+                <p>Servings: {{ recipe.servings }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+</div>
+<div id="footer"></div>
+</body>
+</html>
