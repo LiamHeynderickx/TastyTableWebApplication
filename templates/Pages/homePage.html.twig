@@ -106,11 +106,13 @@
 
         {% for recipe in recipes %}
           <section class="recipe-card">
-            <img src="{{ recipe[1] }}">
-            <h2>{{ recipe[0] }}</h2>
-            <br>
-            <p>Time: {{ recipe[2] }}</p>
-            <p>Rating: {{ recipe[3] }}</p>
+            <a href="{{ path('recipeDisplayer', { id: recipe[4] })  }}">
+              <img src="{{ recipe[1] }}">
+              <h2>{{ recipe[0] }}</h2>
+              <br>
+              <p>Time: {{ recipe[2] }}</p>
+              <p>Rating: {{ recipe[3] }}</p>
+            </a>
           </section>
         {% endfor %}
 

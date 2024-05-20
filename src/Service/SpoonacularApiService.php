@@ -27,7 +27,7 @@ class SpoonacularApiService
         if(!isset($data->recipes[0]->image)){ //overwrite image with default
             $image = $data->recipes[0]->image ?? 'style/images/WebTech Mascot.jpg';
             return array($data->recipes[0]->title, $image, $data->recipes[0]->readyInMinutes,
-                intval($data->recipes[0]->spoonacularScore));
+                intval($data->recipes[0]->spoonacularScore), $data->recipes[0]->id);
         }
         else{
             return array($data->recipes[0]->title, $data->recipes[0]->image,
@@ -35,6 +35,27 @@ class SpoonacularApiService
                 $data->recipes[0]->id);
         }
         // Access the properties of the object
+    }
+
+    public function getRecipeById($id)
+    {
+        $urlID = "https://api.spoonacular.com/recipes/".$id."/information?includeNutrition=false&apiKey=".$this->apiKey;
+        $response = file_get_contents($urlID);
+        $data = json_decode($response);
+
+        if ($data === null || !isset($data->title)) {
+            // Handle the case where the API response is not what you expected
+            return ['No title available', 'style/images/WebTech Mascot.jpg', 'Unknown', 'No rating', null];
+        }
+
+        // Access properties directly since the response is a single recipe object
+        $title = $data->title ?? 'No title available';
+        $image = $data->image ?? 'style/images/WebTech Mascot.jpg';
+        $readyInMinutes = $data->readyInMinutes ?? 'Unknown';
+        $spoonacularScore = isset($data->spoonacularScore) ? intval($data->spoonacularScore) : 0;
+        $recipeId = $data->id ?? null;
+
+        return [$title, $image, $readyInMinutes, $spoonacularScore, $recipeId];
     }
 
     public function searchRecipesByNutrients(array $params)

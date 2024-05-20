@@ -8,6 +8,7 @@ use App\Entity\Recipes;
 use App\Entity\SavedRecipes;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use phpDocumentor\Reflection\Types\Integer;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -207,19 +208,34 @@ class TastyTableController extends AbstractController
 
         $form = $this->createFormBuilder()->getForm();
 
-//        echo $apiService->getRandomRecipe()[0];
-//        echo $apiService->getRandomRecipe()[1];
-
         $recipes = array();
         for ($x = 0; $x < 9; $x++) {
             $recipes[] = $apiService->getRandomRecipe();
         }
 
-
+//        $recipeID = new Integer();
+//
+//        $form = $this->createFormBuilder($recipeID)
+//            ->add('recipeID', TextType::class, [
+//                'attr' => ['id' => 'id', 'placeholder' => 'recipeID']
+//            ])
+//            ->getForm();
+//        $form->handleRequest($request);
 
         return $this->render('Pages/homePage.html.twig', [
             'form' => $form->createView(),
             'recipes' => $recipes
+        ]);
+    }
+
+    #[Route('/recipe/{id}', name: 'recipeDisplayer')]
+    public function recipeDisplayer($id, SpoonacularApiService $apiService): Response
+    {
+        // Fetch the recipe details using the API service
+        $recipeDetails = $apiService->getRecipeById($id);
+
+        return $this->render('Pages/recipeDisplayer.html.twig', [
+            'recipe' => $recipeDetails,
         ]);
     }
 
