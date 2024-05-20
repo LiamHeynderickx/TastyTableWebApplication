@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig authType="PASSWORD" host="sftp.studev.groept.be" id="1fe1c3c4-e552-4591-9b5a-1a7131eb3928" port="22" nameFormat="DESCRIPTIVE" username="a23www406" useOpenSSHConfig="true" />
+    </configs>
+  </component>
+</project>
