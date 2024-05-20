@@ -13,6 +13,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,6 +21,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Mercure\Update;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -317,7 +319,6 @@ class TastyTableController extends AbstractController
                     'selectedDiets' => $selectedDiets,
                     'recipes' => $recipes
 
-
                 ]);
             }
         }
@@ -348,118 +349,86 @@ class TastyTableController extends AbstractController
     }
 
     #[Route('/recipeSubmission', name: 'recipeSubmission')]
-    public function recipeSubmission(Request $request, EntityManagerInterface $em)
+    public function recipeSubmission(Request $request, EntityManagerInterface $em, LoggerInterface $logger): Response
     {
         $recipe = new Recipes();
 
+        $recipe->setUserId(1);
+
+
         $form = $this->createFormBuilder($recipe)
-            ->add('recipeName', TextType::class, [
-                'label' => 'Recipe Name',
-            ])
-            ->add('recipeDescription', TextareaType::class, [
-                'label' => 'Recipe Description',
-                'required' => false,
-            ])
-            ->add('picture', FileType::class, [
-                'label' => 'Recipe Image',
-                'required' => false,
-            ])
+            ->add('recipeName', TextType::class, ['label' => 'Recipe Name'])
+            ->add('recipeDescription', TextareaType::class, ['label' => 'Recipe Description', 'required' => false])
+            ->add('picture', FileType::class, ['label' => 'Recipe Image', 'required' => false])
             ->add('cost', ChoiceType::class, [
-                'choices' => [
-                    '€' => '€',
-                    '€€' => '€€',
-                    '€€€' => '€€€',
-                ],
-                'expanded' => true, // If you want radio buttons
-                'multiple' => false, // If you want only one option to be selected
+                'choices' => ['€' => '1', '€€' => '2', '€€€' => '3'],
+                'expanded' => true,
+                'multiple' => false,
+                'attr' => ['class' => 'form-label-cost'],
             ])
-            ->add('ingredients', TextType::class, [
-                'label' => 'Ingredients (JSON)',
-                'required' => true,
-            ])
-            ->add('ingredientsAmounts', TextType::class, [
-                'label' => 'Ingredients Amounts (JSON)',
-                'required' => false,
-            ])
-            ->add('ingredientsUnits', TextType::class, [
-                'label' => 'Ingredients Units (JSON)',
-                'required' => false,
-            ])
-            ->add('instructions', TextType::class, [
-                'label' => 'Instructions (JSON)',
-                'required' => false,
-            ])
-            ->add('time', IntegerType::class, [
-                'label' => 'Cooking Time (minutes)',
-            ])
-            ->add('calories', IntegerType::class, [
-                'label' => 'Calories',
-                'required' => false,
-            ])
-            ->add('fat', IntegerType::class, [
-                'label' => 'Fat',
-                'required' => false,
-            ])
-            ->add('carbs', IntegerType::class, [
-                'label' => 'Carbohydrates',
-                'required' => false,
-            ])
-            ->add('protein', IntegerType::class, [
-                'label' => 'Protein',
-                'required' => false,
-            ])
-            ->add('servings', IntegerType::class, [
-                'label' => 'Number of Servings',
-            ])
-            ->add('diet', TextType::class, [
-                'label' => 'Diet',
-            ])
-            ->add('type', TextType::class, [
-                'label' => 'Meal Type',
-            ])
+            ->add('time', IntegerType::class, ['label' => 'Cooking Time (minutes)'])
+            ->add('calories', IntegerType::class, ['label' => 'Calories', 'required' => false])
+            ->add('fat', IntegerType::class, ['label' => 'Fat', 'required' => false])
+            ->add('carbs', IntegerType::class, ['label' => 'Carbohydrates', 'required' => false])
+            ->add('protein', IntegerType::class, ['label' => 'Protein', 'required' => false])
+            ->add('servings', IntegerType::class, ['label' => 'Number of Servings'])
+            ->add('diet', TextType::class, ['label' => 'Diet'])
+            ->add('type', TextType::class, ['label' => 'Meal Type'])
+            ->add('ingredients', HiddenType::class, ['mapped' => false])
+            ->add('ingredientsAmounts', HiddenType::class, ['mapped' => false])
+            ->add('ingredientsUnits', HiddenType::class, ['mapped' => false])
+            ->add('instructions', HiddenType::class, ['mapped' => false])
             ->getForm();
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             // Handle file upload
             $pictureFile = $form->get('picture')->getData();
             if ($pictureFile) {
                 $newFilename = uniqid() . '.' . $pictureFile->guessExtension();
-
                 try {
-                    $pictureFile->move(
-                        $this->getParameter('recipes_images_directory'),
-                        $newFilename
-                    );
+                    $pictureFile->move($this->getParameter('recipes_images_directory'), $newFilename);
                 } catch (FileException $e) {
                     // Handle file upload error
                 }
-
                 $recipe->setPicture($newFilename);
             }
 
-            // Set additional fields
-            // Example: Assuming logged in user, set userId
-            // $recipe->setUserId($this->getUser()->getId());
-
-            // Convert JSON inputs to arrays
+            // Get ingredients, quantities, units, and instructions from hidden fields
             $ingredients = json_decode($form->get('ingredients')->getData(), true);
-            $recipe->setIngredients($ingredients);
-
             $ingredientsAmounts = json_decode($form->get('ingredientsAmounts')->getData(), true);
-            $recipe->setIngredientsAmounts($ingredientsAmounts);
-
             $ingredientsUnits = json_decode($form->get('ingredientsUnits')->getData(), true);
-            $recipe->setIngredientsUnits($ingredientsUnits);
-
             $instructions = json_decode($form->get('instructions')->getData(), true);
-            $recipe->setInstructions($instructions);
 
+            // Set the data to the recipe entity
+            if ($ingredients != null) {
+                $recipe->setIngredients($ingredients);
+            }
+            if ($ingredientsAmounts != null) {
+                $recipe->setIngredientsAmounts($ingredientsAmounts);
+            }
+            if ($instructions != null) {
+                $recipe->setIngredientsUnits($ingredientsUnits);
+            }
+            if ($ingredients != null) {
+                $recipe->setInstructions($instructions);
+            }
+
+//            // Log raw request data
+//            $logger->info('Raw request data:', $request->request->all());
+//
+//            // Log decoded arrays
+//            $logger->info('Decoded ingredients:', $ingredients);
+//            $logger->info('Decoded ingredientsAmounts:', $ingredientsAmounts);
+//            $logger->info('Decoded ingredientsUnits:', $ingredientsUnits);
+//            $logger->info('Decoded instructions:', $instructions);
+
+            // Save the recipe to the database
             $em->persist($recipe);
             $em->flush();
 
-            // Redirect to success page or home page
             return $this->redirectToRoute('homePage');
         }
 
@@ -468,5 +437,18 @@ class TastyTableController extends AbstractController
         ]);
     }
 
+    #[Route('/recipeDisplay', name: 'recipeDisplay')]
+    public function display(Request $request, EntityManagerInterface $em, SessionInterface $session): Response
+    {
+        $recipe = $em->getRepository(Recipes::class)->find(7);
+
+        if (!$recipe) {
+            throw $this->createNotFoundException('The recipe does not exist');
+        }
+
+        return $this->render('Pages/recipeDisplay.html.twig', [
+            'recipe' => $recipe,
+        ]);
+    }
 }
 

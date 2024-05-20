@@ -8,80 +8,97 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Submit Your Recipe</h1>
+    <center><h1>Create Your Recipe</h1></center>
 
-    <form action="{{ path('recipeSubmission') }}" method="POST" enctype="multipart/form-data">
-        {{ form_start(form) }}
+    {{ form_start(form) }}
 
-        {{ form_row(form.recipeName, {'label': 'Recipe Name'}) }}
-        {{ form_row(form.type, {'label': 'Meal Type'}) }}
-        {{ form_row(form.recipeDescription, {'label': 'Recipe Description'}) }}
-        {{ form_row(form.picture, {'label': 'Recipe Image'}) }}
-        {{ form_row(form.servings, {'label': 'Number of Servings'}) }}
-        {{ form_row(form.time, {'label': 'Cooking Time (minutes)'}) }}
-        {{ form_row(form.calories, {'label': 'Calories'}) }}
-        {{ form_row(form.fat, {'label': 'Fat'}) }}
-        {{ form_row(form.carbs, {'label': 'Carbohydrates'}) }}
-        {{ form_row(form.protein, {'label': 'Protein'}) }}
+    {{ form_row(form.recipeName, {'label': 'Recipe Name'}) }}
+    {{ form_row(form.type, {'label': 'Meal Type'}) }}
+    {{ form_row(form.recipeDescription, {'label': 'Recipe Description'}) }}
+    {{ form_row(form.picture, {'label': 'Recipe Image'}) }}<br>
+    {{ form_row(form.servings, {'label': 'Number of Servings'}) }}
+    {{ form_row(form.time, {'label': 'Cooking Time (minutes)'}) }}
+    {{ form_row(form.calories, {'label': 'Calories'}) }}
+    {{ form_row(form.fat, {'label': 'Fat'}) }}
+    {{ form_row(form.carbs, {'label': 'Carbohydrates'}) }}
+    {{ form_row(form.protein, {'label': 'Protein'}) }}
+    {{ form_row(form.diet, {'label': 'Diet'}) }}
 
-        <label>Price Range:</label><br>
-        {{ form_widget(form.cost) }}<br><br>
+    <label>Price Range:</label><br>
+    {{ form_widget(form.cost) }}<br><br>
 
-        <label for="ingredients">Ingredients:</label><br>
-        <div id="ingredients_list">
-            {% for ingredient in form.ingredients %}
-                <div class="ingredient">
-                    {{ form_widget(ingredient.name, {'attr': {'placeholder': 'Ingredient', 'required': true}}) }}
-                    {{ form_widget(ingredient.quantity, {'attr': {'placeholder': 'Quantity', 'pattern': '\\d+(\\.\\d+)?'}}) }}
-                    {{ form_widget(ingredient.unit, {'attr': {'placeholder': 'Unit'}}) }}
-                </div>
-            {% endfor %}
-        </div>
-        <button type="button" onclick="addIngredient()">Add Ingredient</button><br><br>
+    <label for="ingredients">Ingredients:</label><br>
+    <div id="ingredients_list">
+        {% for ingredient in form.ingredients %}
+            <div class="ingredient">
+                {{ form_widget(ingredient.name, {'attr': {'placeholder': 'Ingredient', 'required': true}}) }}
+                {{ form_widget(ingredient.quantity, {'attr': {'placeholder': 'Quantity', 'pattern': '\\d+(\\.\\d+)?'}}) }}
+                {{ form_widget(ingredient.unit, {'attr': {'placeholder': 'Unit'}}) }}
+                <button type="button" class="remove-button">Remove</button>
+            </div>
+        {% endfor %}
+    </div>
+    <button type="button" id="add-ingredient">Add Ingredient</button><br><br>
 
-        <label for="instructions">Instructions:</label><br>
-        <div id="instructions_list">
-            {% for instruction in form.instructions %}
-                <div class="instruction">
-                    <span>Step {{ loop.index }}:</span><br>
-                    {{ form_widget(instruction, {'attr': {'rows': 2, 'cols': 50, 'required': true}}) }}
-                </div>
-            {% endfor %}
-        </div>
-        <button type="button" onclick="addInstruction()">Add Step</button><br><br>
+    <label for="instructions">Instructions:</label><br>
+    <div id="instructions_list">
+        {% for instruction in form.instructions %}
+            <div class="instruction">
+                <label>Step {{ loop.index }}:</label><br>
+                {{ form_widget(instruction, {'attr': {'rows': 2, 'cols': 50, 'required': true}}) }}
+                <button type="button" class="remove-button">Remove</button>
+            </div>
+        {% endfor %}
+    </div>
+    <button type="button" id="add-instruction">Add Step</button><br><br>
 
-        {{ form_end(form) }}
-    </form>
+    <button type="submit" class="submit-button">Submit Recipe</button>
+
+    {{ form_end(form) }}
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/4c4c8749b1.js" crossorigin="anonymous"></script>
 
     <script>
-        function addIngredient() {
-            var ingredientsList = document.getElementById('ingredients_list');
-            var newIngredient = document.createElement('div');
-            newIngredient.classList.add('ingredient');
-            newIngredient.innerHTML = `
-                <input type="text" name="recipe[ingredients][name][]" placeholder="Ingredient" required>
-                <input type="text" name="recipe[ingredients][quantity][]" placeholder="Quantity" pattern="\\d+(\\.\\d+)?">
-                <input type="text" name="recipe[ingredients][unit][]" placeholder="Unit">
-            `;
-            ingredientsList.appendChild(newIngredient);
-        }
+        $(document).ready(function() {
+            // Add Ingredient
+            $('#add-ingredient').click(function() {
+                var newIngredient = `
+                    <div class="ingredient">
+                        <input type="text" name="recipe[ingredients][name][]" placeholder="Ingredient" required>
+                        <input type="text" name="recipe[ingredients][quantity][]" placeholder="Quantity" pattern="\\d+(\\.\\d+)?">
+                        <input type="text" name="recipe[ingredients][unit][]" placeholder="Unit">
+                        <button type="button" class="remove-button">Remove</button>
+                    </div>
+                `;
+                $('#ingredients_list').append(newIngredient);
+            });
 
-        var step = 1;
-        function addInstruction() {
-            var instructionsList = document.getElementById('instructions_list');
-            var newStep = step++;
+            // Remove Ingredient
+            $('#ingredients_list').on('click', '.remove-button', function() {
+                $(this).parent().remove();
+            });
 
-            var newInstruction = document.createElement('div');
-            newInstruction.classList.add('instruction');
-            newInstruction.innerHTML = `
-                <span>Step ${newStep}:</span><br>
-                <textarea name="recipe[instructions][]" rows="2" cols="50" required></textarea>
-            `;
-            instructionsList.appendChild(newInstruction);
-        }
+            // Add Instruction
+            $('#add-instruction').click(function() {
+                var newInstruction = `
+                    <div class="instruction">
+                        <label>Step ${ $('.instruction').length + 1 }:</label><br>
+                        <textarea name="recipe[instructions][]" rows="2" cols="50" required></textarea>
+                        <button type="button" class="remove-button">Remove</button>
+                    </div>
+                `;
+                $('#instructions_list').append(newInstruction);
+            });
+
+            // Remove Instruction
+            $('#instructions_list').on('click', '.remove-button', function() {
+                $(this).parent().remove();
+                // Update step labels after removal
+                $('.instruction').each(function(index) {
+                    $(this).find('label').text('Step ' + (index + 1) + ':');
+                });
+            });
+        });
     </script>
-
 {% endblock %}
