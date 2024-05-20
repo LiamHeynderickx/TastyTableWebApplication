@@ -5,49 +5,27 @@ form {
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 10px;
+    /*color: #e1823a;*/
+    font-weight: bolder;
 }
 
-/* Adjust space between labels and input fields */
 form label {
     display: block;
-    margin-bottom: 10px; /* Adjust as needed */
+    margin-bottom: 10px;
 }
 
-/* Ingredient/Amount/Unit Boxes Side by Side */
-.ingredient {
-    display: flex;
-    gap: 10px; /* Adjust space between fields */
-    align-items: center;
-    margin-bottom: 10px; /* Adjust as needed */
-}
-
-.ingredient input[type="text"],
-.ingredient input[type="number"],
-.ingredient input[type="text"] {
-    width: 33%; /* Adjust width as needed */
+form input[type="text"],
+form input[type="number"],
+form select,
+form textarea {
+    width: calc(100% - 20px);
     padding: 10px;
+    margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
 }
 
-/* Price Range Choices Side by Side */
-.cost-field {
-    display: flex;
-    gap: 10px; /* Adjust space between fields */
-    align-items: center;
-    margin-bottom: 10px; /* Adjust as needed */
-}
-
-.cost-field label {
-    margin-bottom: 0; /* Remove margin from label */
-}
-
-.cost-field input[type="radio"] {
-    margin-right: 5px; /* Adjust space between radio buttons */
-}
-
-/* Adjust styling for buttons */
 form button {
     padding: 10px 20px;
     background-color: #007bff;
@@ -58,8 +36,78 @@ form button {
     font-size: 16px;
 }
 
-/* Optional: Adjust style for form headings */
 form h1 {
     text-align: center;
-    margin-bottom: 20px; /* Adjust as needed */
+    margin-bottom: 20px;
+}
+
+.ingredient {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.ingredient button {
+    padding: 10px;
+    background-color: #dc3545; /* Red color for remove button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 10px; /* Adjust margin as needed */
+}
+
+.ingredient input[type="text"],
+.ingredient input[type="number"],
+.ingredient input[type="text"] {
+    width: calc(33.33% - 20px); /* Adjust width and gap */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.instruction {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.instruction textarea {
+    flex: 1;
+    width: calc(100% - 160px); /* Adjust width and gap */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 10px; /* Adjust margin as needed */
+}
+
+.instruction button {
+    padding: 10px;
+    background-color: #dc3545; /* Red color for remove button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 10px; /* Adjust margin as needed */
+}
+
+form .submit-button {
+    background-color: #ff9800; /* Orange color for submit button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px 20px;
+    display: block;
+    margin: 0 auto;
+}
+
+.form-label-cost {
+    display: flex;
+    gap: 20px;
 }

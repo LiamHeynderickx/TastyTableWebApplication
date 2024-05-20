@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+{% block title %}TastyTable{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('style/Follows.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="dropdown">
+        <button class="dropbtn"><i class="fa fa-bars"></i></button>
+        <div class="dropdown-content">
+            <a href="{{ path('homePage') }}">Homepage</a>
+            <a href="{{ path('profile') }}">Profile</a>
+            <a href="{{ path('aboutUs') }}">About Us/Contact</a>
+        </div>
+    </div>
+    <div class="container">
+        <main>
+            <div class="profile-info">
+                <h2>{{ app.session.get('username') }}</h2>
+            </div>
+            <hr class="rounded">
+            <div class="breadcrumb">
+                <a href="{{ path('follows', { type: 'followers' }) }}">Followers</a>
+                <span class="separator"> / </span>
+                <a href="{{ path('follows', { type: 'following' }) }}">Following</a>
+            </div>
+
+
+            <div class="follow-information">
+                <!-- Display Followers -->
+                {% if type == 'followers' %}
+                    {% for follower in follows %}
+                        <div class="follow-card">
+                            <a href="{{ path('user_profile', { 'username': follower.username }) }}">
+                                <h3>{{ follower.username }}</h3>
+                            </a>
+                        </div>
+                    {% else %}
+                        <p>No followers found.</p>
+                    {% endfor %}
+                    <!-- Display Following -->
+                {% elseif type == 'following' %}
+                    {% for followee in follows %}
+                        <div class="follow-card">
+                            <a href="{{ path('user_profile', { 'username': followee.username }) }}">
+                                <h3>{{ followee.username }}</h3>
+                            </a>
+                        </div>
+                    {% else %}
+                        <p>No following found.</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </main>
+    </div>
+{% endblock %}

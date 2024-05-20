@@ -12,14 +12,37 @@ class SpoonacularApiService
     public function __construct(HttpClientInterface $client)
     {
         $this->client = $client;
-        $this->apiKey = '19d88678c40e403bae96298037a292bc';
-        $this->apiKey =   'c032d39ece4346bdb75d5e9ac3d6b903';
-        $this->apiKey = 'a97f080d485740608c87a17ef0957691';
+//        $this->apiKey = '19d88678c40e403bae96298037a292bc';
+//        $this->apiKey =   'c032d39ece4346bdb75d5e9ac3d6b903';
+//        $this->apiKey = 'a97f080d485740608c87a17ef0957691';
+        $this->apiKey = 'face680489cd4b5fbbb1faca74e6ca22';
     }
 
-    public function getRandomRecipe() {
-        $urlRandom = "https://api.spoonacular.com/recipes/random?number=1&apiKey=" . $this->apiKey;
-        $response = file_get_contents($urlRandom);
+    public function getRandomRecipe($filters) {
+
+        $tags = [];
+        $glutenFree = "";
+        $dairyFree = "";
+
+        if (!empty($filters['vegetarian'])) {
+            $tags[] = 'vegetarian';
+        }
+        if (!empty($filters['vegan'])) {
+            $tags[] = 'vegan';
+        }
+        if (!empty($filters['gluten-free'])) {
+            $glutenFree = "true";
+        }
+        if (!empty($filters['dairy-free'])) {
+            $dairyFree = "true";
+        }
+
+        $diet = implode(',', $tags);
+        $url = "https://api.spoonacular.com/recipes/random?number=1&include-tags={$diet}&apiKey={$this->apiKey}";
+
+        echo $url;
+
+        $response = file_get_contents($url);
 
         // Decode the JSON response into a stdClass object
         $data = json_decode($response);
@@ -27,13 +50,43 @@ class SpoonacularApiService
         if(!isset($data->recipes[0]->image)){ //overwrite image with default
             $image = $data->recipes[0]->image ?? 'style/images/WebTech Mascot.jpg';
             return array($data->recipes[0]->title, $image, $data->recipes[0]->readyInMinutes,
-                intval($data->recipes[0]->spoonacularScore));
+                intval($data->recipes[0]->spoonacularScore), $data->recipes[0]->id);
         }
         else{
             return array($data->recipes[0]->title, $data->recipes[0]->image,
-                $data->recipes[0]->readyInMinutes, intval($data->recipes[0]->spoonacularScore));
+                $data->recipes[0]->readyInMinutes, intval($data->recipes[0]->spoonacularScore),
+                $data->recipes[0]->id);
         }
         // Access the properties of the object
+    }
+
+    public function getRecipeById($id)
+    {
+        $urlID = "https://api.spoonacular.com/recipes/".$id."/information?includeNutrition=false&apiKey=".$this->apiKey;
+        $response = file_get_contents($urlID);
+        $data = json_decode($response);
+
+        if ($data === null || !isset($data->title)) {
+            return [
+                'title' => 'No title available',
+                'image' => 'default_image.png',
+                'readyInMinutes' => 'Unknown',
+                'spoonacularScore' => 'No rating',
+                'id' => null
+            ];
+        }
+
+        return [
+            'recipeName' => $data->title ?? 'No title available',
+            'picture' => $data->image ?? 'default_image.png',
+            'time' => $data->readyInMinutes ?? 'Unknown',
+            'spoonacularScore' => isset($data->spoonacularScore) ? intval($data->spoonacularScore) : 0,
+            'id' => $data->id ?? null,
+            'servings' => $data->servings ?? null,
+            'ingredients' => '',
+            'recipeDescription' => $data->summary ?? null,
+
+        ];
     }
 
     public function searchRecipesByNutrients(array $params)

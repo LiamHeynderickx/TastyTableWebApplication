@@ -40,4 +40,14 @@ class FollowersRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findFollowersByUser(int $userId)
+    {
+        return $this->createQueryBuilder('f')
+            ->andWhere('f.userId = :userId') //Not sure if this works
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getResult();
+    }
+
 }

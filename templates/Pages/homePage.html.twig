@@ -14,103 +14,33 @@
       <a href="{{ path('aboutUs') }}">About Us/Contact</a>
     </div>
   </div>
-    <div class="filter-section">
-      <h3>Filter Recipes</h3>
-      <form>
-        <input type="checkbox" id="vegetarian" name="vegetarian">
-        <label for="vegetarian">Vegetarian</label><br>
-        <input type="checkbox" id="vegan" name="vegan">
-        <label for="vegan">Vegan</label><br>
-        <input type="checkbox" id="gluten-free" name="gluten-free">
-        <label for="gluten-free">Gluten-Free</label><br>
-        <input type="checkbox" id="dairy-free" name="dairy-free">
-        <label for="dairy-free">Dairy-Free</label><br>
-      </form>
-    </div>
+  <div class="filter-section">
+    <h3>Filter Recipes</h3>
+    <form method="get" action="{{ path('homePage') }}">
+      <input type="checkbox" id="vegetarian" name="vegetarian" {% if filters.vegetarian %}checked{% endif %}>
+      <label for="vegetarian">Vegetarian</label><br>
+      <input type="checkbox" id="vegan" name="vegan" {% if filters.vegan %}checked{% endif %}>
+      <label for="vegan">Vegan</label><br>
+      <input type="checkbox" id="gluten-free" name="gluten-free" {% if filters['gluten-free'] %}checked{% endif %}>
+      <label for="gluten-free">Gluten-Free</label><br>
+      <input type="checkbox" id="dairy-free" name="dairy-free" {% if filters['dairy-free'] %}checked{% endif %}>
+      <label for="dairy-free">Dairy-Free</label><br>
+      <button type="submit">Apply Filters</button>
+    </form>
+  </div>
     <main>
       <div class="recipes">
-{#        <section class="recipe-card">#}
-{#          <img src="../assets/styles/mascot%201.jpg" alt="Golden Butter Rice">#}
-{#          <h2>Golden Butter Rice</h2>#}
-{#          <div class="rate">#}
-{#            <input type="radio" id="star5" name="rate" value="5" />#}
-{#            <label for="star5" title="text">5 stars</label>#}
-{#            <input type="radio" id="star4" name="rate" value="4" />#}
-{#            <label for="star4" title="text">4 stars</label>#}
-{#            <input type="radio" id="star3" name="rate" value="3" />#}
-{#            <label for="star3" title="text">3 stars</label>#}
-{#            <input type="radio" id="star2" name="rate" value="2" />#}
-{#            <label for="star2" title="text">2 stars</label>#}
-{#            <input type="radio" id="star1" name="rate" value="1" />#}
-{#            <label for="star1" title="text">1 star</label>#}
-{#          </div>#}
-{#        </section>#}
-{#        <section class="recipe-card">#}
-{#          <img src="../assets/styles/WebTech%20Mascot.jpg" alt="Green Beans with Cherry Tomatoes">#}
-{#          <h2>Green Beans with Cherry Tomatoes</h2>#}
-{#          <p>★★★★★ 983 Ratings</p>#}
-{#        </section>#}
-{#        <section class="recipe-card">#}
-{#          <img src="../assets/styles/mascot%202.jpg" alt="Purple Cabbage Salad">#}
-{#          <h2>Purple Cabbage Salad</h2>#}
-{#          <p>★★★★☆ 25 Ratings</p>#}
-{#        </section>#}
-
-
-{#        <script>#}
-{#          for (let i=0; i<9; i++){#}
-{#            <section class="recipe-card">#}
-{#              <h2>{{recipes[i][0]}}</h2>#}
-{#              <img src="{{ recipe[i][0] }}">#}
-{#            </section>#}
-{#          }#}
-{#        </script>#}
-
-{#        <section class="recipe-card">#}
-{#          <img src="{{ recipes[0][1] }}">#}
-{#          <h2>{{ recipes[0][0] }}</h2>#}
-{#        </section>#}
-{#        <section class="recipe-card">#}
-{#          <img src="{{ recipes[1][1] }}">#}
-{#          <h2>{{ recipes[1][0] }}</h2>#}
-{#        </section>#}
-{#        <section class="recipe-card">#}
-{#          <img src="{{ recipes[2][1] }}">#}
-{#          <h2>{{ recipes[2][0] }}</h2>#}
-{#        </section>#}
-{#        <section class="recipe-card">#}
-{#          <img src="{{ recipes[3][1] }}">#}
-{#          <h2>{{ recipes[3][0] }}</h2>#}
-{#        </section>#}
-{#        <section class="recipe-card">#}
-{#          <img src="{{ recipes[4][1] }}">#}
-{#          <h2>{{ recipes[4][0] }}</h2>#}
-{#        </section>#}
-{#        <section class="recipe-card">#}
-{#          <img src="{{ recipes[5][1] }}">#}
-{#          <h2>{{ recipes[5][0] }}</h2>#}
-{#        </section>#}
-{#        <section class="recipe-card">#}
-{#          <img src="{{ recipes[6][1] }}">#}
-{#          <h2>{{ recipes[6][0] }}</h2>#}
-{#        </section>#}
-{#        <section class="recipe-card">#}
-{#          <img src="{{ recipes[7][1] }}">#}
-{#          <h2>{{ recipes[7][0] }}</h2>#}
-{#        </section>#}
-{#        <section class="recipe-card">#}
-{#          <img src="{{ recipes[8][1] }}">#}
-{#          <h2>{{ recipes[8][0] }}</h2>#}
-{#        </section>#}
 
 
         {% for recipe in recipes %}
           <section class="recipe-card">
-            <img src="{{ recipe[1] }}">
-            <h2>{{ recipe[0] }}</h2>
-            <br>
-            <p>Time: {{ recipe[2] }}</p>
-            <p>Rating: {{ recipe[3] }}</p>
+            <a href="{{ path('recipeDisplayAPI', { id: recipe[4] })  }}">
+              <img src="{{ recipe[1] }}">
+              <h2>{{ recipe[0] }}</h2>
+              <br>
+              <p>Time: {{ recipe[2] }}</p>
+              <p>Rating: {{ recipe[3] }}</p>
+            </a>
           </section>
         {% endfor %}
 
