@@ -211,7 +211,7 @@ class TastyTableController extends AbstractController
 //        echo $apiService->getRandomRecipe()[1];
 
         $recipes = array();
-        for ($x = 0; $x <= 9; $x++) {
+        for ($x = 0; $x < 9; $x++) {
             $recipes[] = $apiService->getRandomRecipe();
         }
 

@@ -13,8 +13,8 @@ class SpoonacularApiService
     {
         $this->client = $client;
         $this->apiKey = '19d88678c40e403bae96298037a292bc';
-//        $this->apiKey =   'c032d39ece4346bdb75d5e9ac3d6b903';
-        // api key &apiKey=a97f080d485740608c87a17ef0957691
+        $this->apiKey =   'c032d39ece4346bdb75d5e9ac3d6b903';
+        $this->apiKey = 'a97f080d485740608c87a17ef0957691';
     }
 
     public function getRandomRecipe() {
@@ -26,10 +26,12 @@ class SpoonacularApiService
 
         if(!isset($data->recipes[0]->image)){ //overwrite image with default
             $image = $data->recipes[0]->image ?? 'style/images/WebTech Mascot.jpg';
-            return array($data->recipes[0]->title, $image);
+            return array($data->recipes[0]->title, $image, $data->recipes[0]->readyInMinutes,
+                intval($data->recipes[0]->spoonacularScore));
         }
         else{
-            return array($data->recipes[0]->title, $data->recipes[0]->image);
+            return array($data->recipes[0]->title, $data->recipes[0]->image,
+                $data->recipes[0]->readyInMinutes, intval($data->recipes[0]->spoonacularScore));
         }
         // Access the properties of the object
     }
