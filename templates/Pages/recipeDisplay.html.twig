@@ -34,7 +34,9 @@
                             <ul>
                                 {% for index, ingredient in recipe.ingredients %}
                                     <li>
-                                        <span class="ingredient-amount">{{ recipe.ingredientsAmounts[index] }} {{ recipe.ingredientsUnits[index] }}</span> {{ ingredient }}
+                                        <span class="ingredient-amount" data-original-amount="{{ recipe.ingredientsAmounts[index] }}">
+                                            {{ recipe.ingredientsAmounts[index] }} {{ recipe.ingredientsUnits[index] }}
+                                        </span> {{ ingredient }}
                                     </li>
                                 {% endfor %}
                             </ul>
@@ -63,7 +65,16 @@
                     <p>{{ recipe.recipeDescription }}</p>
                     <p>Cooking Time: {{ recipe.time }} minutes &nbsp; | &nbsp; Calories: {{ recipe.calories }} kcal</p>
                     <p>Fats: {{ recipe.fat }}g &nbsp; | &nbsp; Carbs: {{ recipe.carbs }}g &nbsp; | &nbsp; Proteins: {{ recipe.protein }}g</p>
-                    <p>Price range: € &nbsp; | &nbsp; Rating: ★★★★★</p>
+                    <p>Price range:
+                        {% if recipe.cost == 1 %}
+                            €
+                        {% elseif recipe.cost == 2 %}
+                            €€
+                        {% elseif recipe.cost == 3 %}
+                            €€€
+                        {% endif %}
+                        &nbsp; | &nbsp; Rating: ★★★★★
+                    </p>
                 </div>
 
                 <!-- Instructions -->
@@ -117,11 +128,11 @@
         function adjustIngredientAmounts(newServings) {
             var ingredientElements = document.querySelectorAll('.ingredient-amount');
             ingredientElements.forEach(function(ingredient) {
-                var originalAmount = ingredient.textContent.trim();
-                var includesG = originalAmount.includes('g');
-                originalAmount = parseFloat(originalAmount.replace('g', '').trim());
+                var originalAmount = ingredient.getAttribute('data-original-amount');
+                var unit = ingredient.textContent.match(/[a-zA-Z]+$/)[0];
+                originalAmount = parseFloat(originalAmount);
                 var newAmount = originalAmount * newServings / servings;
-                ingredient.textContent = includesG ? parseFloat(newAmount.toFixed(0)) + 'g' : parseFloat(newAmount.toFixed(2));
+                ingredient.textContent = newAmount.toFixed(2) + ' ' + unit;
             });
         }
 

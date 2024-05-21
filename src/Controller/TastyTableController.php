@@ -487,7 +487,7 @@ class TastyTableController extends AbstractController
     #[Route('/recipeDisplay', name: 'recipeDisplay')]
     public function display(Request $request, EntityManagerInterface $em, SessionInterface $session): Response
     {
-        $recipe = $em->getRepository(Recipes::class)->find(36);
+        $recipe = $em->getRepository(Recipes::class)->find(27);
 
         if (!$recipe) {
             throw $this->createNotFoundException('The recipe does not exist');
