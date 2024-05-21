@@ -21,7 +21,7 @@ final class Version20240517124302 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         //$this->addSql('CREATE TABLE followers (id INT AUTO_INCREMENT NOT NULL, user_id VARCHAR(100) NOT NULL, follower_id VARCHAR(100) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE saved_recipes (id INT AUTO_INCREMENT NOT NULL, user_id VARCHAR(100) NOT NULL, recipe_id VARCHAR(100) NOT NULL, is_api TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+//        $this->addSql('CREATE TABLE saved_recipes (id INT AUTO_INCREMENT NOT NULL, user_id VARCHAR(100) NOT NULL, recipe_id VARCHAR(100) NOT NULL, is_api TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         //$this->addSql('ALTER TABLE user CHANGE email email VARCHAR(255) NOT NULL, CHANGE password password VARCHAR(255) NOT NULL, CHANGE username username VARCHAR(255) NOT NULL, CHANGE name name VARCHAR(255) NOT NULL, CHANGE surname surname VARCHAR(255) NOT NULL, CHANGE dietPreference dietPreference VARCHAR(255) NOT NULL');
     }
 

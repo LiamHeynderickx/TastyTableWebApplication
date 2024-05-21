@@ -15,11 +15,11 @@ class SavedRecipes
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 100)]
-    private ?string $userId = null;
+    #[ORM\Column]
+    private ?int $userId = null;
 
-    #[ORM\Column(length: 100)]
-    private ?string $recipeId = null;
+    #[ORM\Column]
+    private ?int $recipeId = null;
 
     #[ORM\Column]
     private ?bool $isApi = null;

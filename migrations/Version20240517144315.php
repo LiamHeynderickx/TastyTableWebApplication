@@ -20,10 +20,10 @@ final class Version20240517144315 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP TABLE IF EXISTS comments');
-        $this->addSql('DROP TABLE IF EXISTS following');
-        $this->addSql('DROP TABLE IF EXISTS followers');
-        $this->addSql('DROP TABLE IF EXISTS Posts');
+//        $this->addSql('DROP TABLE IF EXISTS comments');
+//        $this->addSql('DROP TABLE IF EXISTS following');
+//        $this->addSql('DROP TABLE IF EXISTS followers');
+//        $this->addSql('DROP TABLE IF EXISTS Posts');
         //$this->addSql('DROP TABLE IF EXISTS saved_recipes');
         //$this->addSql('CREATE TABLE saved_recipes (id INT AUTO_INCREMENT NOT NULL, user_id VARCHAR(100) NOT NULL, recipe_id VARCHAR(100) NOT NULL, is_api TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
 
