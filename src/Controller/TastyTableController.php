@@ -420,7 +420,12 @@ class TastyTableController extends AbstractController
             ->add('recipeName', TextType::class, ['label' => 'Recipe Name'])
             ->add('recipeDescription', TextareaType::class, ['label' => 'Recipe Description', 'required' => false])
             ->add('picture', FileType::class, ['label' => 'Recipe Image', 'required' => false])
-            ->add('cost', ChoiceType::class, ['choices' => ['€' => '1', '€€' => '2', '€€€' => '3'], 'expanded' => true, 'multiple' => false, 'attr' => ['class' => 'form-label-cost'],])
+            ->add('cost', ChoiceType::class, [
+                'choices' => ['€' => '1', '€€' => '2', '€€€' => '3'],
+                'expanded' => true,
+                'multiple' => false,
+                'attr' => ['class' => 'form-label-cost'],
+            ])
             ->add('time', IntegerType::class, ['label' => 'Cooking Time (minutes)'])
             ->add('calories', IntegerType::class, ['label' => 'Calories', 'required' => false])
             ->add('fat', IntegerType::class, ['label' => 'Fat', 'required' => false])
@@ -452,16 +457,24 @@ class TastyTableController extends AbstractController
             }
 
             // Get ingredients, quantities, units, and instructions from hidden fields
-            $ingredientsJSON = json_decode($form->get('ingredients')->getData(), true);
-            $ingredientsAmountsJSON = json_decode($form->get('ingredientsAmounts')->getData(), true);
-            $ingredientsUnitsJSON = json_decode($form->get('ingredientsUnits')->getData(), true);
-            $instructionsJSON = json_decode($form->get('instructions')->getData(), true);
+            $ingredients = json_decode($form->get('ingredients')->getData(), true);
+            $ingredientsAmounts = json_decode($form->get('ingredientsAmounts')->getData(), true);
+            $ingredientsUnits = json_decode($form->get('ingredientsUnits')->getData(), true);
+            $instructions = json_decode($form->get('instructions')->getData(), true);
 
             // Set the data to the recipe entity
-            $recipe->setIngredients($ingredientsJSON ?? []);
-            $recipe->setIngredientsAmounts($ingredientsAmountsJSON ?? []);
-            $recipe->setIngredientsUnits($ingredientsUnitsJSON ?? []);
-            $recipe->setInstructions($instructionsJSON ?? []);
+            if ($ingredients != null) {
+                $recipe->setIngredients($ingredients);
+            }
+            if ($ingredientsAmounts != null) {
+                $recipe->setIngredientsAmounts($ingredientsAmounts);
+            }
+            if ($instructions != null) {
+                $recipe->setIngredientsUnits($ingredientsUnits);
+            }
+            if ($ingredients != null) {
+                $recipe->setInstructions($instructions);
+            }
 
 //            // Log raw request data
 //            $logger->info('Raw request data:', $request->request->all());
@@ -476,7 +489,7 @@ class TastyTableController extends AbstractController
             $em->persist($recipe);
             $em->flush();
 
-            return $this->redirectToRoute('recipeDisplay');
+            return $this->redirectToRoute('homePage');
         }
 
         return $this->render('Pages/recipeSubmission.html.twig', [
@@ -487,7 +500,7 @@ class TastyTableController extends AbstractController
     #[Route('/recipeDisplay', name: 'recipeDisplay')]
     public function display(Request $request, EntityManagerInterface $em, SessionInterface $session): Response
     {
-        $recipe = $em->getRepository(Recipes::class)->find(27);
+        $recipe = $em->getRepository(Recipes::class)->find(7);
 
         if (!$recipe) {
             throw $this->createNotFoundException('The recipe does not exist');
@@ -516,6 +529,10 @@ class TastyTableController extends AbstractController
         return $this->render('Pages/User.html.twig', [
             'user' => $user,
         ]);
+    }
+    public function getWelcome(): string
+    {
+        return "Welcome";
     }
 
 }
