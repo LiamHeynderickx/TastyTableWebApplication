@@ -82,7 +82,7 @@ main {
 hr.rounded {
     border-top: 3px solid #bbb;
     border-radius: 5px;
-    border-color: limegreen;
+    border-color: black;
 }
 
 .profile-info {

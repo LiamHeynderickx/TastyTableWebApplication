@@ -261,6 +261,8 @@ class TastyTableController extends AbstractController
             return $this->redirectToRoute('index');
         }
 
+        $user = $em->getRepository(User::class)->findOneBy(['username' => $session->get('username')]);
+
         $userId = $session->get('userId');
         $type = $request->query->get('type');
 
@@ -277,6 +279,7 @@ class TastyTableController extends AbstractController
         return $this->render('Pages/Follows.html.twig', [
             'follows' => $followData,
             'type' => $type,
+            'user' => $user
         ]);
     }
 
@@ -301,6 +304,7 @@ class TastyTableController extends AbstractController
             return $this->redirectToRoute('index');
         }
 
+        $user = $em->getRepository(User::class)->findOneBy(['username' => $session->get('username')]);
 
         $dietaryPreferences = [
             'none' => 'None',
@@ -355,7 +359,8 @@ class TastyTableController extends AbstractController
                 'dietaryPreferences' => $dietaryPreferences,
                 'selectedDiets' => $selectedDiets,
                 'API_recipes' => $ApiRecipes,
-                'Db_recipes'=>$DbRecipes
+                'Db_recipes'=>$DbRecipes,
+                'user' => $user
             ]);
 
         }elseif ($type === 'my'){
@@ -370,8 +375,8 @@ class TastyTableController extends AbstractController
                     'dietaryPreferences' => $dietaryPreferences,
                     'selectedDiets' => $selectedDiets,
                     'API_recipes' => [],
-                    'Db_recipes'=>$DbRecipes
-
+                    'Db_recipes'=>$DbRecipes,
+                    'user' => $user
                 ]);
 
         }
@@ -386,8 +391,8 @@ class TastyTableController extends AbstractController
                 'dietaryPreferences' => $dietaryPreferences,
                 'selectedDiets' => $selectedDiets,
                 'API_recipes' => [],
-                'Db_recipes'=>$DbRecipes
-
+                'Db_recipes'=>$DbRecipes,
+                'user' => $user
             ]);
 
         }
