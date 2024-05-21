@@ -9,6 +9,9 @@ framework:
     #esi: true
     #fragments: true
 
+parameters:
+    recipe_images_directory: '%kernel.project_dir%/public/style/images/recipeImages'
+
 
 when@test:
     framework:

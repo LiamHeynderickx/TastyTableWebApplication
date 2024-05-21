@@ -409,22 +409,33 @@ class TastyTableController extends AbstractController
     }
 
     #[Route('/recipeSubmission', name: 'recipeSubmission')]
-    public function recipeSubmission(Request $request, EntityManagerInterface $em, LoggerInterface $logger): Response
+    public function recipeSubmission(Request $request, EntityManagerInterface $em, LoggerInterface $logger, SessionInterface $session): Response
     {
         $recipe = new Recipes();
 
-        $recipe->setUserId(1);
+        // Retrieve user ID from session and set it to the recipe entity
+        $userId = $session->get('userId');
+        if (!$userId) {
+            throw $this->createAccessDeniedException('You must be logged in to submit a recipe.');
+        }
+        $recipe->setUserId($userId);
 
+        //$recipe->setUserId(1);
 
         $form = $this->createFormBuilder($recipe)
             ->add('recipeName', TextType::class, ['label' => 'Recipe Name'])
             ->add('recipeDescription', TextareaType::class, ['label' => 'Recipe Description', 'required' => false])
-            ->add('picture', FileType::class, ['label' => 'Recipe Image', 'required' => false])
+            ->add('picture', FileType::class, [
+                'label' => 'Recipe Image',
+                'required' => false,
+                'mapped' => false, // Not mapped directly to the entity
+                'attr' => ['accept' => 'image/*'] // Limit to image files
+            ])
             ->add('cost', ChoiceType::class, [
                 'choices' => ['€' => '1', '€€' => '2', '€€€' => '3'],
                 'expanded' => true,
                 'multiple' => false,
-                'attr' => ['class' => 'form-label-cost'],
+                'attr' => ['class' => 'form-label-cost']
             ])
             ->add('time', IntegerType::class, ['label' => 'Cooking Time (minutes)'])
             ->add('calories', IntegerType::class, ['label' => 'Calories', 'required' => false])
@@ -443,53 +454,45 @@ class TastyTableController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             // Handle file upload
             $pictureFile = $form->get('picture')->getData();
+
             if ($pictureFile) {
+                // Generate a unique name for the file before saving it
                 $newFilename = uniqid() . '.' . $pictureFile->guessExtension();
+
+                // Move the file to the directory where brochures are stored
                 try {
-                    $pictureFile->move($this->getParameter('recipes_images_directory'), $newFilename);
+                    $pictureFile->move(
+                        $this->getParameter('recipe_images_directory'),
+                        $newFilename
+                    );
                 } catch (FileException $e) {
-                    // Handle file upload error
+                    // Handle exception if something happens during file upload
+                    $logger->error('Error uploading file: ' . $e->getMessage());
                 }
-                $recipe->setPicture($newFilename);
+
+                // Store the file name in the entity
+                $recipe->setPicturePath($newFilename); // Corrected method name
             }
 
             // Get ingredients, quantities, units, and instructions from hidden fields
-            $ingredients = json_decode($form->get('ingredients')->getData(), true);
-            $ingredientsAmounts = json_decode($form->get('ingredientsAmounts')->getData(), true);
-            $ingredientsUnits = json_decode($form->get('ingredientsUnits')->getData(), true);
-            $instructions = json_decode($form->get('instructions')->getData(), true);
+            $ingredientsJSON = json_decode($form->get('ingredients')->getData(), true);
+            $ingredientsAmountsJSON = json_decode($form->get('ingredientsAmounts')->getData(), true);
+            $ingredientsUnitsJSON = json_decode($form->get('ingredientsUnits')->getData(), true);
+            $instructionsJSON = json_decode($form->get('instructions')->getData(), true);
 
             // Set the data to the recipe entity
-            if ($ingredients != null) {
-                $recipe->setIngredients($ingredients);
-            }
-            if ($ingredientsAmounts != null) {
-                $recipe->setIngredientsAmounts($ingredientsAmounts);
-            }
-            if ($instructions != null) {
-                $recipe->setIngredientsUnits($ingredientsUnits);
-            }
-            if ($ingredients != null) {
-                $recipe->setInstructions($instructions);
-            }
-
-//            // Log raw request data
-//            $logger->info('Raw request data:', $request->request->all());
-//
-//            // Log decoded arrays
-//            $logger->info('Decoded ingredients:', $ingredients);
-//            $logger->info('Decoded ingredientsAmounts:', $ingredientsAmounts);
-//            $logger->info('Decoded ingredientsUnits:', $ingredientsUnits);
-//            $logger->info('Decoded instructions:', $instructions);
+            $recipe->setIngredients($ingredientsJSON ?? []);
+            $recipe->setIngredientsAmounts($ingredientsAmountsJSON ?? []);
+            $recipe->setIngredientsUnits($ingredientsUnitsJSON ?? []);
+            $recipe->setInstructions($instructionsJSON ?? []);
 
             // Save the recipe to the database
             $em->persist($recipe);
             $em->flush();
 
-            return $this->redirectToRoute('homePage');
+            return $this->redirectToRoute('recipeDisplay');
         }
 
         return $this->render('Pages/recipeSubmission.html.twig', [
@@ -497,10 +500,11 @@ class TastyTableController extends AbstractController
         ]);
     }
 
+
     #[Route('/recipeDisplay', name: 'recipeDisplay')]
     public function display(Request $request, EntityManagerInterface $em, SessionInterface $session): Response
     {
-        $recipe = $em->getRepository(Recipes::class)->find(7);
+        $recipe = $em->getRepository(Recipes::class)->find(40);
 
         if (!$recipe) {
             throw $this->createNotFoundException('The recipe does not exist');
@@ -529,10 +533,6 @@ class TastyTableController extends AbstractController
         return $this->render('Pages/User.html.twig', [
             'user' => $user,
         ]);
-    }
-    public function getWelcome(): string
-    {
-        return "Welcome";
     }
 
 }
