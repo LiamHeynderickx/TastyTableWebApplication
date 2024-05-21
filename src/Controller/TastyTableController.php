@@ -409,10 +409,18 @@ class TastyTableController extends AbstractController
     }
 
     #[Route('/recipeSubmission', name: 'recipeSubmission')]
-    public function recipeSubmission(Request $request, EntityManagerInterface $em, LoggerInterface $logger): Response
+    public function recipeSubmission(Request $request, EntityManagerInterface $em, LoggerInterface $logger, SessionInterface $session): Response
     {
         $recipe = new Recipes();
-        $recipe->setUserId(1);
+
+        // Retrieve user ID from session and set it to the recipe entity
+        $userId = $session->get('userId');
+        if (!$userId) {
+            throw $this->createAccessDeniedException('You must be logged in to submit a recipe.');
+        }
+        $recipe->setUserId($userId);
+
+        //$recipe->setUserId(1);
 
         $form = $this->createFormBuilder($recipe)
             ->add('recipeName', TextType::class, ['label' => 'Recipe Name'])
