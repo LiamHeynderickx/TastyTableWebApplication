@@ -5,10 +5,8 @@ namespace App\Tests;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\User;
-use App\Controller\TastyTableController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 class ShowUserProfileTest extends KernelTestCase
 {
@@ -32,10 +30,7 @@ class ShowUserProfileTest extends KernelTestCase
     public function testSomething(): void
     {
         $kernel = self::bootKernel();
-
         $this->assertSame('test', $kernel->getEnvironment());
-        // $routerService = static::getContainer()->get('router');
-        // $myCustomService = static::getContainer()->get(CustomService::class);
     }
 
     public function testShowUserProfileUserFound(): void
@@ -48,7 +43,7 @@ class ShowUserProfileTest extends KernelTestCase
             $user->setEmail('testuser@example.com');
             $user->setName('Test'); // Set the name field
             $user->setSurname('User'); // Set the surname field
-            $user->setDietPreference(User::DIET_VEGETARIAN); // Use the integer value for dietPreference
+            $user->setDietPreference('vegetarian'); // Use string value for dietPreference
             $user->setPassword($this->passwordHasher->hashPassword($user, 'password123')); // Set a password
 
             $this->entityManager->persist($user);
@@ -56,10 +51,7 @@ class ShowUserProfileTest extends KernelTestCase
         }
 
         // Create the controller
-        $controller = new TastyTableController();
-
-        // Create a request
-        $request = Request::create('/profile/testuser');
+        $controller = static::getContainer()->get('App\Controller\TastyTableController');
 
         // Call the controller method
         $response = $controller->showUserProfile($this->entityManager, 'testuser');
@@ -85,7 +77,7 @@ class ShowUserProfileTest extends KernelTestCase
         }
 
         // Create the controller
-        $controller = new TastyTableController();
+        $controller = static::getContainer()->get('App\Controller\TastyTableController');
 
         // Expect an exception
         $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
@@ -94,4 +86,3 @@ class ShowUserProfileTest extends KernelTestCase
         $controller->showUserProfile($this->entityManager, 'nonexistentuser');
     }
 }
-//yes
