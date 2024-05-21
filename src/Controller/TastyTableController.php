@@ -316,7 +316,7 @@ class TastyTableController extends AbstractController
         $selectedDiets = $request->query->all('diets');
         $diets = !empty($selectedDiets) ? $selectedDiets : [];
 
-        $logger->info('Selected diets:', ['diets' => $diets]);
+       // $logger->info('Selected diets:', ['diets' => $diets]);
         $type = $request->query->get('type');
         $UserID=$session->get('userId');
 
@@ -349,14 +349,7 @@ class TastyTableController extends AbstractController
             //$DbRecipes = $em->getRepository(Recipes::class)->findBy(['id' => $recipeIds]);
             $DbRecipes = $em->getRepository(Recipes::class)->findRecipesByIdsAndDiets($recipeIds, $diets);
 
-            foreach ($DbRecipes as $recipe) {
-                if ($recipe->getPicture()) {
-                    $pictureStream = stream_get_contents($recipe->getPicture());
-                    $recipe->base64Picture = base64_encode($pictureStream);
-                } else {
-                    $recipe->base64Picture = null;
-                }
-            }
+
 
             return $this->render('Pages/Profile.html.twig', [
                 'dietaryPreferences' => $dietaryPreferences,
@@ -371,14 +364,7 @@ class TastyTableController extends AbstractController
             //$DbRecipes = $em->getRepository(Recipes::class)->findBy(['id' => $recipeIds]);
             $DbRecipes = $em->getRepository(Recipes::class)->findRecipesByIdsAndDiets($recipeIds, $diets);
 
-            foreach ($DbRecipes as $recipe) {
-                if ($recipe->getPicture()) {
-                    $pictureStream = stream_get_contents($recipe->getPicture());
-                    $recipe->base64Picture = base64_encode($pictureStream);
-                } else {
-                    $recipe->base64Picture = null;
-                }
-            }
+
 
             return $this->render('Pages/Profile.html.twig', [
                     'dietaryPreferences' => $dietaryPreferences,
@@ -469,7 +455,7 @@ class TastyTableController extends AbstractController
                     );
                 } catch (FileException $e) {
                     // Handle exception if something happens during file upload
-                    $logger->error('Error uploading file: ' . $e->getMessage());
+                   // $logger->error('Error uploading file: ' . $e->getMessage());
                 }
 
                 // Store the file name in the entity

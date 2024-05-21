@@ -74,8 +74,11 @@
 
                 {% for recipeDb in Db_recipes %}
                     <div class="recipe-card">
-                        {% if recipeDb.picture %}
-                            <img src="data:image/png;base64,{{ recipeDb.base64Picture }}" alt="{{ recipeDb.recipeName }}">                        {% endif %}
+                        {% if recipeDb.picturePath %}
+                            <img src="{{ asset('style/images/recipeImages/' ~ recipeDb.picturePath) }}" alt="Recipe Image" style="width: 280px; height: 280px;">
+                        {% else %}
+                            <img src="{{ asset('style/images/placeholderImage.jpeg') }}" alt="Recipe Image" style="width: 280px; height: 280px;">
+                        {% endif %}
                         <h3>{{ recipeDb.recipeName }}</h3>
                         <p>{{ recipeDb.time }} minutes </p>
                         <p>Servings: {{ recipeDb.servings  }}</p>
