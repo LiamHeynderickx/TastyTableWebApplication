@@ -13,8 +13,8 @@
             <!-- Recipe Image -->
             <aside>
                 <div class="image">
-                    {% if recipe.picture %}
-                        <img src="{{ recipe.picture }}" alt="Recipe Image" style="width: 280px; height: 280px;">
+                    {% if recipe.picturePath %}
+                        <img src="{{ asset('style/images/recipeImages/' ~ recipe.picturePath) }}" alt="Recipe Image" style="width: 280px; height: 280px;">
                     {% else %}
                         <img src="{{ asset('style/images/placeholderImage.jpeg') }}" alt="Recipe Image" style="width: 280px; height: 280px;">
                     {% endif %}
@@ -23,20 +23,24 @@
                 <div class="below-image">
                     <div class="servings">
                         <h2>Servings</h2>
-                        <button onclick="decreaseServings()"><i class="fas fa-minus"></i></button>
-                        <span id="servings">{{ recipe.servings }}</span>
-                        <button onclick="increaseServings()"><i class="fas fa-plus"></i></button>
+                        <button id="decrease-servings" onclick="adjustServings(-1)"><i class="fas fa-minus"></i></button>
+                        <span id="servings" data-initial="{{ recipe.servings }}">{{ recipe.servings }}</span>
+                        <button id="increase-servings" onclick="adjustServings(1)"><i class="fas fa-plus"></i></button>
                     </div>
                     <!-- Ingredients -->
                     <div class="ingredients">
                         {% if recipe.ingredients is not empty %}
                             <h2>Ingredients:</h2>
-                            <ul>
+                            <ul id="ingredients-list">
                                 {% for index, ingredient in recipe.ingredients %}
                                     <li>
-                                        <span class="ingredient-amount" data-original-amount="{{ recipe.ingredientsAmounts[index] }}">
-                                            {{ recipe.ingredientsAmounts[index] }} {{ recipe.ingredientsUnits[index] }}
-                                        </span> {{ ingredient }}
+                                        {% if recipe.ingredientsAmounts[index] is not null %}
+                                            <span class="ingredient-amount" data-original-amount="{{ recipe.ingredientsAmounts[index] }}">
+                                                {{ recipe.ingredientsAmounts[index] }} {{ recipe.ingredientsUnits[index] }}
+                                                {% if recipe.ingredientsUnits[index] is not empty %} of {% endif %}
+                                            </span>
+                                        {% endif %}
+                                        {{ ingredient }}
                                     </li>
                                 {% endfor %}
                             </ul>
@@ -108,31 +112,28 @@
             $("#footer").load("Footer.html");
         });
 
-        let servings = parseInt(document.getElementById('servings').textContent);
-        let newServings = servings;
+        function adjustServings(change) {
+            let servingsElement = document.getElementById('servings');
+            let initialServings = parseFloat(servingsElement.getAttribute('data-initial'));
+            let currentServings = parseFloat(servingsElement.innerText);
+            let newServings = currentServings + change;
 
-        function increaseServings() {
-            newServings++;
-            document.getElementById('servings').textContent = newServings;
-            adjustIngredientAmounts(newServings);
-        }
+            if (newServings < 1) return; // Prevent servings from going below 1
 
-        function decreaseServings() {
-            if (newServings > 1) {
-                newServings--;
-                document.getElementById('servings').textContent = newServings;
-                adjustIngredientAmounts(newServings);
-            }
-        }
+            servingsElement.innerText = newServings;
 
-        function adjustIngredientAmounts(newServings) {
-            var ingredientElements = document.querySelectorAll('.ingredient-amount');
-            ingredientElements.forEach(function(ingredient) {
-                var originalAmount = ingredient.getAttribute('data-original-amount');
-                var unit = ingredient.textContent.match(/[a-zA-Z]+$/)[0];
-                originalAmount = parseFloat(originalAmount);
-                var newAmount = originalAmount * newServings / servings;
-                ingredient.textContent = newAmount.toFixed(2) + ' ' + unit;
+            let ingredientElements = document.querySelectorAll('.ingredient-amount');
+
+            ingredientElements.forEach(element => {
+                let originalAmount = parseFloat(element.getAttribute('data-original-amount'));
+                if (!isNaN(originalAmount)) { // Check if originalAmount is not NaN (i.e., it's a valid number)
+                    let unit = element.innerText.split(' ')[1]; // Extract the unit
+                    let newAmount = (originalAmount * newServings) / initialServings;
+                    element.innerText = `${Math.round(newAmount)} ${unit}`; // Round to whole number
+                    if (unit) {
+                        element.innerText += " of "; // Add "of" if unit is present
+                    }
+                }
             });
         }
 
@@ -142,6 +143,17 @@
 
         function markAsDone() {
             alert('Recipe marked as done!');
+        }
+
+        function addComment() {
+            let comment = document.getElementById('comment').value;
+            if (comment.trim() !== "") {
+                // Here you would add your logic to save the comment, e.g., send it to the server
+                alert('Comment added: ' + comment);
+                document.getElementById('comment').value = ''; // Clear the textarea
+            } else {
+                alert('Please enter a comment.');
+            }
         }
     </script>
 {% endblock %}

@@ -26,9 +26,8 @@ class Recipes
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $recipeDescription = null;
-
-    #[ORM\Column(type: Types::BLOB, nullable: true)]
-    private $picture;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private $picturePath;
 
     #[ORM\Column]
     private ?int $cost = null;
@@ -122,14 +121,14 @@ class Recipes
         return $this;
     }
 
-    public function getPicture()
+    public function getPicturePath(): ?string
     {
-        return $this->picture;
+        return $this->picturePath;
     }
 
-    public function setPicture($picture): static
+    public function setPicturePath(?string $picture): self
     {
-        $this->picture = $picture;
+        $this->picturePath = $picture;
 
         return $this;
     }

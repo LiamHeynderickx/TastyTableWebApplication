@@ -10,7 +10,7 @@
 ///**
 // * Auto-generated Migration: Please modify to your needs!
 // */
-//final class Version20240510122157 extends AbstractMigration
+//final class Version20240521160210 extends AbstractMigration
 //{
 //    public function getDescription(): string
 //    {
@@ -20,14 +20,13 @@
 //    public function up(Schema $schema): void
 //    {
 //        // this up() migration is auto-generated, please modify it to your needs
-//        $this->addSql('CREATE TABLE mithil_test (id INT AUTO_INCREMENT NOT NULL, col1 VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-//        $this->addSql('ALTER TABLE user ADD username VARCHAR(100) NOT NULL, ADD name VARCHAR(100) DEFAULT NULL, ADD surname VARCHAR(100) DEFAULT NULL, ADD diet_preference INT DEFAULT NULL');
+//        $this->addSql('UPDATE recipes SET picture = NULL');
+//        $this->addSql('ALTER TABLE recipes CHANGE picture picturePath VARCHAR(255) DEFAULT NULL');
 //    }
 //
 //    public function down(Schema $schema): void
 //    {
 //        // this down() migration is auto-generated, please modify it to your needs
-//        $this->addSql('DROP TABLE mithil_test');
-//        $this->addSql('ALTER TABLE user DROP username, DROP name, DROP surname, DROP diet_preference');
+//        $this->addSql('ALTER TABLE recipes CHANGE picturePath picture LONGBLOB DEFAULT NULL');
 //    }
 //}

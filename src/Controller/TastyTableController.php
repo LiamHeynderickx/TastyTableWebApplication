@@ -412,15 +412,23 @@ class TastyTableController extends AbstractController
     public function recipeSubmission(Request $request, EntityManagerInterface $em, LoggerInterface $logger): Response
     {
         $recipe = new Recipes();
-
         $recipe->setUserId(1);
-
 
         $form = $this->createFormBuilder($recipe)
             ->add('recipeName', TextType::class, ['label' => 'Recipe Name'])
             ->add('recipeDescription', TextareaType::class, ['label' => 'Recipe Description', 'required' => false])
-            ->add('picture', FileType::class, ['label' => 'Recipe Image', 'required' => false])
-            ->add('cost', ChoiceType::class, ['choices' => ['€' => '1', '€€' => '2', '€€€' => '3'], 'expanded' => true, 'multiple' => false, 'attr' => ['class' => 'form-label-cost'],])
+            ->add('picture', FileType::class, [
+                'label' => 'Recipe Image',
+                'required' => false,
+                'mapped' => false, // Not mapped directly to the entity
+                'attr' => ['accept' => 'image/*'] // Limit to image files
+            ])
+            ->add('cost', ChoiceType::class, [
+                'choices' => ['€' => '1', '€€' => '2', '€€€' => '3'],
+                'expanded' => true,
+                'multiple' => false,
+                'attr' => ['class' => 'form-label-cost']
+            ])
             ->add('time', IntegerType::class, ['label' => 'Cooking Time (minutes)'])
             ->add('calories', IntegerType::class, ['label' => 'Calories', 'required' => false])
             ->add('fat', IntegerType::class, ['label' => 'Fat', 'required' => false])
@@ -438,17 +446,26 @@ class TastyTableController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             // Handle file upload
             $pictureFile = $form->get('picture')->getData();
+
             if ($pictureFile) {
+                // Generate a unique name for the file before saving it
                 $newFilename = uniqid() . '.' . $pictureFile->guessExtension();
+
+                // Move the file to the directory where brochures are stored
                 try {
-                    $pictureFile->move($this->getParameter('recipes_images_directory'), $newFilename);
+                    $pictureFile->move(
+                        $this->getParameter('recipe_images_directory'),
+                        $newFilename
+                    );
                 } catch (FileException $e) {
-                    // Handle file upload error
+                    // Handle exception if something happens during file upload
+                    $logger->error('Error uploading file: ' . $e->getMessage());
                 }
-                $recipe->setPicture($newFilename);
+
+                // Store the file name in the entity
+                $recipe->setPicturePath($newFilename); // Corrected method name
             }
 
             // Get ingredients, quantities, units, and instructions from hidden fields
@@ -463,15 +480,6 @@ class TastyTableController extends AbstractController
             $recipe->setIngredientsUnits($ingredientsUnitsJSON ?? []);
             $recipe->setInstructions($instructionsJSON ?? []);
 
-//            // Log raw request data
-//            $logger->info('Raw request data:', $request->request->all());
-//
-//            // Log decoded arrays
-//            $logger->info('Decoded ingredients:', $ingredients);
-//            $logger->info('Decoded ingredientsAmounts:', $ingredientsAmounts);
-//            $logger->info('Decoded ingredientsUnits:', $ingredientsUnits);
-//            $logger->info('Decoded instructions:', $instructions);
-
             // Save the recipe to the database
             $em->persist($recipe);
             $em->flush();
@@ -484,10 +492,11 @@ class TastyTableController extends AbstractController
         ]);
     }
 
+
     #[Route('/recipeDisplay', name: 'recipeDisplay')]
     public function display(Request $request, EntityManagerInterface $em, SessionInterface $session): Response
     {
-        $recipe = $em->getRepository(Recipes::class)->find(27);
+        $recipe = $em->getRepository(Recipes::class)->find(40);
 
         if (!$recipe) {
             throw $this->createNotFoundException('The recipe does not exist');
