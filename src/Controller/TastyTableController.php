@@ -89,6 +89,7 @@ class TastyTableController extends AbstractController
                 $session->set('mail', $user->getEmail());
 
                 $session->set('userId', $user->getId());
+                $session->set('type', 'saved');
 
       //          $logger->info('User logged in', [
         //            'userId' => $user->getId(),
@@ -293,7 +294,7 @@ class TastyTableController extends AbstractController
     }
 
     #[Route('/profile', name: 'profile')]
-    public function getSavedRecipes(Request $request, EntityManagerInterface $em,SessionInterface $session,SpoonacularApiService $apiService): Response
+    public function getSavedRecipes(Request $request, EntityManagerInterface $em,SessionInterface $session,LoggerInterface $logger,SpoonacularApiService $apiService): Response
     {
         if (!$session->get('isOnline'))
         {
@@ -313,8 +314,20 @@ class TastyTableController extends AbstractController
 
 
         $selectedDiets = $request->query->all('diets');
+        $diets = !empty($selectedDiets) ? $selectedDiets : [];
+
+        $logger->info('Selected diets:', ['diets' => $diets]);
         $type = $request->query->get('type');
         $UserID=$session->get('userId');
+
+        if ($type!=='saved' and $type !== 'my')
+        {
+            $type= $session->get('type');
+        }
+        else
+        {
+            $session->set('type',$type);
+        }
 
 
         //if it is saved recipies
@@ -327,12 +340,14 @@ class TastyTableController extends AbstractController
                 //From the API
                 try {
                     $ApiRecipes = $apiService->getRecipesInformationBulk($recipeIds);
+                   // $logger->info('Selected diets:', ['diets' => $ApiRecipes]);
                 } catch (\Exception $e) {
                     //return new Response('Error: ' . $e->getMessage());
                 }
             }
             $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($UserID, 0,0);
-            $DbRecipes = $em->getRepository(Recipes::class)->findBy(['id' => $recipeIds]);
+            //$DbRecipes = $em->getRepository(Recipes::class)->findBy(['id' => $recipeIds]);
+            $DbRecipes = $em->getRepository(Recipes::class)->findRecipesByIdsAndDiets($recipeIds, $diets);
 
             foreach ($DbRecipes as $recipe) {
                 if ($recipe->getPicture()) {
@@ -353,10 +368,19 @@ class TastyTableController extends AbstractController
         }elseif ($type === 'my'){
             // Fetch my recipes from the DB and set is my TRUE
             $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($UserID, 0,1);
-            $DbRecipes = $em->getRepository(Recipes::class)->findBy(['id' => $recipeIds]);
+            //$DbRecipes = $em->getRepository(Recipes::class)->findBy(['id' => $recipeIds]);
+            $DbRecipes = $em->getRepository(Recipes::class)->findRecipesByIdsAndDiets($recipeIds, $diets);
 
+            foreach ($DbRecipes as $recipe) {
+                if ($recipe->getPicture()) {
+                    $pictureStream = stream_get_contents($recipe->getPicture());
+                    $recipe->base64Picture = base64_encode($pictureStream);
+                } else {
+                    $recipe->base64Picture = null;
+                }
+            }
 
-                return $this->render('Pages/Profile.html.twig', [
+            return $this->render('Pages/Profile.html.twig', [
                     'dietaryPreferences' => $dietaryPreferences,
                     'selectedDiets' => $selectedDiets,
                     'API_recipes' => [],
@@ -368,7 +392,8 @@ class TastyTableController extends AbstractController
         else{
             // Fetch my recipes from the DB and set is my TRUE
             $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($UserID, 0,1);
-            $DbRecipes = $em->getRepository(Recipes::class)->findBy(['id' => $recipeIds]);
+          //  $DbRecipes = $em->getRepository(Recipes::class)->findBy(['id' => $recipeIds]);
+            $DbRecipes = $em->getRepository(Recipes::class)->findRecipesByIdsAndDiets($recipeIds, $diets);
 
 
             return $this->render('Pages/Profile.html.twig', [

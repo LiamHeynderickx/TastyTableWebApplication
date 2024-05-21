@@ -40,4 +40,19 @@ class RecipesRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findRecipesByIdsAndDiets(array $recipeIds, ?array $diets = null): array
+    {
+        $queryBuilder = $this->createQueryBuilder('r')
+            ->where('r.id IN (:recipeIds)')
+            ->setParameter('recipeIds', $recipeIds);
+
+        if (!empty($diets)) {
+            $lowercaseDiets = array_map('strtolower', $diets);
+            $queryBuilder->andWhere('LOWER(r.diet) IN (:diets)')
+                ->setParameter('diets', $lowercaseDiets);
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

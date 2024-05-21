@@ -18,9 +18,6 @@
         <main>
             <div class="profile-info">
                 <h2>{{ app.session.get('username') }}'s Profile</h2>
-                <p><strong>Name:</strong> {{ app.session.get('name') }}</p>
-                <p><strong>Surname:</strong> {{ app.session.get('surname') }}</p>
-                <p><strong>Email:</strong> {{ app.session.get('email') }}</p>
                 <ul>
                     <i class="fa-solid fa-users"></i>
                     <li><a href="{{ path('follows') }}">Followers</a></li>
@@ -79,7 +76,7 @@
                         {% if recipeDb.picture %}
                             <img src="data:image/png;base64,{{ recipeDb.base64Picture }}" alt="{{ recipeDb.recipeName }}">                        {% endif %}
                         <h3>{{ recipeDb.recipeName }}</h3>
-                        <p>{{ recipeDb.recipeDescription }} minutes </p>
+                        <p>{{ recipeDb.time }} minutes </p>
                         <p>Servings: {{ recipeDb.servings  }}</p>
                     </div>
                 {% endfor %}
