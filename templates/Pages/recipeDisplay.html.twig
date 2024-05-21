@@ -29,12 +29,12 @@
                     </div>
                     <!-- Ingredients -->
                     <div class="ingredients">
-                        {% if recipe.ingredients %}
+                        {% if recipe.ingredients is not empty %}
                             <h2>Ingredients:</h2>
                             <ul>
-                                {% for ingredient, quantity, unit in recipe.ingredients %}
+                                {% for index, ingredient in recipe.ingredients %}
                                     <li>
-                                        <span class="ingredient-amount" data-original-amount="{{ quantity }}">{{ quantity }}</span>{{ unit }} {{ ingredient }}
+                                        <span class="ingredient-amount">{{ recipe.ingredientsAmounts[index] }} {{ recipe.ingredientsUnits[index] }}</span> {{ ingredient }}
                                     </li>
                                 {% endfor %}
                             </ul>
@@ -61,23 +61,23 @@
                 <div class="recipeInfo">
                     <h2>{{ recipe.recipeName }}</h2>
                     <p>{{ recipe.recipeDescription }}</p>
-                    <p>Cooking Time: {{ recipe.time }} minutes &nbsp; | &nbsp; Calories: XXXX kcal</p>
-{#                    <p>Fats: {{ recipe.fat }}g &nbsp; | &nbsp; Carbs: {{ recipe.carbs }}g &nbsp; | &nbsp; Proteins: {{ recipe.protein }}</p>#}
+                    <p>Cooking Time: {{ recipe.time }} minutes &nbsp; | &nbsp; Calories: {{ recipe.calories }} kcal</p>
+                    <p>Fats: {{ recipe.fat }}g &nbsp; | &nbsp; Carbs: {{ recipe.carbs }}g &nbsp; | &nbsp; Proteins: {{ recipe.protein }}g</p>
                     <p>Price range: € &nbsp; | &nbsp; Rating: ★★★★★</p>
                 </div>
 
                 <!-- Instructions -->
                 <div>
                     <h2>Instructions</h2>
-{#                    {% if recipe.instructions %}#}
-{#                        <div>#}
-{#                            {% for step in recipe.instructions %}#}
-{#                                <strong>Step {{ loop.index }}:</strong><br>{{ step }}<br><br>#}
-{#                            {% endfor %}#}
-{#                        </div>#}
-{#                    {% else %}#}
-{#                        <p>No instructions found.</p>#}
-{#                    {% endif %}#}
+                    {% if recipe.instructions is not empty %}
+                        <div>
+                            {% for step in recipe.instructions %}
+                                <strong>Step {{ loop.index }}:</strong><br>{{ step }}<br><br>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p>No instructions found.</p>
+                    {% endif %}
                 </div>
 
                 <!-- Buttons to like recipe and mark as done -->
@@ -117,13 +117,11 @@
         function adjustIngredientAmounts(newServings) {
             var ingredientElements = document.querySelectorAll('.ingredient-amount');
             ingredientElements.forEach(function(ingredient) {
-                var originalAmount = ingredient.dataset.originalAmount;
-                if (originalAmount !== "") {
-                    var includesG = originalAmount.includes('g');
-                    originalAmount = parseInt(originalAmount);
-                    var newAmount = originalAmount * newServings / servings;
-                    ingredient.textContent = includesG ? parseFloat(newAmount.toFixed(0)) + 'g' : parseFloat(newAmount.toFixed(0));
-                }
+                var originalAmount = ingredient.textContent.trim();
+                var includesG = originalAmount.includes('g');
+                originalAmount = parseFloat(originalAmount.replace('g', '').trim());
+                var newAmount = originalAmount * newServings / servings;
+                ingredient.textContent = includesG ? parseFloat(newAmount.toFixed(0)) + 'g' : parseFloat(newAmount.toFixed(2));
             });
         }
 
@@ -136,4 +134,3 @@
         }
     </script>
 {% endblock %}
-

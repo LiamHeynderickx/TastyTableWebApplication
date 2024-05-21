@@ -37,10 +37,10 @@ class Recipes
     private ?array $ingredients = [];
 
     #[ORM\Column(type: 'json', nullable: true)]
-    private ?array $ingredientsAmounts = [];
+    private ?array $ingredients_amounts = [];
 
     #[ORM\Column(type: 'json', nullable: true)]
-    private ?array $ingredientsUnits = [];
+    private ?array $ingredients_units = [];
 
 
     #[ORM\Column(type: 'json', nullable: true)]
@@ -160,24 +160,24 @@ class Recipes
 
     public function getIngredientsAmounts(): ?array
     {
-        return $this->ingredientsAmounts;
+        return $this->ingredients_amounts;
     }
 
-    public function setIngredientsAmounts(?array $ingredientsAmounts): static
+    public function setIngredientsAmounts(?array $ingredients_amounts): static
     {
-        $this->ingredientsAmounts = $ingredientsAmounts;
+        $this->ingredients_amounts = $ingredients_amounts;
 
         return $this;
     }
 
     public function getIngredientsUnits(): ?array
     {
-        return $this->ingredientsUnits;
+        return $this->ingredients_units;
     }
 
-    public function setIngredientsUnits(?array $ingredientsUnits): static
+    public function setIngredientsUnits(?array $ingredients_units): static
     {
-        $this->ingredientsUnits = $ingredientsUnits;
+        $this->ingredients_units = $ingredients_units;
 
         return $this;
     }

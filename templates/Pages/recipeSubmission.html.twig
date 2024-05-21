@@ -29,28 +29,29 @@
 
     <label for="ingredients">Ingredients:</label><br>
     <div id="ingredients_list">
-        {% for ingredient in form.ingredients %}
-            <div class="ingredient">
-                {{ form_widget(ingredient.name, {'attr': {'placeholder': 'Ingredient', 'required': true}}) }}
-                {{ form_widget(ingredient.quantity, {'attr': {'placeholder': 'Quantity', 'pattern': '\\d+(\\.\\d+)?'}}) }}
-                {{ form_widget(ingredient.unit, {'attr': {'placeholder': 'Unit'}}) }}
-                <button type="button" class="remove-button">Remove</button>
-            </div>
-        {% endfor %}
+        <div class="ingredient">
+            <input type="text" name="ingredient[]" placeholder="Ingredient" required>
+            <input type="text" name="amount[]" placeholder="Quantity" pattern="\d+(\.\d+)?" required>
+            <input type="text" name="unit[]" placeholder="Unit">
+            <button type="button" class="remove-button">Remove</button>
+        </div>
     </div>
     <button type="button" id="add-ingredient">Add Ingredient</button><br><br>
 
     <label for="instructions">Instructions:</label><br>
     <div id="instructions_list">
-        {% for instruction in form.instructions %}
-            <div class="instruction">
-                <label>Step {{ loop.index }}:</label><br>
-                {{ form_widget(instruction, {'attr': {'rows': 2, 'cols': 50, 'required': true}}) }}
-                <button type="button" class="remove-button">Remove</button>
-            </div>
-        {% endfor %}
+        <div class="instruction">
+            <label>Step 1:</label><br>
+            <textarea name="instruction[]" rows="2" cols="50" required></textarea>
+            <button type="button" class="remove-button">Remove</button>
+        </div>
     </div>
     <button type="button" id="add-instruction">Add Step</button><br><br>
+
+    {{ form_row(form.ingredients, {'attr': {'style': 'display:none;'}}) }}
+    {{ form_row(form.ingredientsAmounts, {'attr': {'style': 'display:none;'}}) }}
+    {{ form_row(form.ingredientsUnits, {'attr': {'style': 'display:none;'}}) }}
+    {{ form_row(form.instructions, {'attr': {'style': 'display:none;'}}) }}
 
     <button type="submit" class="submit-button">Submit Recipe</button>
 
@@ -61,43 +62,65 @@
 
     <script>
         $(document).ready(function() {
-            // Add Ingredient
-            $('#add-ingredient').click(function() {
+            function updateHiddenFields() {
+                const ingredients = [];
+                const amounts = [];
+                const units = [];
+                $('#ingredients_list .ingredient').each(function() {
+                    ingredients.push($(this).find('input[name="ingredient[]"]').val());
+                    amounts.push($(this).find('input[name="amount[]"]').val());
+                    units.push($(this).find('input[name="unit[]"]').val());
+                });
+                $('#form_ingredients').val(JSON.stringify(ingredients));
+                $('#form_ingredientsAmounts').val(JSON.stringify(amounts));
+                $('#form_ingredientsUnits').val(JSON.stringify(units));
+
+                const instructions = [];
+                $('#instructions_list .instruction textarea').each(function() {
+                    instructions.push($(this).val());
+                });
+                $('#form_instructions').val(JSON.stringify(instructions));
+            }
+
+            $('#add-ingredient').click(function () {
                 var newIngredient = `
                     <div class="ingredient">
-                        <input type="text" name="recipe[ingredients][name][]" placeholder="Ingredient" required>
-                        <input type="text" name="recipe[ingredients][quantity][]" placeholder="Quantity" pattern="\\d+(\\.\\d+)?">
-                        <input type="text" name="recipe[ingredients][unit][]" placeholder="Unit">
+                        <input type="text" name="ingredient[]" placeholder="Ingredient" required>
+                        <input type="text" name="amount[]" placeholder="Quantity" pattern="\\d+(\\.\\d+)?">
+                        <input type="text" name="unit[]" placeholder="Unit">
                         <button type="button" class="remove-button">Remove</button>
                     </div>
                 `;
                 $('#ingredients_list').append(newIngredient);
             });
 
-            // Remove Ingredient
-            $('#ingredients_list').on('click', '.remove-button', function() {
+            $('#ingredients_list').on('click', '.remove-button', function () {
                 $(this).parent().remove();
+                updateHiddenFields();
             });
 
-            // Add Instruction
-            $('#add-instruction').click(function() {
+            $('#add-instruction').click(function () {
                 var newInstruction = `
-                    <div class="instruction">
-                        <label>Step ${ $('.instruction').length + 1 }:</label><br>
-                        <textarea name="recipe[instructions][]" rows="2" cols="50" required></textarea>
-                        <button type="button" class="remove-button">Remove</button>
-                    </div>
+                <div class="instruction">
+                    <label>Step ${$('.instruction').length + 1}:</label><br>
+                    <textarea name="instruction[]" rows="2" cols="50" required></textarea>
+                    <button type="button" class="remove-button">Remove</button>
+                </div>
                 `;
                 $('#instructions_list').append(newInstruction);
             });
 
-            // Remove Instruction
-            $('#instructions_list').on('click', '.remove-button', function() {
+            $('#instructions_list').on('click', '.remove-button', function () {
                 $(this).parent().remove();
                 // Update step labels after removal
-                $('.instruction').each(function(index) {
+                $('.instruction').each(function (index) {
                     $(this).find('label').text('Step ' + (index + 1) + ':');
                 });
+                updateHiddenFields();
+            });
+
+            $('form').on('submit', function() {
+                updateHiddenFields();
             });
         });
     </script>
