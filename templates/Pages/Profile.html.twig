@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 {% block title %}TastyTable{% endblock %}
-
+{% block search_bar %}
+    <!-- Overriding and making it invisible -->
+{% endblock %}
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('style/Profile.css') }}">
 {% endblock %}
@@ -72,6 +74,7 @@
                         <h3>{{ recipe.title }}</h3>
                         <p>{{ recipe.readyInMinutes }} minutes </p>
                         <p>Servings: {{ recipe.servings }}</p>
+
                     </div>
                 {% endfor %}
 

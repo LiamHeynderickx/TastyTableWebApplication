@@ -307,7 +307,7 @@ class TastyTableController extends AbstractController
         $user = $em->getRepository(User::class)->findOneBy(['username' => $session->get('username')]);
 
         $dietaryPreferences = [
-            'none' => 'None',
+            'lacto ovo vegetarian' => 'lacto ovo vegetarian',
             'lacto-vegetarian' => 'Lacto Vegetarian',
             'ovo-vegetarian' => 'Ovo Vegetarian',
             'ovolacto-vegetarian' => 'Ovo-Lacto Vegetarian',
@@ -338,17 +338,42 @@ class TastyTableController extends AbstractController
         if ($type === 'saved') {
             // Fetch saved recipes from the API & DB
             $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($UserID, 1,0);
+           // echo "Fetched Recipe IDs:\n";
+            //print_r($recipeIds);
             $ApiRecipes=[];
             if (!empty($recipeIds)) {
                 // return new Response('No saved recipes found.');
                 //From the API
+                $filteredArrays=[];
                 try {
                     $ApiRecipes = $apiService->getRecipesInformationBulk($recipeIds);
-                   // $logger->info('Selected diets:', ['diets' => $ApiRecipes]);
+
+                    foreach ($ApiRecipes as $apiRecipe){
+
+                        if (!empty($selectedDiets)){
+
+
+                            if (array_intersect($apiRecipe['diets'], $selectedDiets))
+                            {
+
+                                $filteredArrays []= $apiRecipe;
+                               // print_r( $filteredArrays);
+
+                            }
+                        }
+
+                        if (!empty($selectedDiets))
+                        {
+                            $ApiRecipes=$filteredArrays;
+                        }
+
+                    }
+
                 } catch (\Exception $e) {
                     //return new Response('Error: ' . $e->getMessage());
                 }
             }
+
             $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($UserID, 0,0);
             //$DbRecipes = $em->getRepository(Recipes::class)->findBy(['id' => $recipeIds]);
             $DbRecipes = $em->getRepository(Recipes::class)->findRecipesByIdsAndDiets($recipeIds, $diets);
