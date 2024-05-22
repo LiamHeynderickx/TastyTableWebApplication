@@ -1,0 +1,33 @@
+
+{% extends 'base.html.twig' %}
+{% block title %}TastyTable{% endblock %}
+{% block body %}
+
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('style/homePage.css') }}">
+    {% endblock %}
+
+
+{{ form_start(form) }}
+<div>
+    {{ form_label(form.name) }}
+    {{ form_widget(form.name) }}
+</div>
+<div>
+    {{ form_label(form.surname) }}
+    {{ form_widget(form.surname) }}
+</div>
+<div>
+    {{ form_label(form.email) }}
+    {{ form_widget(form.email) }}
+</div>
+<div>
+    {{ form_label(form.password) }}
+    {{ form_widget(form.password) }}
+</div>
+<div>
+    {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
+</div>
+{{ form_end(form) }}
+
+{% endblock %}

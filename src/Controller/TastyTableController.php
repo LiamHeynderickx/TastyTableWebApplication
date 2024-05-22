@@ -350,7 +350,7 @@ class TastyTableController extends AbstractController
                             {
 
                                 $filteredArrays []= $apiRecipe;
-                               // print_r( $filteredArrays);
+                                print_r( $filteredArrays);
 
                             }
                         }
@@ -400,19 +400,9 @@ class TastyTableController extends AbstractController
         }
         else{
             // Fetch my recipes from the DB and set is my TRUE
-            $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($UserID, 0,1);
-          //  $DbRecipes = $em->getRepository(Recipes::class)->findBy(['id' => $recipeIds]);
-            $DbRecipes = $em->getRepository(Recipes::class)->findRecipesByIdsAndDiets($recipeIds, $diets);
-
-
-            return $this->render('Pages/Profile.html.twig', [
-                'dietaryPreferences' => $dietaryPreferences,
-                'selectedDiets' => $selectedDiets,
-                'API_recipes' => [],
-                'Db_recipes'=>$DbRecipes,
-                'user' => $user
-            ]);
-
+             echo "Fetched Recipe IDs:\n";
+            //print_r($recipe[0]);
+            return $this->redirectToRoute('update_profile');
         }
 
     }
@@ -562,7 +552,7 @@ class TastyTableController extends AbstractController
         ]);
     }
 
-    #[Route('/updateProfile', name: 'update_profile', methods: ['POST'])]
+    #[Route('/updateProfile', name: 'update_profile')]
     public function updateProfile(Request $request, EntityManagerInterface $em, LoggerInterface $logger, SessionInterface $session): Response
     {
         // Retrieve user ID from session
@@ -577,67 +567,40 @@ class TastyTableController extends AbstractController
             throw $this->createNotFoundException('User not found.');
         }
 
-        // Define dietary preferences options
-        $dietaryPreferences = [
-            'none' => 'None',
-            'lacto-vegetarian' => 'Lacto Vegetarian',
-            'ovo-vegetarian' => 'Ovo Vegetarian',
-            'ovolacto-vegetarian' => 'Ovo-Lacto Vegetarian',
-            'pescatarian' => 'Pescatarian',
-            'vegan' => 'Vegan',
-            'vegetarian' => 'Vegetarian'
-        ];
-
-        // Create a form for updating profile information
         $form = $this->createFormBuilder($user)
             ->add('name', TextType::class, ['label' => 'Name'])
             ->add('surname', TextType::class, ['label' => 'Surname'])
             ->add('email', EmailType::class, ['label' => 'Email'])
             ->add('password', PasswordType::class, ['label' => 'Password', 'required' => false])
-            ->add('dietaryPreferences', ChoiceType::class, [
-                'choices' => $dietaryPreferences,
-                'multiple' => true,
-                'expanded' => true,
-                'label' => 'Dietary Preferences'
-            ])
+            ->add('save', SubmitType::class, ['label' => 'Save'])
             ->getForm();
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Update user information
-            $user->setName($form->get('name')->getData());
-            $user->setSurname($form->get('surname')->getData());
-            $user->setEmail($form->get('email')->getData());
+            // If the password is not empty, encode it
+           // if ($user->getPassword()) {
+            //    $password = $this->passwordEncoder->encodePassword($user, $user->getPassword());
+             //   $user->setPassword($password);
+           // }
 
-            // If a new password is provided, encode it
-            $password = $form->get('password')->getData();
-            if ($password) {
-                $encodedPassword = password_hash($password, PASSWORD_BCRYPT);
-                $user->setPassword($encodedPassword);
-            }
-
-            // Update dietary preferences
-            $selectedPreferences = $form->get('dietaryPreferences')->getData();
-            $user->setDietPreference(implode(',', $selectedPreferences));
-
-            // Save changes to the database
             $em->persist($user);
             $em->flush();
 
-            // Add a flash message
-            $this->addFlash('success', 'Profile updated successfully.');
-
-            // Redirect to profile page
+            $this->addFlash('success', 'Profile updated successfully!');
             return $this->redirectToRoute('profile');
         }
 
-        return $this->render('Pages/Profile.html.twig', [
+        return $this->render('Pages/updateUserProfile.html.twig', [
             'form' => $form->createView(),
-            'user' => $user,
-            'dietaryPreferences' => $dietaryPreferences,
         ]);
     }
+
+
+
+
+
+
 
 }
 
