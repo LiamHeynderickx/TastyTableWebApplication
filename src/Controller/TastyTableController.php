@@ -222,7 +222,7 @@ class TastyTableController extends AbstractController
         $form = $this->createFormBuilder()->getForm();
 
         $recipes = array();
-        for ($x = 0; $x < 1; $x++) { //change loop limit to change number of recipes displayed in home
+        for ($x = 0; $x < 9; $x++) { //change loop limit to change number of recipes displayed in home
             //display less recipes to save key usage for testing
             $recipes[] = $apiService->getRandomRecipe($filters);
         }
@@ -235,6 +235,34 @@ class TastyTableController extends AbstractController
 //            ])
 //            ->getForm();
 //        $form->handleRequest($request);
+
+        return $this->render('Pages/homePage.html.twig', [
+            'form' => $form->createView(),
+            'recipes' => $recipes,
+            'filters' => $filters
+        ]);
+    }
+
+    #[Route('/search', name: 'search_recipes')]
+    public function searchRecipes(Request $request, SpoonacularApiService $apiService): Response
+    {
+        $query = $request->query->get('query');
+
+        $filters = [
+            'vegetarian' => $request->query->get('vegetarian'),
+            'vegan' => $request->query->get('vegan'),
+            'gluten-free' => $request->query->get('gluten-free'),
+            'dairy-free' => $request->query->get('dairy-free')
+        ];
+
+        // Fetch recipes based on the search query
+        $form = $this->createFormBuilder()->getForm();
+
+        $recipes = array();
+        for ($x = 0; $x < 9; $x++) { //change loop limit to change number of recipes displayed in home
+            //display less recipes to save key usage for testing
+            $recipes[] = $apiService->searchRecipesByName($query);
+        }
 
         return $this->render('Pages/homePage.html.twig', [
             'form' => $form->createView(),
