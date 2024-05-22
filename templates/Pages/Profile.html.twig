@@ -31,13 +31,13 @@
                 </ul>
                 <hr class="rounded">
 
-                {# Display and Edit Forms for Profile Information #}
+                {# Display Profile Information #}
                 <div>
-                    <p><strong>Name:</strong> <span id="name-display">{{ user.name }}</span> <i class="fas fa-edit" onclick="toggleEdit('name')"></i></p>
-
-
-
+                    <p><strong>Name:</strong> <span id="name-display">{{ user.name }}</span></p>
+                    <p><strong>Surname:</strong> <span id="surname-display">{{ user.surname }}</span></p>
+                    <p><strong>Email:</strong> <span id="email-display">{{ user.email }}</span></p>
                 </div>
+
                 <!--Dropdown-->
                 <nav>
                     <button class="dropbtn" onclick="toggleDropdown()" style="background-color: #00aaff; color: white; padding: 10px 20px; border: none; border-radius: 5px;">
