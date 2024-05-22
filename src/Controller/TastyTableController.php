@@ -517,17 +517,35 @@ class TastyTableController extends AbstractController
     }
 
 
-    #[Route('/recipeDisplay', name: 'recipeDisplay')]
-    public function display(Request $request, EntityManagerInterface $em, SessionInterface $session): Response
+    #[Route('/recipeDisplay/{id}', name: 'recipeDisplay')]
+    public function display($id,Request $request, EntityManagerInterface $em, SessionInterface $session,SpoonacularApiService $apiService): Response
     {
-        $recipe = $em->getRepository(Recipes::class)->find(40);
+        $recipe = $em->getRepository(Recipes::class)->find($id);
+        $isFromDb=1;
 
         if (!$recipe) {
-            throw $this->createNotFoundException('The recipe does not exist');
+            //throw $this->createNotFoundException('The recipe does not exist');
+           // $recipe=$apiService->getRecipeById($id);
+            //$ids[]=$id;
+
+            $recipe = ($apiService->getRecipeByIdFordisplay($id));
+            if ($recipe){
+                $isFromDb=0;
+            }
+            else
+            {
+                $recipe=[] ;
+            }
+
         }
+       // echo "Fetched Recipe IDs:\n";
+        //print_r($recipe[0]);
+
+
 
         return $this->render('Pages/recipeDisplay.html.twig', [
             'recipe' => $recipe,
+            'DbFlag' => $isFromDb,
         ]);
     }
 

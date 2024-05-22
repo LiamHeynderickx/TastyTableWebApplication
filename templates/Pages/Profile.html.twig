@@ -69,26 +69,37 @@
 
             <div class="saved-recipes">
                 {% for recipe in API_recipes %}
-                    <div class="recipe-card">
+
+                <div class="recipe-card">
                         <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
+                    <a href="{{ path('recipeDisplay', { 'id': recipe.id }) }} " id="text-for-link-1">
                         <h3>{{ recipe.title }}</h3>
+
+
                         <p>{{ recipe.readyInMinutes }} minutes </p>
                         <p>Servings: {{ recipe.servings }}</p>
-
+                    </a>
                     </div>
+
                 {% endfor %}
 
                 {% for recipeDb in Db_recipes %}
+
+
                     <div class="recipe-card">
                         {% if recipeDb.picturePath %}
                             <img src="{{ asset('style/images/recipeImages/' ~ recipeDb.picturePath) }}" alt="Recipe Image" style="width: 280px; height: 280px;">
                         {% else %}
                             <img src="{{ asset('style/images/placeholderImage.jpeg') }}" alt="Recipe Image" style="width: 280px; height: 280px;">
+
                         {% endif %}
+                        <a href="{{ path('recipeDisplay', { 'id': recipeDb.id }) }} " id="text-for-link">
                         <h3>{{ recipeDb.recipeName }}</h3>
                         <p>{{ recipeDb.time }} minutes </p>
                         <p>Servings: {{ recipeDb.servings  }}</p>
+                        </a>
                     </div>
+
                 {% endfor %}
 
                 <!-- Add more recipe cards here -->

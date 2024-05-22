@@ -246,6 +246,14 @@ nav ul a {
     text-decoration: none;
     font-weight: bold;
     transition: color 0.3s;
+    text-decoration: none;
+}
+#text-for-link,#text-for-link-1
+  {
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
 }
 
 .breadcrumb a:hover {
