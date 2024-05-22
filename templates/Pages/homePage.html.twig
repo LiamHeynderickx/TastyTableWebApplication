@@ -34,12 +34,12 @@
 
         {% for recipe in recipes %}
           <section class="recipe-card">
-            <a href="{{ path('recipeDisplayAPI', { id: recipe[4] })  }}">
-              <img src="{{ recipe[1] }}">
-              <h2>{{ recipe[0] }}</h2>
+            <a href="{{ path('recipeDisplay', { id: recipe.id })  }}">
+              <img src="{{ recipe.image }}">
+              <h2>{{ recipe.title }}</h2>
               <br>
-              <p>Time: {{ recipe[2] }}</p>
-              <p>Rating: {{ recipe[3] }}</p>
+              <p>Time: {{ recipe.readyInMinutes }}</p>
+              <p>Rating: {{ recipe.spoonacularScore }}</p>
             </a>
           </section>
         {% endfor %}

@@ -208,6 +208,34 @@ class TastyTableController extends AbstractController
         ]);
     }
 
+    #[Route('/search', name: 'search_recipes')]
+    public function searchRecipes(Request $request, SpoonacularApiService $apiService): Response
+    {
+        $query = $request->query->get('query');
+
+        $filters = [
+            'vegetarian' => $request->query->get('vegetarian'),
+            'vegan' => $request->query->get('vegan'),
+            'gluten-free' => $request->query->get('gluten-free'),
+            'dairy-free' => $request->query->get('dairy-free')
+        ];
+
+        // Fetch recipes based on the search query
+        $form = $this->createFormBuilder()->getForm();
+
+        $recipes = array();
+        for ($x = 0; $x < 1; $x++) { //change loop limit to change number of recipes displayed in home
+            //display less recipes to save key usage for testing
+            $recipes[] = $apiService->searchRecipesByName($query);
+        }
+
+        return $this->render('Pages/homePage.html.twig', [
+            'form' => $form->createView(),
+            'recipes' => $recipes,
+            'filters' => $filters
+        ]);
+    }
+
     #[Route('/recipe/{id}', name: 'recipeDisplayAPI')]
     public function recipeDisplayer($id, SpoonacularApiService $apiService): Response
     {
@@ -272,7 +300,7 @@ class TastyTableController extends AbstractController
         $user = $em->getRepository(User::class)->findOneBy(['username' => $session->get('username')]);
 
         $dietaryPreferences = [
-            'none' => 'None',
+            'lacto ovo vegetarian' => 'lacto ovo vegetarian',
             'lacto-vegetarian' => 'Lacto Vegetarian',
             'ovo-vegetarian' => 'Ovo Vegetarian',
             'ovolacto-vegetarian' => 'Ovo-Lacto Vegetarian',
@@ -303,17 +331,42 @@ class TastyTableController extends AbstractController
         if ($type === 'saved') {
             // Fetch saved recipes from the API & DB
             $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($UserID, 1,0);
+           // echo "Fetched Recipe IDs:\n";
+            //print_r($recipeIds);
             $ApiRecipes=[];
             if (!empty($recipeIds)) {
                 // return new Response('No saved recipes found.');
                 //From the API
+                $filteredArrays=[];
                 try {
                     $ApiRecipes = $apiService->getRecipesInformationBulk($recipeIds);
-                   // $logger->info('Selected diets:', ['diets' => $ApiRecipes]);
+
+                    foreach ($ApiRecipes as $apiRecipe){
+
+                        if (!empty($selectedDiets)){
+
+
+                            if (array_intersect($apiRecipe['diets'], $selectedDiets))
+                            {
+
+                                $filteredArrays []= $apiRecipe;
+                               // print_r( $filteredArrays);
+
+                            }
+                        }
+
+                        if (!empty($selectedDiets))
+                        {
+                            $ApiRecipes=$filteredArrays;
+                        }
+
+                    }
+
                 } catch (\Exception $e) {
                     //return new Response('Error: ' . $e->getMessage());
                 }
             }
+
             $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($UserID, 0,0);
             //$DbRecipes = $em->getRepository(Recipes::class)->findBy(['id' => $recipeIds]);
             $DbRecipes = $em->getRepository(Recipes::class)->findRecipesByIdsAndDiets($recipeIds, $diets);
@@ -457,17 +510,35 @@ class TastyTableController extends AbstractController
     }
 
 
-    #[Route('/recipeDisplay', name: 'recipeDisplay')]
-    public function display(Request $request, EntityManagerInterface $em, SessionInterface $session): Response
+    #[Route('/recipeDisplay/{id}', name: 'recipeDisplay')]
+    public function display($id,Request $request, EntityManagerInterface $em, SessionInterface $session,SpoonacularApiService $apiService): Response
     {
-        $recipe = $em->getRepository(Recipes::class)->find(40);
+        $recipe = $em->getRepository(Recipes::class)->find($id);
+        $isFromDb=1;
 
         if (!$recipe) {
-            throw $this->createNotFoundException('The recipe does not exist');
+            //throw $this->createNotFoundException('The recipe does not exist');
+           // $recipe=$apiService->getRecipeById($id);
+            //$ids[]=$id;
+
+            $recipe = ($apiService->getRecipeByIdFordisplay($id));
+            if ($recipe){
+                $isFromDb=0;
+            }
+            else
+            {
+                $recipe=[] ;
+            }
+
         }
+       // echo "Fetched Recipe IDs:\n";
+        //print_r($recipe[0]);
+
+
 
         return $this->render('Pages/recipeDisplay.html.twig', [
             'recipe' => $recipe,
+            'DbFlag' => $isFromDb,
         ]);
     }
 

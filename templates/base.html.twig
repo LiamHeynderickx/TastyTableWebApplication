@@ -31,12 +31,14 @@
                         <a href="{{ path('homePage') }}"><img src="{{ asset('style/images/WebTech Mascot.jpg') }}"></a>
                         <h1>Tasty Table</h1>
                     </div>
-                    <div class ="search-bar">
-                        {% block search_bar %}
-                        <input type="search" placeholder="Find a recipe or ingredient">
-                        <i class="fa fa-search"></i>
-                        {% endblock %}
-                    </div>
+            <div class="search-bar">
+                {% block search_bar %}
+                    <form method="get" action="{{ path('search_recipes') }}">
+                        <input type="search" name="query" placeholder="Find a recipe or ingredient">
+                        <button type="submit"><i class="fa fa-search"></i></button>
+                    </form>
+                {% endblock %}
+            </div>
                     <div class="user">
                         {% block profile_user %}
                         <a href="{{ path('profile') }}"><i class="fa fa-user"></i></a>
