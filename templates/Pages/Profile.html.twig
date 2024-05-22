@@ -17,11 +17,10 @@
     </div>
     <div class="container">
         <main>
+            {# templates/Pages/Profile.html.twig #}
+
             <div class="profile-info">
-                <h2>{{ user.username }}'s Profile</h2>
-                <p><strong>Name:</strong> {{ user.name }}</p>
-                <p><strong>Surname:</strong> {{ user.surname }}</p>
-                <p><strong>Email:</strong> {{ user.email }}</p>
+                <h2>{{ app.session.get('username') }}'s Profile</h2>
                 <ul>
                     <i class="fa-solid fa-users"></i>
                     <li><a href="{{ path('follows') }}">Followers</a></li>
@@ -29,6 +28,44 @@
                     <li><a href="{{ path('follows') }}">Following</a></li>
                 </ul>
                 <hr class="rounded">
+
+                {# Display and Edit Forms for Profile Information #}
+                <div>
+                    <p><strong>Name:</strong> <span id="name-display">{{ user.name }}</span> <i class="fas fa-edit" onclick="toggleEdit('name')"></i></p>
+                    <form id="name-form" action="{{ path('update_profile') }}" method="post" style="display:none;">
+                        <input type="text" name="name" value="{{ user.name }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('update-profile') }}">
+                        <button type="submit">Save</button>
+                        <button type="button" onclick="toggleEdit('name')">Cancel</button>
+                    </form>
+                </div>
+                <div>
+                    <p><strong>Surname:</strong> <span id="surname-display">{{ user.surname }}</span> <i class="fas fa-edit" onclick="toggleEdit('surname')"></i></p>
+                    <form id="surname-form" action="{{ path('update_profile') }}" method="post" style="display:none;">
+                        <input type="text" name="surname" value="{{ user.surname }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('update-profile') }}">
+                        <button type="submit">Save</button>
+                        <button type="button" onclick="toggleEdit('surname')">Cancel</button>
+                    </form>
+                </div>
+                <div>
+                    <p><strong>Email:</strong> <span id="email-display">{{ user.email }}</span> <i class="fas fa-edit" onclick="toggleEdit('email')"></i></p>
+                    <form id="email-form" action="{{ path('update_profile') }}" method="post" style="display:none;">
+                        <input type="email" name="email" value="{{ user.email }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('update-profile') }}">
+                        <button type="submit">Save</button>
+                        <button type="button" onclick="toggleEdit('email')">Cancel</button>
+                    </form>
+                </div>
+                <div>
+                    <p><strong>Password:</strong> <span>********</span> <i class="fas fa-edit" onclick="toggleEdit('password')"></i></p>
+                    <form id="password-form" action="{{ path('update_profile') }}" method="post" style="display:none;">
+                        <input type="password" name="password" placeholder="New Password">
+                        <input type="hidden" name="_token" value="{{ csrf_token('update-profile') }}">
+                        <button type="submit">Save</button>
+                        <button type="button" onclick="toggleEdit('password')">Cancel</button>
+                    </form>
+                </div>
 
                 <!--Dropdown-->
                 <nav>
@@ -46,6 +83,21 @@
                     </ul>
                 </nav>
             </div>
+
+            <script>
+                function toggleEdit(field) {
+                    const displayElement = document.getElementById(`${field}-display`);
+                    const formElement = document.getElementById(`${field}-form`);
+                    if (formElement.style.display === "none") {
+                        formElement.style.display = "block";
+                        displayElement.style.display = "none";
+                    } else {
+                        formElement.style.display = "none";
+                        displayElement.style.display = "block";
+                    }
+                }
+            </script>
+
             <hr class="rounded">
             <div class="breadcrumb">
                 <a href="{{ path('profile', { type: 'saved' }) }}">Saved Recipes</a>
