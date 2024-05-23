@@ -35,7 +35,7 @@
                 {% if type == 'followers' %}
                     {% for follower in follows %}
                         <div class="follow-card">
-                            <a href="{{ path('user_profile', { 'username': follower.username }) }}">
+                            <a href="{{ path('user_profile', {'username': follower.username, 'isFollowing': '0'}) }}">
                                 <h3>{{ follower.username }}</h3>
                             </a>
                         </div>
@@ -46,7 +46,7 @@
                 {% elseif type == 'following' %}
                     {% for followee in follows %}
                         <div class="follow-card">
-                            <a href="{{ path('user_profile', { 'username': followee.username }) }}">
+                            <a href="{{ path('user_profile', {'username': followee.username, 'isFollowing': '1'}) }}">
                                 <h3>{{ followee.username }}</h3>
                             </a>
                         </div>

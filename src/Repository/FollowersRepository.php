@@ -50,4 +50,17 @@ class FollowersRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function removeFollowingByUserAndFollowers(int $userId, int $followersId): void
+    {
+        $qb = $this->createQueryBuilder('f')
+            ->delete()
+            ->where('f.userId = :userId')
+            ->andWhere('f.followerId = :followerId')
+            ->setParameter('userId', $userId)
+            ->setParameter('followerId', $followersId)
+            ->getQuery();
+
+        $qb->execute();
+    }
+
 }
