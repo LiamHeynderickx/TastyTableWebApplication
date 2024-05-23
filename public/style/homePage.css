@@ -66,6 +66,7 @@ main {
     width: 90%;
 }
 
+
 .recipe-card {
     flex-basis: calc(30% - 40px); /* Set width for three cards per row */
     margin: 10px;
@@ -86,6 +87,24 @@ main {
 .recipe-card h3 {
     margin-bottom: 5px;
 }
+
+.noRecipe{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    width: 90%;
+}
+.noRecipe img{
+    width: 100%;
+    height: 300px;
+    margin-bottom: 40px;
+}
+.noRecipe h2{
+    margin-top: 40px;
+}
+
 
 /* 5 Star Rating */
 *{

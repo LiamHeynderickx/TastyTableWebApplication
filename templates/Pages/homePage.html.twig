@@ -31,18 +31,34 @@
     <main>
       <div class="recipes">
 
-
-        {% for recipe in recipes %}
-          <section class="recipe-card">
-            <a href="{{ path('recipeDisplay', { id: recipe.id })  }}">
-              <img src="{{ recipe.image }}">
-              <h2>{{ recipe.title }}</h2>
-              <br>
-              <p>Time: {{ recipe.readyInMinutes }}</p>
-              <p>Rating: {{ recipe.spoonacularScore }}</p>
-            </a>
+        {% if recipes == [] %}
+          <section class="noRecipe">
+            <img src="{{ asset('style/images/sadFace.png') }}">
+            <h2>No Results Found</h2>
           </section>
-        {% endfor %}
+        {% else %}
+          {% for recipe in recipes %}
+            {% if recipe is not null %}
+              <section class="recipe-card">
+                <a href="{{ path('recipeDisplay', { id: recipe.id }) }}">
+                  <img src="{{ recipe.image }}" alt="Recipe Image">
+                  <h2>{{ recipe.title }}</h2>
+                  <p>Time: {{ recipe.time }} minutes</p>
+                  <p>Rating: {{ recipe.score }}</p>
+                </a>
+              </section>
+            {% else %}
+              <section class="recipe-card">
+                <img src="{{ recipe.image }}" alt="Recipe Image">
+                <h2>{{ recipe.title }}</h2>
+                <p>Time: {{ recipe.time }} minutes</p>
+                <p>Rating: {{ recipe.score }}</p>
+              </section>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+
+
 
       </div>
     </main>
