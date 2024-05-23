@@ -15,8 +15,9 @@ class SavedRecipes
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'userComments')]
-    #[ORM\JoinColumn(nullable: false)]
+    //must specify column name to avoid errors
+    #[ORM\ManyToOne(inversedBy: 'userSavedRecipes')]
+    #[ORM\JoinColumn(name: 'user_id',nullable: false)]
     private ?User $userId = null;
 
     #[ORM\Column]

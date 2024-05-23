@@ -14,9 +14,9 @@ class SpoonacularApiService
         $this->client = $client;
 //        $this->apiKey = '19d88678c40e403bae96298037a292bc';
 //        $this->apiKey =   'c032d39ece4346bdb75d5e9ac3d6b903';
-    //   $this->apiKey = 'a97f080d485740608c87a17ef0957691';
-        $this->apiKey = 'face680489cd4b5fbbb1faca74e6ca22';
-       // $this->apiKey = 'bc0704a1ef5f424e91b1b7ab2e54153b';
+//       $this->apiKey = 'a97f080d485740608c87a17ef0957691';
+        //$this->apiKey = 'face680489cd4b5fbbb1faca74e6ca22';
+        $this->apiKey = '8fc06e17edce40e88e7f2f8984508877';
     }
 
 //    public function getRandomRecipe($filters) {
@@ -176,42 +176,6 @@ class SpoonacularApiService
         ];
     }
 
-
-//    public function searchRecipesByName(string $search){
-//
-//        $url = "https://api.spoonacular.com/recipes/complexSearch?number=9&sort=random&query=".$search."&apiKey={$this->apiKey}";
-//
-//        //have to use complex search to apply filters and still be random
-//        //then have to use id search to get more info as its not supplied by complex search
-//
-//        $response = file_get_contents($url);
-//
-//        $data = json_decode($response);
-//
-//
-//        if (isset($data->results[0])) {
-//
-//            $image = $data->image ?? 'style/images/WebTech Mascot.jpg';
-//            return [
-//                'title' => $data->title ?? 'No title available',
-//                'image' => $image,
-////                'readyInMinutes' => $data->readyInMinutes ?? 'Unknown',
-////                'spoonacularScore' => isset($data->spoonacularScore) ? intval($data->spoonacularScore) : 0,
-//                'id' => $data->id ?? null
-//            ];
-//        } else {
-//            // Handle the case where no recipes are found
-//            return [
-//                'title' => 'No title available',
-//                'image' => 'mascot 1.jpg',
-////                'readyInMinutes' => 'Unknown',
-////                'spoonacularScore' => 'No rating',
-//                'id' => null
-//            ];
-//        }
-//
-//
-//    }
 
 
 
