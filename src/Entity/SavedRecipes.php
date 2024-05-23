@@ -15,8 +15,9 @@ class SavedRecipes
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $userId = null;
+    #[ORM\ManyToOne(inversedBy: 'userComments')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $userId = null;
 
     #[ORM\Column]
     private ?int $recipeId = null;
@@ -42,12 +43,12 @@ class SavedRecipes
         return $this->id;
     }
 
-    public function getUserId(): ?string
+    public function getUserId(): ?User
     {
         return $this->userId;
     }
 
-    public function setUserId(string $userId): static
+    public function setUserId(User $userId): static
     {
         $this->userId = $userId;
 
