@@ -67,12 +67,12 @@ class SavedRecipes
         return $this;
     }
 
-    public function isApi(): ?bool
+    public function getIsApi(): ?bool
     {
         return $this->isApi;
     }
 
-    public function setApi(bool $isApi): static
+    public function setIsApi(bool $isApi): static
     {
         $this->isApi = $isApi;
 

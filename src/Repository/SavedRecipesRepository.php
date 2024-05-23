@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\SavedRecipes;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 
@@ -56,5 +57,21 @@ class SavedRecipesRepository extends ServiceEntityRepository
             ->setParameter('isMyRecipe', $isMyRecipe);
 
         return array_column($qb->getQuery()->getArrayResult(), 'recipeId');
+    }
+    public function addSavedRecipe(EntityManagerInterface $em,int $userId, int $recipeId, bool $isApi, bool $isMyRecipe): void
+    {
+        $conn = $em->getConnection();
+
+        $sql = '
+            INSERT INTO saved_recipes (user_id, recipe_id, is_api, is_my_recipe) 
+            VALUES (:userId, :recipeId, :isApi, :isMyRecipe)
+        ';
+        $stmt = $conn->prepare($sql);
+        $stmt->executeQuery([
+            'userId' => $userId,
+            'recipeId' => $recipeId,
+            'isApi' => $isApi,
+            'isMyRecipe' => $isMyRecipe,
+        ]);
     }
 }

@@ -1,0 +1,18 @@
+{# templates/add_saved_recipe.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Add Saved Recipe{% endblock %}
+
+{% block body %}
+    <h1>Add Saved Recipe</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.userId) }}
+    {{ form_row(form.recipeId) }}
+    {{ form_row(form.isApi) }}
+    {{ form_row(form.isMyRecipe) }}
+    {{ form_row(form.save) }}
+    {{ form_end(form) }}
+
+{% endblock %}
