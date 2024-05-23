@@ -174,11 +174,10 @@ class TastyTableController extends AbstractController
     #[Route('/LogOut', name: 'logOut')]
     public function LogOut(Request $request, EntityManagerInterface $em, SessionInterface $session,UserPasswordHasherInterface $passwordHasher): Response
     {
-        $form = $this->createFormBuilder()->getForm();
+
         $session->clear();
-        return $this->render('Pages/homePage.html.twig', [
-            'form' => $form->createView()
-        ]);
+        return $this->redirectToRoute('index');
+
     }
 
     #[Route('/homePage', name: 'homePage')]
@@ -350,7 +349,7 @@ class TastyTableController extends AbstractController
                             {
 
                                 $filteredArrays []= $apiRecipe;
-                                print_r( $filteredArrays);
+                              //  print_r( $filteredArrays);
 
                             }
                         }
@@ -533,10 +532,13 @@ class TastyTableController extends AbstractController
     }
 
     #[Route('/profile/{username}', name: 'user_profile')]
-    public function showUserProfile(EntityManagerInterface $entityManager, string $username): Response
+    public function showUserProfile(EntityManagerInterface $entityManager, string $username,Request $request,SessionInterface $session): Response
     {
         // Find the user by username
         $user = $entityManager->getRepository(User::class)->findOneBy(['username' => $username]);
+
+        $type = $request->query->get('type');
+
 
         // If user not found, throw an exception or handle the error as needed
         if (!$user) {
@@ -545,6 +547,38 @@ class TastyTableController extends AbstractController
 
         if ($user->getDietPreference() === null) {
             $user -> setDietPreference('');
+        }
+
+        if ($type === 'delete')
+        {
+            $userId = $session->get('userId');
+            $mainUser = $entityManager->getRepository(User::class)->findOneBy(['username' => $userId]);
+            $following = $entityManager->getRepository(Following::class)->findOneBy(['userId' =>21, 'followingId' => $user->getId()]);
+
+            if ($following) {
+                echo "Following entity ID: " . $following->getId() . "<br>";
+                echo "Following entity User ID: " . $following->getUserId()->getId() . "<br>";
+                echo "Following entity Following ID: " . $following->getFollowingId()->getId() . "<br>";
+
+
+
+               // $entityManager->remove($following);
+                $entityManager->getRepository(Following::class)->removeFollowingByUserAndFollowing($following->getUserId()->getId() ,$following->getFollowingId()->getId());
+                // Debugging: Before flushing
+                echo "Before flush<br>";
+                try {
+                    $entityManager->flush();
+                   // echo "Flush successful<br>";
+                } catch (\Exception $e) {
+                    echo "Error during flush: " . $e->getMessage() . "<br>";
+                }
+                // Debugging: After flushing
+                //echo "After flush<br>";
+
+                // Redirect to the follows page
+                return $this->redirectToRoute('follows');
+            }
+
         }
         // Render the user profile template
         return $this->render('Pages/User.html.twig', [

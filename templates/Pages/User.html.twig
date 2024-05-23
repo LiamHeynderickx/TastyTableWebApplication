@@ -13,5 +13,12 @@
         <p><strong>Email:</strong> {{ user.email }}</p>
         <p><strong>Diet Preference:</strong> {% if user.dietPreference %} {{ user.dietPreference }} {% endif %} </p>
         <!-- Add more fields as needed -->
+
+        <hr class="rounded">
+        <div class="breadcrumb">
+
+            <a href="{{ path('user_profile', { 'username': user.username, 'type': 'delete' }) }}">Unfollow</a>
+        </div>
+
     </div>
 {% endblock %}
