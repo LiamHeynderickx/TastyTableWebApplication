@@ -109,8 +109,8 @@ class SpoonacularApiService
             return [
                 'title' => $data2->title ?? 'No title available',
                 'image' => $image,
-                'readyInMinutes' => $data2->readyInMinutes ?? 'Unknown',
-                'spoonacularScore' => isset($data2->spoonacularScore) ? intval($data2->spoonacularScore) : 0,
+                'time' => $data2->readyInMinutes ?? 'Unknown',
+                'score' => isset($data2->spoonacularScore) ? intval($data2->spoonacularScore) : 0,
                 'id' => $data2->id ?? null
             ];
         } else {
@@ -118,11 +118,15 @@ class SpoonacularApiService
             return [
                 'title' => 'No title available',
                 'image' => 'default_image.png',
-                'readyInMinutes' => 'Unknown',
-                'spoonacularScore' => 'No rating',
+                'time' => 'Unknown',
+                'score' => 'No rating',
                 'id' => null
             ];
         }
+    }
+
+    private function getScore($intScore){
+
     }
 
     public function getRecipeById($id)
@@ -132,16 +136,16 @@ class SpoonacularApiService
         $data = json_decode($response);
 
         if ($data === null || !isset($data->title)) {
-            return [
+            return $recipes = [
                 'title' => 'No title available',
                 'image' => 'default_image.png',
-                'readyInMinutes' => 'Unknown',
-                'spoonacularScore' => 'No rating',
+                'time' => 'Unknown',
+                'score' => 'No rating',
                 'id' => null
             ];
         }
 
-        return [
+        return $recipes = [
             'recipeName' => $data->title ?? 'No title available',
             'picture' => $data->image ?? 'default_image.png',
             'time' => $data->readyInMinutes ?? 'Unknown',
@@ -155,46 +159,69 @@ class SpoonacularApiService
     }
 
 
-    public function searchRecipesByName(string $search){
+//    public function searchRecipesByName(string $search){
+//
+//        $url = "https://api.spoonacular.com/recipes/complexSearch?number=9&sort=random&query=".$search."&apiKey={$this->apiKey}";
+//
+//        //have to use complex search to apply filters and still be random
+//        //then have to use id search to get more info as its not supplied by complex search
+//
+//        $response = file_get_contents($url);
+//
+//        $data = json_decode($response);
+//
+//
+//        if (isset($data->results[0])) {
+//
+//            $image = $data->image ?? 'style/images/WebTech Mascot.jpg';
+//            return [
+//                'title' => $data->title ?? 'No title available',
+//                'image' => $image,
+////                'readyInMinutes' => $data->readyInMinutes ?? 'Unknown',
+////                'spoonacularScore' => isset($data->spoonacularScore) ? intval($data->spoonacularScore) : 0,
+//                'id' => $data->id ?? null
+//            ];
+//        } else {
+//            // Handle the case where no recipes are found
+//            return [
+//                'title' => 'No title available',
+//                'image' => 'mascot 1.jpg',
+////                'readyInMinutes' => 'Unknown',
+////                'spoonacularScore' => 'No rating',
+//                'id' => null
+//            ];
+//        }
+//
+//
+//    }
 
-        $url = "https://api.spoonacular.com/recipes/complexSearch?number=1&sort=random&query=".$search."&apiKey={$this->apiKey}";
 
-        //have to use complex search to apply filters and still be random
-        //then have to use id search to get more info as its not supplied by complex search
+
+    public function searchRecipesByName(string $search)
+    {
+        $url = "https://api.spoonacular.com/recipes/complexSearch?number=9&query=" . urlencode($search) . "&apiKey={$this->apiKey}";
 
         $response = file_get_contents($url);
-
         $data = json_decode($response);
 
-
-        if (isset($data->results[0])) {
-            $id = $data->results[0]->id;
-
-            $urlID = "https://api.spoonacular.com/recipes/" . $id . "/information?includeNutrition=false&apiKey=" . $this->apiKey;
-            $response = file_get_contents($urlID);
-            $data2 = json_decode($response);
-
-            $image = $data2->image ?? 'style/images/WebTech Mascot.jpg';
-            return [
-                'title' => $data2->title ?? 'No title available',
-                'image' => $image,
-                'readyInMinutes' => $data2->readyInMinutes ?? 'Unknown',
-                'spoonacularScore' => isset($data2->spoonacularScore) ? intval($data2->spoonacularScore) : 0,
-                'id' => $data2->id ?? null
-            ];
-        } else {
-            // Handle the case where no recipes are found
-            return [
-                'title' => 'No title available',
-                'image' => 'default_image.png',
-                'readyInMinutes' => 'Unknown',
-                'spoonacularScore' => 'No rating',
-                'id' => null
-            ];
+        $recipes = [];
+        if (isset($data->results)) {
+            foreach ($data->results as $recipe) {
+                $recipes[] = [
+                    'title' => $recipe->title ?? 'No title available',
+                    'image' => $recipe->image ?? 'default_image.png',
+                    'id' => $recipe->id ?? null,
+                    'time' => '',
+                    'score' => ''
+                ];
+            }
         }
 
-
+        return $recipes;
     }
+
+
+
 
     public function getRecipeByIdFordisplay($id){
 

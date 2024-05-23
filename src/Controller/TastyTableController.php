@@ -222,11 +222,9 @@ class TastyTableController extends AbstractController
         // Fetch recipes based on the search query
         $form = $this->createFormBuilder()->getForm();
 
-        $recipes = array();
-        for ($x = 0; $x < 1; $x++) { //change loop limit to change number of recipes displayed in home
-            //display less recipes to save key usage for testing
-            $recipes[] = $apiService->searchRecipesByName($query);
-        }
+
+        $recipes = $apiService->searchRecipesByName($query);
+
 
         return $this->render('Pages/homePage.html.twig', [
             'form' => $form->createView(),
