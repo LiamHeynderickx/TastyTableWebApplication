@@ -16,8 +16,12 @@
 
         <hr class="rounded">
         <div class="breadcrumb">
+            {% if isFollowing == '1' %}
+            <a href="{{ path('user_profile', { 'username': user.username, 'isFollowing': '1', 'type': 'delete' }) }}">Unfollow</a>
+            {% else %}
+            <a href="{{ path('user_profile', { 'username': user.username, 'isFollowing': '0', 'type': 'RemoveFollower' }) }}">Remove Follower</a>
+            {% endif %}
 
-            <a href="{{ path('user_profile', { 'username': user.username, 'type': 'delete' }) }}">Unfollow</a>
         </div>
 
     </div>

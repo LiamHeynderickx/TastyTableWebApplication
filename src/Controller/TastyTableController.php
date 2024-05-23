@@ -531,8 +531,8 @@ class TastyTableController extends AbstractController
         ]);
     }
 
-    #[Route('/profile/{username}', name: 'user_profile')]
-    public function showUserProfile(EntityManagerInterface $entityManager, string $username,Request $request,SessionInterface $session): Response
+    #[Route('/profile/{username}/{isFollowing}', name: 'user_profile')]
+    public function showUserProfile(EntityManagerInterface $entityManager, string $username,string $isFollowing,Request $request,SessionInterface $session): Response
     {
         // Find the user by username
         $user = $entityManager->getRepository(User::class)->findOneBy(['username' => $username]);
@@ -552,8 +552,8 @@ class TastyTableController extends AbstractController
         if ($type === 'delete')
         {
             $userId = $session->get('userId');
-            $mainUser = $entityManager->getRepository(User::class)->findOneBy(['username' => $userId]);
-            $following = $entityManager->getRepository(Following::class)->findOneBy(['userId' =>21, 'followingId' => $user->getId()]);
+            //$mainUser = $entityManager->getRepository(User::class)->findOneBy(['username' => $userId]);
+            $following = $entityManager->getRepository(Following::class)->findOneBy(['userId' =>$userId, 'followingId' => $user->getId()]);
 
             if ($following) {
                 echo "Following entity ID: " . $following->getId() . "<br>";
@@ -579,10 +579,43 @@ class TastyTableController extends AbstractController
                 return $this->redirectToRoute('follows');
             }
 
+
+        }
+        elseif ($type=='RemoveFollower')
+        {
+            $userId = $session->get('userId');
+            $followers = $entityManager->getRepository(Followers::class)->findOneBy(['userId' =>$userId, 'followerId' => $user->getId()]);
+
+            if ($followers) {
+                echo "Following entity ID: " . $followers->getId() . "<br>";
+                echo "Following entity User ID: " . $followers->getUserId()->getId() . "<br>";
+                echo "Following entity Following ID: " . $followers->getFollowerId()->getId() . "<br>";
+
+
+
+                // $entityManager->remove($following);
+                $entityManager->getRepository(Followers::class)->removeFollowingByUserAndFollowers($followers->getUserId()->getId() ,$followers->getFollowerId()->getId());
+                // Debugging: Before flushing
+                echo "Before flush<br>";
+                try {
+                    $entityManager->flush();
+                    // echo "Flush successful<br>";
+                } catch (\Exception $e) {
+                    echo "Error during flush: " . $e->getMessage() . "<br>";
+                }
+                // Debugging: After flushing
+                //echo "After flush<br>";
+
+                // Redirect to the follows page
+                return $this->redirectToRoute('follows');
+            }
+
+
         }
         // Render the user profile template
         return $this->render('Pages/User.html.twig', [
             'user' => $user,
+            'isFollowing'=>$isFollowing,
         ]);
     }
 
