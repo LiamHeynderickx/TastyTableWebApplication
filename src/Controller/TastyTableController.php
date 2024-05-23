@@ -233,7 +233,7 @@ class TastyTableController extends AbstractController
         ]);
     }
 
-    #[Route('/recipe/{id}', name: 'recipeDisplayAPI')]
+    #[Route('/recipe/{id}', name: 'recipeDisplayAPI')] //not used rn
     public function recipeDisplayer($id, SpoonacularApiService $apiService): Response
     {
         // Fetch the recipe details using the API service

@@ -80,10 +80,10 @@ class SpoonacularApiService
             $diet[] = 'vegan';
         }
         if (!empty($filters['gluten-free'])) {
-            $intolerances[] = 'glutenFree';
+            $intolerances[] = 'gluten';
         }
         if (!empty($filters['dairy-free'])) {
-            $intolerances[] = 'dairyFree';
+            $intolerances[] = 'dairy';
         }
 
         $dietString = implode(',', $diet);
