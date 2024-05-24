@@ -6,7 +6,11 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\User;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+
+//need these use statements because function incorporates them
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class ShowUserProfileTest extends KernelTestCase
 {
@@ -53,8 +57,12 @@ class ShowUserProfileTest extends KernelTestCase
         // Create the controller
         $controller = static::getContainer()->get('App\Controller\TastyTableController');
 
+        // Mock the Request and Session
+        $request = new Request();
+        $session = $this->createMock(SessionInterface::class);
+
         // Call the controller method
-        $response = $controller->showUserProfile($this->entityManager, 'testuser');
+        $response = $controller->showUserProfile($this->entityManager, 'testuser', 'true', $request, $session);
 
         // Assert the response is a Response object
         $this->assertInstanceOf(Response::class, $response);
@@ -79,11 +87,14 @@ class ShowUserProfileTest extends KernelTestCase
         // Create the controller
         $controller = static::getContainer()->get('App\Controller\TastyTableController');
 
+        // Mock the Request and Session
+        $request = new Request();
+        $session = $this->createMock(SessionInterface::class);
+
         // Expect an exception
         $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
 
         // Call the controller method with a username that does not exist
-        $controller->showUserProfile($this->entityManager, 'nonexistentuser');
+        $controller->showUserProfile($this->entityManager, 'nonexistentuser', 'false', $request, $session);
     }
 }
-//upload
