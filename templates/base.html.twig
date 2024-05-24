@@ -13,7 +13,6 @@
         {% block stylesheetsFooter %}
             <link rel="stylesheet" href="{{ asset('style/footer.css') }}">
         {% endblock %}
-        <script>
 
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
@@ -26,11 +25,10 @@
     <body>
     <header>
         {% block header %}
-
-                    <div class ="logo">
-                        <a href="{{ path('homePage') }}"><img src="{{ asset('style/images/WebTech Mascot.jpg') }}"></a>
-                        <h1>Tasty Table</h1>
-                    </div>
+                <div class ="logo">
+                    <a href="{{ path('homePage') }}"><img src="{{ asset('style/images/WebTech Mascot.jpg') }}"></a>
+                    <h1>Tasty Table</h1>
+                </div>
             <div class="search-bar">
                 {% block search_bar %}
                     <form method="get" action="{{ path('search_recipes') }}">
@@ -39,28 +37,34 @@
                     </form>
                 {% endblock %}
             </div>
-                    <div class="user">
-                        {% block profile_user %}
-                        <a href="{{ path('profile') }}"><i class="fa fa-user"></i></a>
-                        {% endblock %}
-                    </div>
 
-            <div class="userRecipes">
-                {% block userRecipes %}
-                    <a href="{{ path('homePage') }}"><h3>User Recipes</h3></a>
+            <div class="user">
+                {% block profile_user %}
+                <a href="{{ path('profile') }}"><i class="fa fa-user"></i></a>
                 {% endblock %}
             </div>
 
-            <div class="apiRecipes">
-                {% block apiRecipes %}
-                    <a href="{{ path('homePageAPI') }}"><h3>TastyTable Recipes</h3></a>
-                {% endblock %}
-            </div>
 
         {% endblock %}
 
 
     </header>
+
+    <div class="subHeader">
+        {% block subHeader %}
+        <div class="userRecipes">
+            {% block userRecipes %}
+                <a href="{{ path('homePage') }}"><h3>User Recipes</h3></a>
+            {% endblock %}
+        </div>
+
+        <div class="apiRecipes">
+            {% block apiRecipes %}
+                <a href="{{ path('homePageAPI') }}"><h3>TastyTable Recipes</h3></a>
+            {% endblock %}
+        </div>
+        {% endblock %}
+    </div>
 
 
         {% block body %}{% endblock %}

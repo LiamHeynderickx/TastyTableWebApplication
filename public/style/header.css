@@ -1,7 +1,10 @@
 header {
     background-color: rgba(225, 129, 58, 0.78);
     color: white;
-    padding: 20px;
+    padding-top: 20px;
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-bottom: 5px;
     display: flex;
     align-items: center; /* Center elements vertically */
 }
@@ -56,4 +59,18 @@ input[type="search"] {
     font-size: 35px; /* Adjust the size of the user icon */
 }
 
+.subHeader {
+    background-color: rgba(225, 129, 58, 0.78);
+    color: white;
+    padding-bottom: 5px;
+    display: flex;
+    justify-content: center; /* Distribute space around items */
+    align-items: center; /* Center elements vertically */
+}
 
+.userRecipes,
+.apiRecipes {
+    margin: 10px 0; /* Add margin to top and bottom */
+    margin-right: 20px;
+    margin-left: 20px;
+}

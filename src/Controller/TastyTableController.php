@@ -196,18 +196,19 @@ class TastyTableController extends AbstractController
 
         $recipe = new Recipes();
 
-//        $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
+        $allRecipes = $em->getRepository(Recipes::class)->findAll();
 
-        $recipe =  $em->getRepository(Recipes::class)->findOneBy(['id' => 45]);
-
-        $recipes[] = $recipe;
-
-
-
-//        for ($x = 0; $x < 1; $x++) { //change loop limit to change number of recipes displayed in home
-//            //display less recipes to save key usage for testing
-//            $recipes[] = $apiService->getRandomRecipe($filters);
-//        }
+        // Randomly select 9 recipes
+        $recipes = [];
+        if (count($allRecipes) > 9) {
+            $randomKeys = array_rand($allRecipes, 9);
+            foreach ($randomKeys as $key) {
+                $recipes[] = $allRecipes[$key];
+            }
+        } else {
+            // If there are less than or equal to 9 recipes, use all of them
+            $recipes = $allRecipes;
+        }
 
         return $this->render('Pages/homePage.html.twig', [
             'form' => $form->createView(),
@@ -262,7 +263,7 @@ class TastyTableController extends AbstractController
         $recipes = $apiService->searchRecipesByName($query);
 
 
-        return $this->render('Pages/homePage.html.twig', [
+        return $this->render('Pages/homePageAPI.html.twig', [
             'form' => $form->createView(),
             'recipes' => $recipes,
             'filters' => $filters
