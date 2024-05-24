@@ -14,10 +14,6 @@ form label {
     margin-bottom: 10px;
 }
 
-title {
-    color: white;
-}
-
 form input[type="text"],
 form input[type="number"],
 form select,
@@ -40,20 +36,18 @@ form button {
     font-size: 16px;
 }
 
-body h1 {
+form h1 {
     text-align: center;
     margin-bottom: 20px;
-    color: darkorange;
 }
 
-.ingredient, .instruction {
+.ingredient {
     display: flex;
     align-items: center;
-    gap: 5px; /* Adjust gap as needed */
     margin-bottom: 10px;
 }
 
-.ingredient button, .instruction button {
+.ingredient button {
     padding: 10px;
     background-color: #dc3545; /* Red color for remove button */
     color: white;
@@ -74,6 +68,12 @@ body h1 {
     font-size: 16px;
 }
 
+.instruction {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
 .instruction textarea {
     flex: 1;
     width: calc(100% - 160px); /* Adjust width and gap */
@@ -84,9 +84,15 @@ body h1 {
     margin-bottom: 10px; /* Adjust margin as needed */
 }
 
-.form-label-cost {
-    display: flex;
-    gap: 20px;
+.instruction button {
+    padding: 10px;
+    background-color: #dc3545; /* Red color for remove button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 10px; /* Adjust margin as needed */
 }
 
 form .submit-button {
@@ -99,4 +105,9 @@ form .submit-button {
     padding: 10px 20px;
     display: block;
     margin: 0 auto;
+}
+
+.form-label-cost {
+    display: flex;
+    gap: 20px;
 }

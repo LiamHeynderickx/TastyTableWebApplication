@@ -27,7 +27,7 @@ class Recipes
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $recipeDescription = null;
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private ?string $picturePath;
+    private $picturePath;
 
     #[ORM\Column]
     private ?int $cost = null;
