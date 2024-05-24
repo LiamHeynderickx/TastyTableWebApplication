@@ -60,6 +60,8 @@
                         <!-- Add your own comment -->
                         <textarea id="comment" placeholder="Add your comment"></textarea><br>
                         <button onclick="addComment()">Add Comment</button>
+                        <!-- Edit Recipe Button -->
+                        <button onclick="editRecipe()">Edit Recipe</button>
                     </div>
                 </div>
                 <button onclick="deleteRecipe()">Delete Recipe</button>
@@ -168,6 +170,8 @@
                             <button onclick="addComment()">Add Comment</button>
                         </div>
 
+
+
                     </div>
                     {% if SaveFlag %}
                         <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '1','isApi':APIFlag}) }}" style="display: inline-block; padding: 10px 20px; font-size: 16px; font-weight: bold; text-align: center; color: white; background-color: #b2b2b2; border: none; border-radius: 5px; text-decoration: none;">
@@ -273,6 +277,10 @@
         function deleteRecipe() {
             alert('Recipe has been deleted!');
             window.location.href = "{{ path('recipe_delete', {'id': recipe.id}) }}";
+        }
+
+        function editRecipe() {
+            window.location.href = "{{ path('recipe_edit', {'id': recipe.id}) }}";
         }
 
         function addComment() {

@@ -1,40 +1,131 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Recipe{% endblock %}
+{% block title %}Edit Your Recipe - TastyTable{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('style/recipeForm.css') }}">
+    <link rel="stylesheet" href="{{ asset('style/recipeSubmission.css') }}">
 {% endblock %}
 
 {% block body %}
-    <main>
-        <div class="container">
-            <h2>Edit Recipe</h2>
-            <form action="{{ path('recipe_update', {'id': recipe.id}) }}" method="post">
-                <div class="form-group">
-                    <label for="recipeName">Recipe Name</label>
-                    <input type="text" id="recipeName" name="recipeName" value="{{ recipe.recipeName }}" required>
+    <center><h1>Edit Your Recipe</h1></center>
+
+    {{ form_start(form) }}
+
+    {{ form_row(form.recipeName, {'label': 'Recipe Name'}) }}
+    {{ form_row(form.type, {'label': 'Meal Type'}) }}
+    {{ form_row(form.recipeDescription, {'label': 'Recipe Description'}) }}
+    {{ form_row(form.picture, {'label': 'Recipe Image'}) }}<br>
+    {{ form_row(form.servings, {'label': 'Number of Servings'}) }}
+    {{ form_row(form.time, {'label': 'Cooking Time (minutes)'}) }}
+    {{ form_row(form.calories, {'label': 'Calories'}) }}
+    {{ form_row(form.fat, {'label': 'Fat'}) }}
+    {{ form_row(form.carbs, {'label': 'Carbohydrates'}) }}
+    {{ form_row(form.protein, {'label': 'Protein'}) }}
+    {{ form_row(form.diet, {'label': 'Diet'}) }}
+
+    <label>Price Range:</label><br>
+    {{ form_widget(form.cost) }}<br><br>
+
+    <label for="ingredients">Ingredients:</label><br>
+    <div id="ingredients_list">
+        {% for index, ingredient in recipe.ingredients %}
+            <div class="ingredient">
+                <input type="text" name="ingredient[]" value="{{ ingredient }}" placeholder="Ingredient" required>
+                <input type="text" name="amount[]" value="{{ recipe.ingredientsAmounts[index] }}" placeholder="Quantity" pattern="\d+(\.\d+)?" required>
+                <input type="text" name="unit[]" value="{{ recipe.ingredientsUnits[index] }}" placeholder="Unit">
+                <button type="button" class="remove-button">Remove</button>
+            </div>
+        {% endfor %}
+    </div>
+    <button type="button" id="add-ingredient">Add Ingredient</button><br><br>
+
+    <label for="instructions">Instructions:</label><br>
+    <div id="instructions_list">
+        {% for index, instruction in recipe.instructions %}
+            <div class="instruction">
+                <label>Step {{ index + 1 }}:</label><br>
+                <textarea name="instruction[]" rows="2" cols="50" required>{{ instruction }}</textarea>
+                <button type="button" class="remove-button">Remove</button>
+            </div>
+        {% endfor %}
+    </div>
+    <button type="button" id="add-instruction">Add Step</button><br><br>
+
+    {{ form_row(form.ingredients, {'attr': {'style': 'display:none;'}}) }}
+    {{ form_row(form.ingredientsAmounts, {'attr': {'style': 'display:none;'}}) }}
+    {{ form_row(form.ingredientsUnits, {'attr': {'style': 'display:none;'}}) }}
+    {{ form_row(form.instructions, {'attr': {'style': 'display:none;'}}) }}
+
+    <button type="submit" class="submit-button">Submit Recipe</button>
+
+    {{ form_end(form) }}
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/4c4c8749b1.js" crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function() {
+            function updateHiddenFields() {
+                const ingredients = [];
+                const amounts = [];
+                const units = [];
+                $('#ingredients_list .ingredient').each(function() {
+                    ingredients.push($(this).find('input[name="ingredient[]"]').val());
+                    amounts.push($(this).find('input[name="amount[]"]').val());
+                    units.push($(this).find('input[name="unit[]"]').val());
+                });
+                $('#form_ingredients').val(JSON.stringify(ingredients));
+                $('#form_ingredientsAmounts').val(JSON.stringify(amounts));
+                $('#form_ingredientsUnits').val(JSON.stringify(units));
+
+                const instructions = [];
+                $('#instructions_list .instruction textarea').each(function(index) {
+                    instructions.push($(this).val());
+                });
+                $('#form_instructions').val(JSON.stringify(instructions));
+            }
+
+            $('#add-ingredient').click(function () {
+                var newIngredient = `
+                    <div class="ingredient">
+                        <input type="text" name="ingredient[]" placeholder="Ingredient" required>
+                        <input type="text" name="amount[]" placeholder="Quantity" pattern="\\d+(\\.\\d+)?">
+                        <input type="text" name="unit[]" placeholder="Unit">
+                        <button type="button" class="remove-button">Remove</button>
+                    </div>
+                `;
+                $('#ingredients_list').append(newIngredient);
+            });
+
+            $('#ingredients_list').on('click', '.remove-button', function () {
+                $(this).parent().remove();
+                updateHiddenFields();
+            });
+
+            $('#add-instruction').click(function () {
+                var newInstruction = `
+                <div class="instruction">
+                    <label>Step ${$('.instruction').length + 1}:</label><br>
+                    <textarea name="instruction[]" rows="2" cols="50" required></textarea>
+                    <button type="button" class="remove-button">Remove</button>
                 </div>
-                <div class="form-group">
-                    <label for="recipeDescription">Description</label>
-                    <textarea id="recipeDescription" name="recipeDescription" required>{{ recipe.recipeDescription }}</textarea>
-                </div>
-                <div class="form-group">
-                    <label for="time">Cooking Time (minutes)</label>
-                    <input type="number" id="time" name="time" value="{{ recipe.time }}" required>
-                </div>
-                <div class="form-group">
-                    <label for="calories">Calories</label>
-                    <input type="number" id="calories" name="calories" value="{{ recipe.calories }}" required>
-                </div>
-                <div class="form-group">
-                    <label for="servings">Servings</label>
-                    <input type="number" id="servings" name="servings" value="{{ recipe.servings }}" required>
-                </div>
-                <!-- Add more fields as needed -->
-                <button type="submit" class="btn btn-primary">Save Changes</button>
-            </form>
-        </div>
-    </main>
+                `;
+                $('#instructions_list').append(newInstruction);
+            });
+
+            $('#instructions_list').on('click', '.remove-button', function () {
+                $(this).parent().remove();
+                // Update step labels after removal
+                $('.instruction').each(function (index) {
+                    $(this).find('label').text('Step ' + (index + 1) + ':');
+                });
+                updateHiddenFields();
+            });
+
+            $('form').on('submit', function() {
+                updateHiddenFields();
+            });
+        });
+    </script>
 {% endblock %}

@@ -755,6 +755,98 @@ class TastyTableController extends AbstractController
         return $this->redirectToRoute('homePage'); // Replace 'homepage' with the name of your homepage route
     }
 
+    #[Route('/recipe/edit/{id}', name: 'recipe_edit')]
+    public function edit($id, Request $request, EntityManagerInterface $em, LoggerInterface $logger): Response
+    {
+        $recipe = $em->getRepository(Recipes::class)->find($id);
+
+        if (!$recipe) {
+            throw $this->createNotFoundException('No recipe found for id ' . $id);
+        }
+
+        // Create the form with the existing recipe data
+        $form = $this->createFormBuilder($recipe)
+            ->add('recipeName', TextType::class, ['label' => 'Recipe Name', 'data' => $recipe->getRecipeName()])
+            ->add('recipeDescription', TextareaType::class, ['label' => 'Recipe Description', 'required' => false, 'data' => $recipe->getRecipeDescription()])
+            ->add('picture', FileType::class, [
+                'label' => 'Recipe Image',
+                'required' => false,
+                'mapped' => false, // Not mapped directly to the entity
+                'attr' => ['accept' => 'image/*'], // Limit to image files
+                'data_class' => null, // To prevent errors related to file types
+            ])
+            ->add('cost', ChoiceType::class, [
+                'choices' => ['€' => '1', '€€' => '2', '€€€' => '3'],
+                'expanded' => true,
+                'multiple' => false,
+                'attr' => ['class' => 'form-label-cost'],
+                'data' => $recipe->getCost(),
+            ])
+            ->add('time', IntegerType::class, ['label' => 'Cooking Time (minutes)', 'data' => $recipe->getTime()])
+            ->add('calories', IntegerType::class, ['label' => 'Calories', 'required' => false, 'data' => $recipe->getCalories()])
+            ->add('fat', IntegerType::class, ['label' => 'Fat', 'required' => false, 'data' => $recipe->getFat()])
+            ->add('carbs', IntegerType::class, ['label' => 'Carbohydrates', 'required' => false, 'data' => $recipe->getCarbs()])
+            ->add('protein', IntegerType::class, ['label' => 'Protein', 'required' => false, 'data' => $recipe->getProtein()])
+            ->add('servings', IntegerType::class, ['label' => 'Number of Servings', 'data' => $recipe->getServings()])
+            ->add('diet', TextType::class, ['label' => 'Diet', 'data' => $recipe->getDiet()])
+            ->add('type', TextType::class, ['label' => 'Meal Type', 'data' => $recipe->getType()])
+            ->add('ingredients', HiddenType::class, ['mapped' => false, 'data' => json_encode($recipe->getIngredients())])
+            ->add('ingredientsAmounts', HiddenType::class, ['mapped' => false, 'data' => json_encode($recipe->getIngredientsAmounts())])
+            ->add('ingredientsUnits', HiddenType::class, ['mapped' => false, 'data' => json_encode($recipe->getIngredientsUnits())])
+            ->add('instructions', HiddenType::class, ['mapped' => false, 'data' => json_encode($recipe->getInstructions())])
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Handle file upload
+            $pictureFile = $form->get('picture')->getData();
+
+            if ($pictureFile) {
+                // Generate a unique name for the file before saving it
+                $newFilename = uniqid() . '.' . $pictureFile->guessExtension();
+
+                // Move the file to the directory where brochures are stored
+                try {
+                    $pictureFile->move(
+                        $this->getParameter('recipe_images_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // Handle exception if something happens during file upload
+                    // $logger->error('Error uploading file: ' . $e->getMessage());
+                }
+
+                // Store the file name in the entity
+                $recipe->setPicturePath($newFilename); // Corrected method name
+            }
+
+            // Get ingredients, quantities, units, and instructions from hidden fields
+            $ingredientsJSON = json_decode($form->get('ingredients')->getData(), true);
+            $ingredientsAmountsJSON = json_decode($form->get('ingredientsAmounts')->getData(), true);
+            $ingredientsUnitsJSON = json_decode($form->get('ingredientsUnits')->getData(), true);
+            $instructionsJSON = json_decode($form->get('instructions')->getData(), true);
+
+            // Set the data to the recipe entity
+            $recipe->setIngredients($ingredientsJSON ?? []);
+            $recipe->setIngredientsAmounts($ingredientsAmountsJSON ?? []);
+            $recipe->setIngredientsUnits($ingredientsUnitsJSON ?? []);
+            $recipe->setInstructions($instructionsJSON ?? []);
+
+            // Save the edited recipe to the database
+            $em->flush();
+
+            return $this->redirectToRoute('recipeDisplay', ['id' => $recipe->getId()]);
+        }
+
+        // Render the edit form
+        return $this->render('Pages/editRecipe.html.twig', [
+            'form' => $form->createView(),
+            'recipe' => $recipe,
+        ]);
+    }
+
+
 
     #[Route('/updateProfile', name: 'update_profile')]
     public function updateProfile(Request $request, EntityManagerInterface $em, LoggerInterface $logger, SessionInterface $session, UserPasswordHasherInterface $passwordHasher): Response
