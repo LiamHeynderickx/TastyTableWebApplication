@@ -70,6 +70,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
+        $this->userSavedRecipes = new ArrayCollection();
         $this->userFollowing = new ArrayCollection();
         $this->userFollowers = new ArrayCollection();
         $this->userPosts = new ArrayCollection();

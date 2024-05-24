@@ -64,8 +64,7 @@ class SavedRecipesRepository extends ServiceEntityRepository
 
         $sql = '
             INSERT INTO saved_recipes (user_id, recipe_id, is_api, is_my_recipe) 
-            VALUES (:userId, :recipeId, :isApi, :isMyRecipe)
-        ';
+            VALUES (:userId, :recipeId, :isApi, :isMyRecipe)';
         $stmt = $conn->prepare($sql);
         $stmt->executeQuery([
             'userId' => $userId,
