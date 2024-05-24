@@ -62,6 +62,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Comments::class, mappedBy: 'userId', orphanRemoval: true)]
     private Collection $userComments;
 
+    /**
+     * @var Collection<int, SavedRecipes>
+     */
+    #[ORM\OneToMany(targetEntity: SavedRecipes::class, mappedBy: 'userId', orphanRemoval: true)]
+    private Collection $userSavedRecipes;
+
     public function __construct()
     {
         $this->userFollowing = new ArrayCollection();
@@ -277,6 +283,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($userComment->getUserId() === $this) {
                 $userComment->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SavedRecipes>
+     */
+    public function getSavedRecipes(): Collection
+    {
+        return $this->userSavedRecipes;
+    }
+
+    public function addSavedRecipes(SavedRecipes $userSavedRecipe): static
+    {
+        if (!$this->userSavedRecipes->contains($userSavedRecipe)) {
+            $this->userComments->add($userSavedRecipe);
+            $userSavedRecipe->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSavedRecipes(Comments $userSavedRecipe): static
+    {
+        if ($this->userComments->removeElement($userSavedRecipe)) {
+            // set the owning side to null (unless already changed)
+            if ($userSavedRecipe->getUserId() === $this) {
+                $userSavedRecipe->setUserId(null);
             }
         }
 

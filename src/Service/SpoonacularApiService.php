@@ -16,7 +16,7 @@ class SpoonacularApiService
 //        $this->apiKey =   'c032d39ece4346bdb75d5e9ac3d6b903';
 //       $this->apiKey = 'a97f080d485740608c87a17ef0957691';
         //$this->apiKey = 'face680489cd4b5fbbb1faca74e6ca22';
-        $this->apiKey = 'bc0704a1ef5f424e91b1b7ab2e54153b';
+        $this->apiKey = '8fc06e17edce40e88e7f2f8984508877';
     }
 
 //    public function getRandomRecipe($filters) {
