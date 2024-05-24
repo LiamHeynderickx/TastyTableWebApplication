@@ -16,11 +16,11 @@ class Following
     private ?int $id = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: 'user_id', nullable: false)]
     private ?User $userId = null;
 
     #[ORM\ManyToOne(inversedBy: 'userFollowing')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: 'following_id',nullable: false)]
     private ?User $followingId = null;
 
     public function getId(): ?int

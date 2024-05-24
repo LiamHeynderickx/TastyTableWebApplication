@@ -618,7 +618,7 @@ class TastyTableController extends AbstractController
     }
 
     #[Route('/updateProfile', name: 'update_profile')]
-    public function updateProfile(Request $request, EntityManagerInterface $em, LoggerInterface $logger, SessionInterface $session): Response
+    public function updateProfile(Request $request, EntityManagerInterface $em, LoggerInterface $logger, SessionInterface $session, UserPasswordHasherInterface $passwordHasher): Response
     {
         // Retrieve user ID from session
         $userId = $session->get('userId');
@@ -632,11 +632,14 @@ class TastyTableController extends AbstractController
             throw $this->createNotFoundException('User not found.');
         }
 
+        $originalPassword = $user->getPassword(); // Store the original password
+
         $form = $this->createFormBuilder($user)
+            ->add('username', TextType::class, ['label' => 'Username'])
             ->add('name', TextType::class, ['label' => 'Name'])
             ->add('surname', TextType::class, ['label' => 'Surname'])
             ->add('email', EmailType::class, ['label' => 'Email'])
-            ->add('password', PasswordType::class, ['label' => 'Password', 'required' => false])
+            ->add('password', PasswordType::class, ['label' => 'Password', 'required' => false]) // Make password optional
             ->add('save', SubmitType::class, ['label' => 'Save'])
             ->getForm();
 
@@ -644,10 +647,12 @@ class TastyTableController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // If the password is not empty, encode it
-           // if ($user->getPassword()) {
-            //    $password = $this->passwordEncoder->encodePassword($user, $user->getPassword());
-             //   $user->setPassword($password);
-           // }
+            if ($form->get('password')->getData()) {
+                $password = $passwordHasher->hashPassword($user, $form->get('password')->getData());
+                $user->setPassword($password);
+            } else {
+                $user->setPassword($originalPassword); // Keep the original password if no new password is provided
+            }
 
             $em->persist($user);
             $em->flush();
@@ -658,14 +663,28 @@ class TastyTableController extends AbstractController
 
         return $this->render('Pages/updateUserProfile.html.twig', [
             'form' => $form->createView(),
+            'user' => $user
         ]);
     }
 
 
+    #[Route('/addSavedRecipe', name: 'addSaved')]
+    public function recipeSaveOrDelete(Request $request, EntityManagerInterface $em, SessionInterface $session,SpoonacularApiService $apiService): Response
+    {
 
 
+        $user = $em->getRepository(User::class)->findOneBy(['id' =>1]);
+        $user2=$em->getRepository(User::class)->findOneBy(['id' =>22]);
 
+        $follow=new Followers();
+        $follow->setUserId($user);
+        $follow->setFollowerId($user2);
+        $em->persist($follow);
+        $em->flush();
 
+        return $this->redirectToRoute('index');
+
+    }
 
 }
 
