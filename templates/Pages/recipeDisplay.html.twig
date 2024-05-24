@@ -9,118 +9,113 @@
 
 {% block body %}
     <main>
-{#        {% if SaveFlag %}#}
-{#            <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '1','isDB':DbFlag}) }}" style="display: inline-block; padding: 10px 20px; font-size: 16px; font-weight: bold; text-align: center; color: white; background-color: #b2b2b2; border: none; border-radius: 5px; text-decoration: none;">#}
-{#                <h3 style="margin: 0; padding: 0; color: black">Save Recipe {{ recipe.id }}</h3>#}
-{#            </a>#}
-
-{#        {% else %}#}
-
-{#            <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '0','isDB':DbFlag}) }}" style="display: inline-block; padding: 10px 20px; font-size: 16px; font-weight: bold; text-align: center; color: white; background-color: #b2b2b2; border: none; border-radius: 5px; text-decoration: none;">#}
-{#                <h3 style="margin: 0; padding: 0; color: black">Delete Recipe {{ recipe.id }}</h3>#}
-{#            </a>#}
-
-{#        {% endif %}#}
-
         {% if DbFlag==1 %}
-        <div class="container">
-            <!-- Recipe Image -->
-            <aside>
-
-                <div class="image">
-
-                        {% if recipe.picturePath %}
-                            <img src="{{ asset('style/images/recipeImages/' ~ recipe.picturePath) }}" alt="Recipe Image" style="width: 280px; height: 280px;">
-                        {% else %}
-                            <img src="{{ asset('style/images/placeholderImage.jpeg') }}" alt="Recipe Image" style="width: 280px; height: 280px;">
-                        {% endif %}
-
-
-
-                </div>
-                <!-- Servings calculator -->
-                <div class="below-image">
-                    <div class="servings">
-                        <h2>Servings</h2>
-                        <button id="decrease-servings" onclick="adjustServings(-1)"><i class="fas fa-minus"></i></button>
-                        <span id="servings" data-initial="{{ recipe.servings }}">{{ recipe.servings }}</span>
-                        <button id="increase-servings" onclick="adjustServings(1)"><i class="fas fa-plus"></i></button>
-                    </div>
-                    <!-- Ingredients -->
-                    <div class="ingredients">
-                        {% if recipe.ingredients is not empty %}
-                            <h2>Ingredients:</h2>
-                            <ul id="ingredients-list">
-                                {% for index, ingredient in recipe.ingredients %}
-                                    <li>
-                                        {% if recipe.ingredientsAmounts[index] is not null %}
-                                            <span class="ingredient-amount" data-original-amount="{{ recipe.ingredientsAmounts[index] }}">
-                                                {{ recipe.ingredientsAmounts[index] }} {{ recipe.ingredientsUnits[index] }}
-                                                {% if recipe.ingredientsUnits[index] is not empty %} of {% endif %}
-                                            </span>
-                                        {% endif %}
-                                        {{ ingredient }}
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        {% else %}
-                            <p>No ingredients found.</p>
-                        {% endif %}
-                    </div>
-                    <!-- Comments Section -->
-                    <div>
-                        <h2>Comments</h2>
-                        <p>Okay that shit was bussin fr fr<br>
-                            -Chewbacca's uncle<br>
-                        </p>
-                        <!-- Display comments dynamically here -->
-                        <!-- Add your own comment -->
-                        <textarea id="comment" placeholder="Add your comment"></textarea><br>
-                        <button onclick="addComment()">Add Comment</button>
-                    </div>
-                </div>
-            </aside>
-
-            <!-- Recipe Info -->
-            <div class="right-side">
-                <div class="recipeInfo">
-                    <h2>{{ recipe.recipeName }}</h2>
-                    <p>{{ recipe.recipeDescription }}</p>
-                    <p>Cooking Time: {{ recipe.time }} minutes &nbsp; | &nbsp; Calories: {{ recipe.calories }} kcal</p>
-                    <p>Fats: {{ recipe.fat }}g &nbsp; | &nbsp; Carbs: {{ recipe.carbs }}g &nbsp; | &nbsp; Proteins: {{ recipe.protein }}g</p>
-                    <p>Price range:
-                        {% if recipe.cost == 1 %}
-                            €
-                        {% elseif recipe.cost == 2 %}
-                            €€
-                        {% elseif recipe.cost == 3 %}
-                            €€€
-                        {% endif %}
-                        &nbsp; | &nbsp; Rating: ★★★★★
-                    </p>
-                </div>
-
-                <!-- Instructions -->
-                <div>
-                    <h2>Instructions</h2>
-                    {% if recipe.instructions is not empty %}
-                        <div>
-                            {% for step in recipe.instructions %}
-                                <strong>Step {{ loop.index }}:</strong><br>{{ step }}<br><br>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        <p>No instructions found.</p>
+            <div class="container">
+                <!-- Buttons Container -->
+                <div class="button-container" style="position: absolute; top: 10px; right: 10px; display: flex; gap: 10px;">
+                    <form action="{{ path('recipe_delete', {'id': recipe.id}) }}" method="post">
+                        <button onclick="deleteRecipe()" type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                    {% if app.user %}
+                        <a href="{{ path('user_profile', {'username': app.user.username}) }}" class="btn btn-primary">Profile</a>
                     {% endif %}
                 </div>
 
-                <!-- Buttons to like recipe and mark as done -->
-                <div>
-                    <button onclick="likeRecipe()">Like</button>
-                    <button onclick="markAsDone()">Mark as Done</button>
+                <!-- Recipe Image -->
+                <aside>
+                    <div class="image">
+                        {% if recipe.picturePath %}
+                            <img src="{{ asset('style/images/recipeImages/' ~ recipe.picturePath) }}" alt="Recipe Image" style="width: 280px; height: 280px; object-fit: cover;">
+                        {% else %}
+                            <img src="{{ asset('style/images/placeholderImage.jpeg') }}" alt="Recipe Image" style="width: 280px; height: 280px; object-fit: cover;">
+                        {% endif %}
+                    </div>
+
+                    <!-- Servings calculator -->
+                    <div class="below-image">
+                        <div class="servings">
+                            <h2>Servings</h2>
+                            <button id="decrease-servings" onclick="adjustServings(-1)"><i class="fas fa-minus"></i></button>
+                            <span id="servings" data-initial="{{ recipe.servings }}">{{ recipe.servings }}</span>
+                            <button id="increase-servings" onclick="adjustServings(1)"><i class="fas fa-plus"></i></button>
+                        </div>
+
+                        <!-- Ingredients -->
+                        <div class="ingredients">
+                            {% if recipe.ingredients is not empty %}
+                                <h2>Ingredients:</h2>
+                                <ul id="ingredients-list">
+                                    {% for index, ingredient in recipe.ingredients %}
+                                        <li>
+                                            {% if recipe.ingredientsAmounts[index] is not null %}
+                                                <span class="ingredient-amount" data-original-amount="{{ recipe.ingredientsAmounts[index] }}">
+                                                    {{ recipe.ingredientsAmounts[index] }} {{ recipe.ingredientsUnits[index] }}
+                                                    {% if recipe.ingredientsUnits[index] is not empty %} of {% endif %}
+                                                </span>
+                                            {% endif %}
+                                            {{ ingredient }}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p>No ingredients found.</p>
+                            {% endif %}
+                        </div>
+
+                        <!-- Comments Section -->
+                        <div>
+                            <h2>Comments</h2>
+                            <p>Okay that shit was bussin fr fr<br>
+                                -Chewbacca's uncle<br>
+                            </p>
+                            <!-- Display comments dynamically here -->
+                            <!-- Add your own comment -->
+                            <textarea id="comment" placeholder="Add your comment"></textarea><br>
+                            <button onclick="addComment()">Add Comment</button>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Recipe Info -->
+                <div class="right-side">
+                    <div class="recipeInfo">
+                        <h2>{{ recipe.recipeName }}</h2>
+                        <p>{{ recipe.recipeDescription }}</p>
+                        <p>Cooking Time: {{ recipe.time }} minutes &nbsp; | &nbsp; Calories: {{ recipe.calories }} kcal</p>
+                        <p>Fats: {{ recipe.fat }}g &nbsp; | &nbsp; Carbs: {{ recipe.carbs }}g &nbsp; | &nbsp; Proteins: {{ recipe.protein }}g</p>
+                        <p>Price range:
+                            {% if recipe.cost == 1 %}
+                                €
+                            {% elseif recipe.cost == 2 %}
+                                €€
+                            {% elseif recipe.cost == 3 %}
+                                €€€
+                            {% endif %}
+                            &nbsp; | &nbsp; Rating: ★★★★★
+                        </p>
+                    </div>
+
+                    <!-- Instructions -->
+                    <div>
+                        <h2>Instructions</h2>
+                        {% if recipe.instructions is not empty %}
+                            <div>
+                                {% for step in recipe.instructions %}
+                                    <strong>Step {{ loop.index }}:</strong><br>{{ step }}<br><br>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p>No instructions found.</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Buttons to like recipe and mark as done -->
+                    <div>
+                        <button onclick="likeRecipe()">Like</button>
+                        <button onclick="markAsDone()">Mark as Done</button>
+                    </div>
                 </div>
             </div>
-        </div>
         {% else %}
             <div class="container">
                 <!-- Recipe Image -->
@@ -145,9 +140,9 @@
                                 <ul id="ingredients-list">
                                     {% for ingredient in recipe.extendedIngredients %}
                                         <li>
-                                <span class="ingredient-amount" data-original-amount="{{ ingredient.amount }}">
-                                    {{ ingredient.amount }} {{ ingredient.unit }} of
-                                </span>
+                                            <span class="ingredient-amount" data-original-amount="{{ ingredient.amount }}">
+                                                {{ ingredient.amount }} {{ ingredient.unit }} of
+                                            </span>
                                             {{ ingredient.originalName }}
                                         </li>
                                     {% endfor %}
@@ -211,7 +206,6 @@
                     </div>
                 </div>
             </div>
-
         {% endif %}
     </main>
 
@@ -254,6 +248,10 @@
 
         function markAsDone() {
             alert('Recipe marked as done!');
+        }
+
+        function deleteRecipe() {
+            alert('Recipe has been deleted!');
         }
 
         function addComment() {

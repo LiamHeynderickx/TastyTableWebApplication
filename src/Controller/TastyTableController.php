@@ -80,7 +80,7 @@ class TastyTableController extends AbstractController
 
             }
             else{
-               //Correct login
+                //Correct login
                 //if user logged in
                 //then configure session parameters
                 //!!!!!!If you have additional parameters add them !!!!!!!
@@ -91,11 +91,11 @@ class TastyTableController extends AbstractController
                 $session->set('userId', $user->getId());
                 $session->set('type', 'saved');
 
-      //          $logger->info('User logged in', [
-        //            'userId' => $user->getId(),
-          //          'username' => $user->getUsername(),
-            //        'email' => $user->getEmail(),
-              //  ]);
+                //          $logger->info('User logged in', [
+                //            'userId' => $user->getId(),
+                //          'username' => $user->getUsername(),
+                //        'email' => $user->getEmail(),
+                //  ]);
                 return $this->redirectToRoute('homePage');
             }
         }
@@ -310,7 +310,7 @@ class TastyTableController extends AbstractController
         $selectedDiets = $request->query->all('diets');
         $diets = !empty($selectedDiets) ? $selectedDiets : [];
 
-       // $logger->info('Selected diets:', ['diets' => $diets]);
+        // $logger->info('Selected diets:', ['diets' => $diets]);
         $type = $request->query->get('type');
         $UserID=$session->get('userId');
 
@@ -328,7 +328,7 @@ class TastyTableController extends AbstractController
         if ($type === 'saved') {
             // Fetch saved recipes from the API & DB
             $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($UserID, 1,0);
-           // echo "Fetched Recipe IDs:\n";
+            // echo "Fetched Recipe IDs:\n";
             //print_r($recipeIds);
             $ApiRecipes=[];
             if (!empty($recipeIds)) {
@@ -347,7 +347,7 @@ class TastyTableController extends AbstractController
                             {
 
                                 $filteredArrays []= $apiRecipe;
-                              //  print_r( $filteredArrays);
+                                //  print_r( $filteredArrays);
 
                             }
                         }
@@ -387,17 +387,17 @@ class TastyTableController extends AbstractController
 
 
             return $this->render('Pages/Profile.html.twig', [
-                    'dietaryPreferences' => $dietaryPreferences,
-                    'selectedDiets' => $selectedDiets,
-                    'API_recipes' => [],
-                    'Db_recipes'=>$DbRecipes,
-                    'user' => $user
-                ]);
+                'dietaryPreferences' => $dietaryPreferences,
+                'selectedDiets' => $selectedDiets,
+                'API_recipes' => [],
+                'Db_recipes'=>$DbRecipes,
+                'user' => $user
+            ]);
 
         }
         else{
             // Fetch my recipes from the DB and set is my TRUE
-             echo "Fetched Recipe IDs:\n";
+            echo "Fetched Recipe IDs:\n";
             //print_r($recipe[0]);
             return $this->redirectToRoute('update_profile');
         }
@@ -465,7 +465,7 @@ class TastyTableController extends AbstractController
                     );
                 } catch (FileException $e) {
                     // Handle exception if something happens during file upload
-                   // $logger->error('Error uploading file: ' . $e->getMessage());
+                    // $logger->error('Error uploading file: ' . $e->getMessage());
                 }
 
                 // Store the file name in the entity
@@ -505,7 +505,7 @@ class TastyTableController extends AbstractController
 
         if (!$recipe) {
             //throw $this->createNotFoundException('The recipe does not exist');
-           // $recipe=$apiService->getRecipeById($id);
+            // $recipe=$apiService->getRecipeById($id);
             //$ids[]=$id;
 
             $recipe = ($apiService->getRecipeByIdFordisplay($id));
@@ -518,7 +518,7 @@ class TastyTableController extends AbstractController
             }
 
         }
-       // echo "Fetched Recipe IDs:\n";
+        // echo "Fetched Recipe IDs:\n";
         //print_r($recipe[0]);
 
 
@@ -561,13 +561,13 @@ class TastyTableController extends AbstractController
 
 
 
-               // $entityManager->remove($following);
+                // $entityManager->remove($following);
                 $entityManager->getRepository(Following::class)->removeFollowingByUserAndFollowing($following->getUserId()->getId() ,$following->getFollowingId()->getId());
                 // Debugging: Before flushing
                 echo "Before flush<br>";
                 try {
                     $entityManager->flush();
-                   // echo "Flush successful<br>";
+                    // echo "Flush successful<br>";
                 } catch (\Exception $e) {
                     echo "Error during flush: " . $e->getMessage() . "<br>";
                 }
@@ -617,6 +617,24 @@ class TastyTableController extends AbstractController
             'isFollowing'=>$isFollowing,
         ]);
     }
+
+    #[Route('/recipe/delete/{id}', name: 'recipe_delete', methods: ['POST'])]
+    public function delete(int $id, EntityManagerInterface $em, Request $request): Response
+    {
+        $recipe = $em->getRepository(Recipes::class)->find($id);
+
+        if ($recipe) {
+            $em->remove($recipe);
+            $em->flush();
+
+            $this->addFlash('success', 'Recipe deleted successfully.');
+        } else {
+            $this->addFlash('error', 'Recipe not found.');
+        }
+
+        return $this->redirectToRoute('homePage'); // Change 'home' to your desired route
+    }
+
 
     #[Route('/updateProfile', name: 'update_profile')]
     public function updateProfile(Request $request, EntityManagerInterface $em, LoggerInterface $logger, SessionInterface $session, UserPasswordHasherInterface $passwordHasher): Response
@@ -672,8 +690,6 @@ class TastyTableController extends AbstractController
     #[Route('/addSavedRecipe', name: 'addSaved')]
     public function recipeSaveOrDelete(Request $request, EntityManagerInterface $em, SessionInterface $session,SpoonacularApiService $apiService): Response
     {
-
-
         $user = $em->getRepository(User::class)->findOneBy(['id' =>1]);
         $user2=$em->getRepository(User::class)->findOneBy(['id' =>22]);
 
