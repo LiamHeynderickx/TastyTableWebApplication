@@ -534,12 +534,71 @@ class TastyTableController extends AbstractController
         ]);
     }
 
+    #[Route('/SaveRecipeDisplay/{id}/{save}/{isApi}', name: 'SaveRecipeDisplay')]
+    public function SaveRecipeDisplay($id,$save,$isApi,Request $request, EntityManagerInterface $em, SessionInterface $session,SpoonacularApiService $apiService): Response
+    {
+        if (!$session->get('isOnline'))
+        {
+            return $this->redirectToRoute('index');
+        }
+
+
+        $userId = $session->get('userId');
+        $user = $em->getRepository(User::class)->findOneBy(['id' =>$userId]);
+        if ($save=='1')
+        {
+
+            //$user = $em->getRepository(User::class)->findOneBy(['id' =>$userId]);
+            $savedRecipe=new SavedRecipes();
+            $savedRecipe->setRecipeId($id);
+            $savedRecipe->setUserId($user);
+            $savedRecipe->setIsApi($isApi);
+            $savedRecipe->setIsMyRecipe(0);
+            $em->persist($savedRecipe);
+            $em->flush();
+        }
+        elseif ($save=='0')
+        {
+
+            $savedRecipe = $em->getRepository(SavedRecipes::class)->findOneBy([
+                'userId' => $user, // Assuming this is an association with the User entity
+                'recipeId' => $id, // The recipe ID you are looking to delete
+                'isApi' => $isApi, // Assuming this is a condition you also want to match
+            ]);
+
+            if ($savedRecipe) {
+                // Remove the recipe from the database
+                $em->remove($savedRecipe);
+                $em->flush(); // Commit the changes to the database
+
+                // Optionally, add a success message or some form of confirmation
+                $this->addFlash('success', 'Recipe has been successfully deleted.');
+            } else {
+                // Optionally, handle the case where no recipe was found to delete
+                $this->addFlash('error', 'No matching recipe found to delete.');
+            }
+
+        }
+
+
+
+
+
+
+        return $this->redirectToRoute('recipeDisplay', ['id' => $id]);
+
+    }
+
 
     #[Route('/recipeDisplay/{id}', name: 'recipeDisplay')]
     public function display($id,Request $request, EntityManagerInterface $em, SessionInterface $session,SpoonacularApiService $apiService): Response
     {
+        if (!$session->get('isOnline'))
+        {
+            return $this->redirectToRoute('index');
+        }
         $recipe = $em->getRepository(Recipes::class)->find($id);
-        $isFromDb=1;
+        $isFromApi=0;
 
         if (!$recipe) {
             //throw $this->createNotFoundException('The recipe does not exist');
@@ -548,12 +607,20 @@ class TastyTableController extends AbstractController
 
             $recipe = ($apiService->getRecipeByIdFordisplay($id));
             if ($recipe){
-                $isFromDb=0;
+                $isFromApi=1;
             }
             else
             {
                 $recipe=[] ;
             }
+
+        }
+        $isSaveRecipe=0;
+        if ($recipe)
+        {
+            $userId = $session->get('userId');
+            $savedRecipe=$em->getRepository(SavedRecipes::class)->findBy(['userId'=>$userId,'recipeId'=>$id]);
+            $isSaveRecipe = empty($savedRecipe) ? true : false;
 
         }
         // echo "Fetched Recipe IDs:\n";
@@ -563,10 +630,11 @@ class TastyTableController extends AbstractController
 
         return $this->render('Pages/recipeDisplay.html.twig', [
             'recipe' => $recipe,
-            'DbFlag' => $isFromDb,
-            'SaveFlag'=>1
+            'APIFlag' => $isFromApi,
+            'SaveFlag'=>$isSaveRecipe
         ]);
     }
+
 
     #[Route('/profile/{username}/{isFollowing}', name: 'user_profile')]
     public function showUserProfile(EntityManagerInterface $entityManager, string $username,string $isFollowing,Request $request,SessionInterface $session): Response
@@ -728,14 +796,14 @@ class TastyTableController extends AbstractController
     #[Route('/addSavedRecipe', name: 'addSaved')]
     public function recipeSaveOrDelete(Request $request, EntityManagerInterface $em, SessionInterface $session,SpoonacularApiService $apiService): Response
     {
-        $user = $em->getRepository(User::class)->findOneBy(['id' =>1]);
-        $user2=$em->getRepository(User::class)->findOneBy(['id' =>22]);
-
-        $follow=new Followers();
-        $follow->setUserId($user);
-        $follow->setFollowerId($user2);
-        $em->persist($follow);
-        $em->flush();
+//        $user = $em->getRepository(User::class)->findOneBy(['id' =>1]);
+//        $user2=$em->getRepository(User::class)->findOneBy(['id' =>22]);
+//
+//        $follow=new Followers();
+//        $follow->setUserId($user);
+//        $follow->setFollowerId($user2);
+//        $em->persist($follow);
+//        $em->flush();
 
         return $this->redirectToRoute('index');
 

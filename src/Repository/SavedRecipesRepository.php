@@ -58,19 +58,5 @@ class SavedRecipesRepository extends ServiceEntityRepository
 
         return array_column($qb->getQuery()->getArrayResult(), 'recipeId');
     }
-    public function addSavedRecipe(EntityManagerInterface $em,int $userId, int $recipeId, bool $isApi, bool $isMyRecipe): void
-    {
-        $conn = $em->getConnection();
 
-        $sql = '
-            INSERT INTO saved_recipes (user_id, recipe_id, is_api, is_my_recipe) 
-            VALUES (:userId, :recipeId, :isApi, :isMyRecipe)';
-        $stmt = $conn->prepare($sql);
-        $stmt->executeQuery([
-            'userId' => $userId,
-            'recipeId' => $recipeId,
-            'isApi' => $isApi,
-            'isMyRecipe' => $isMyRecipe,
-        ]);
-    }
 }
