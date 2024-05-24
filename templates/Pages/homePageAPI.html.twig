@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+{% block title %}TastyTable{% endblock %}
+{% block body %}
+
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('style/homePage.css') }}">
+    {% endblock %}
+
+    <div class="dropdown">
+        <button class="dropbtn"><i class="fa fa-bars"></i></button>
+        <div class="dropdown-content">
+            <a href="{{ path('homePage') }}">Homepage</a>
+            <a href="{{ path('profile') }}">Profile</a>
+            <a href="{{ path('aboutUs') }}">About Us/Contact</a>
+        </div>
+    </div>
+    <div class="filter-section">
+        <h3>Filter Recipes</h3>
+        <form method="get" action="{{ path('homePage') }}">
+            <input type="checkbox" id="vegetarian" name="vegetarian" {% if filters.vegetarian %}checked{% endif %}>
+            <label for="vegetarian">Vegetarian</label><br>
+            <input type="checkbox" id="vegan" name="vegan" {% if filters.vegan %}checked{% endif %}>
+            <label for="vegan">Vegan</label><br>
+            <input type="checkbox" id="gluten-free" name="gluten-free" {% if filters['gluten-free'] %}checked{% endif %}>
+            <label for="gluten-free">Gluten-Free</label><br>
+            <input type="checkbox" id="dairy-free" name="dairy-free" {% if filters['dairy-free'] %}checked{% endif %}>
+            <label for="dairy-free">Dairy-Free</label><br>
+            <button type="submit">Apply Filters</button>
+        </form>
+    </div>
+    <main>
+        <div class="recipes">
+
+            {% if recipes == [] %}
+                <section class="noRecipe">
+                    <img src="{{ asset('style/images/sadFace.png') }}">
+                    <h2>No Results Found</h2>
+                </section>
+            {% else %}
+                {% for recipe in recipes %}
+                    {% if recipe is not null %}
+                        <section class="recipe-card">
+                            <a href="{{ path('recipeDisplay', { id: recipe.id }) }}">
+                                <img src="{{ recipe.image }}" alt="Recipe Image">
+                                <h2>{{ recipe.title }}</h2>
+                                {% if recipe.time != '' and recipe.score != '' %}
+                                    <p>Time: {{ recipe.time }} minutes</p>
+                                    <p>Rating: {{ recipe.score }}</p>
+                                {% endif %}
+                            </a>
+                        </section>
+                    {% else %}
+                        <section class="recipe-card">
+                            <img src="{{ recipe.image }}" alt="Recipe Image">
+                            <h2>{{ recipe.title }}</h2>
+                            <p>Time: {{ recipe.time }} minutes</p>
+                            <p>Rating: {{ recipe.score }}</p>
+                        </section>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+
+
+        </div>
+    </main>
+{% endblock %}

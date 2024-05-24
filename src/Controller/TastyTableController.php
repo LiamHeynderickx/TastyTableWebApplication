@@ -61,8 +61,6 @@ class TastyTableController extends AbstractController
             $email = $person->getEmail();
             $password = $person->getPassword();
 
-
-
             // Retrieve user by email
             $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
             if (!$user)
@@ -194,13 +192,51 @@ class TastyTableController extends AbstractController
 
         $form = $this->createFormBuilder()->getForm();
 
+        $recipes = array(); //populate this with database
+
+        $recipe = new Recipes();
+
+//        $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
+
+        $recipe =  $em->getRepository(Recipes::class)->findOneBy(['id' => 45]);
+
+        $recipes[] = $recipe;
+
+
+
+//        for ($x = 0; $x < 1; $x++) { //change loop limit to change number of recipes displayed in home
+//            //display less recipes to save key usage for testing
+//            $recipes[] = $apiService->getRandomRecipe($filters);
+//        }
+
+        return $this->render('Pages/homePage.html.twig', [
+            'form' => $form->createView(),
+            'recipes' => $recipes,
+            'filters' => $filters
+        ]);
+    }
+
+    #[Route('/homePageAPI', name: 'homePageAPI')]
+    public function homePageAPI(Request $request, EntityManagerInterface $em, SessionInterface $session,SpoonacularApiService $apiService): Response
+    {
+
+        // Get filter criteria from the request
+        $filters = [
+            'vegetarian' => $request->query->get('vegetarian'),
+            'vegan' => $request->query->get('vegan'),
+            'gluten-free' => $request->query->get('gluten-free'),
+            'dairy-free' => $request->query->get('dairy-free')
+        ];
+
+        $form = $this->createFormBuilder()->getForm();
+
         $recipes = array();
         for ($x = 0; $x < 1; $x++) { //change loop limit to change number of recipes displayed in home
             //display less recipes to save key usage for testing
             $recipes[] = $apiService->getRandomRecipe($filters);
         }
 
-        return $this->render('Pages/homePage.html.twig', [
+        return $this->render('Pages/homePageAPI.html.twig', [
             'form' => $form->createView(),
             'recipes' => $recipes,
             'filters' => $filters
@@ -232,6 +268,8 @@ class TastyTableController extends AbstractController
             'filters' => $filters
         ]);
     }
+
+
 
     #[Route('/recipe/{id}', name: 'recipeDisplayAPI')] //not used rn
     public function recipeDisplayer($id, SpoonacularApiService $apiService): Response

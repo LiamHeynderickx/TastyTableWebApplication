@@ -41,11 +41,11 @@
             {% if recipe is not null %}
               <section class="recipe-card">
                 <a href="{{ path('recipeDisplay', { id: recipe.id }) }}">
-                  <img src="{{ recipe.image }}" alt="Recipe Image">
-                  <h2>{{ recipe.title }}</h2>
-                  {% if recipe.time != '' and recipe.score != '' %}
+                  <img src="{{ asset('style/images/recipeImages/' ~ recipe.picturePath) }}" alt="Recipe Image">
+                  <h2>{{ recipe.recipeName }}</h2>
+                  {% if recipe.time != '' %}
                     <p>Time: {{ recipe.time }} minutes</p>
-                    <p>Rating: {{ recipe.score }}</p>
+{#                    <p>Rating: {{ recipe.score }}</p>#}
                   {% endif %}
                 </a>
               </section>
