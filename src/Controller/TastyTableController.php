@@ -539,7 +539,7 @@ class TastyTableController extends AbstractController
             $this->addFlash('error', 'Recipe not found.');
         }
 
-        return $this->redirectToRoute('home'); // Change 'home' to your desired route
+        return $this->redirectToRoute('homePage'); // Change 'home' to your desired route
     }
 
 
