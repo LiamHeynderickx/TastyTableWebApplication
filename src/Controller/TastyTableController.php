@@ -527,7 +527,9 @@ class TastyTableController extends AbstractController
             $em->persist($recipe);
             $em->flush();
 
-            return $this->redirectToRoute('recipeDisplay');
+
+            $id = $recipe->getId(); // Assuming 'id' is the auto-generated primary key
+            return $this->redirectToRoute('recipeDisplay', ['id' => $id]);
         }
 
         return $this->render('Pages/recipeSubmission.html.twig', [
