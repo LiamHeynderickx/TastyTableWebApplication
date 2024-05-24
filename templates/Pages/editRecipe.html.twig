@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Recipe{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('style/recipeForm.css') }}">
+{% endblock %}
+
+{% block body %}
+    <main>
+        <div class="container">
+            <h2>Edit Recipe</h2>
+            <form action="{{ path('recipe_update', {'id': recipe.id}) }}" method="post">
+                <div class="form-group">
+                    <label for="recipeName">Recipe Name</label>
+                    <input type="text" id="recipeName" name="recipeName" value="{{ recipe.recipeName }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="recipeDescription">Description</label>
+                    <textarea id="recipeDescription" name="recipeDescription" required>{{ recipe.recipeDescription }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="time">Cooking Time (minutes)</label>
+                    <input type="number" id="time" name="time" value="{{ recipe.time }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="calories">Calories</label>
+                    <input type="number" id="calories" name="calories" value="{{ recipe.calories }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="servings">Servings</label>
+                    <input type="number" id="servings" name="servings" value="{{ recipe.servings }}" required>
+                </div>
+                <!-- Add more fields as needed -->
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+        </div>
+    </main>
+{% endblock %}

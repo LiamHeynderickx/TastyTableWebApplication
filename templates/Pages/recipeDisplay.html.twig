@@ -9,23 +9,17 @@
 
 {% block body %}
     <main>
-
-
+        <!-- USER RECIPES -->
         {% if APIFlag==0 %}
         <div class="container">
             <!-- From db -->
             <aside>
-
                 <div class="image">
-
-                        {% if recipe.picturePath %}
-                            <img src="{{ asset('style/images/recipeImages/' ~ recipe.picturePath) }}" alt="Recipe Image" style="width: 280px; height: 280px; object-fit: cover;">
-                        {% else %}
-                            <img src="{{ asset('style/images/placeholderImage.jpeg') }}" alt="Recipe Image" style="width: 280px; height: 280px; object-fit: cover;">
-                        {% endif %}
-
-
-
+                    {% if recipe.picturePath %}
+                        <img src="{{ asset('style/images/recipeImages/' ~ recipe.picturePath) }}" alt="Recipe Image" style="width: 280px; height: 280px; object-fit: cover;">
+                    {% else %}
+                        <img src="{{ asset('style/images/placeholderImage.jpeg') }}" alt="Recipe Image" style="width: 280px; height: 280px; object-fit: cover;">
+                    {% endif %}
                 </div>
                 <!-- Servings calculator -->
                 <div class="below-image">
@@ -74,14 +68,11 @@
                     </a>
 
                 {% else %}
-
                     <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '0','isApi':APIFlag}) }}" style="display: inline-block; padding: 10px 20px; font-size: 16px; font-weight: bold; text-align: center; color: white; background-color: #b2b2b2; border: none; border-radius: 5px; text-decoration: none;">
                         <h3 style="margin: 0; padding: 0; color: black">Delete Recipe </h3>
                     </a>
-
                 {% endif %}
             </aside>
-
                 <!-- Recipe Info -->
                 <div class="right-side">
                     <div class="recipeInfo">
@@ -118,18 +109,17 @@
                                 <h3 style="margin: 0; padding: 0; color: black">Follow Owner </h3>
                             </a>
                         {% endif %}
-
                     </div>
 
-                    <!-- Buttons to like recipe and mark as done -->
+                    <!-- Button to mark as done -->
                     <div>
-                        <button onclick="likeRecipe()">Like</button>
                         <button onclick="markAsDone()">Mark as Done</button>
                     </div>
                 </div>
             </div>
-        {% else %}
 
+            <!-- API RECIPES -->
+        {% else %}
             <div class="container">
                 <!-- Recipe Image -->
                 <aside>
@@ -274,10 +264,6 @@
                     }
                 }
             });
-        }
-
-        function likeRecipe() {
-            alert('Recipe liked!');
         }
 
         function markAsDone() {
