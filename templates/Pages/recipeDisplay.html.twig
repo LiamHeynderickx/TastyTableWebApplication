@@ -113,6 +113,12 @@
                         {% else %}
                             <p>No instructions found.</p>
                         {% endif %}
+                        {% if followFlag %}
+                            <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '3','isApi':APIFlag}) }}" style="display: inline-block; padding: 10px 20px; font-size: 16px; font-weight: bold; text-align: center; color: white; background-color: #b2b2b2; border: none; border-radius: 5px; text-decoration: none;">
+                                <h3 style="margin: 0; padding: 0; color: black">Follow Owner </h3>
+                            </a>
+                        {% endif %}
+
                     </div>
 
                     <!-- Buttons to like recipe and mark as done -->
@@ -184,6 +190,13 @@
                         </a>
 
                     {% endif %}
+                    {% if followFlag %}
+                    <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '3','isApi':APIFlag}) }}" style="display: inline-block; padding: 10px 20px; font-size: 16px; font-weight: bold; text-align: center; color: white; background-color: #b2b2b2; border: none; border-radius: 5px; text-decoration: none;">
+                        <h3 style="margin: 0; padding: 0; color: black">Delete Recipe </h3>
+                    </a>
+                    {% endif %}
+
+
                 </aside>
 
                 <!-- Recipe Info -->

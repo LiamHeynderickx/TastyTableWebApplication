@@ -581,10 +581,6 @@ class TastyTableController extends AbstractController
         }
 
 
-
-
-
-
         return $this->redirectToRoute('recipeDisplay', ['id' => $id]);
 
     }
@@ -616,11 +612,27 @@ class TastyTableController extends AbstractController
 
         }
         $isSaveRecipe=0;
+        $isFollowing=0;
         if ($recipe)
         {
+            //check if the recipe already saved to your recipes.
             $userId = $session->get('userId');
             $savedRecipe=$em->getRepository(SavedRecipes::class)->findBy(['userId'=>$userId,'recipeId'=>$id]);
             $isSaveRecipe = empty($savedRecipe) ? true : false;
+
+            //Check if you follow the owner of the recipe
+
+
+            $userId = $session->get('userId');
+            $user = $em->getRepository(User::class)->findOneBy(['id' =>$userId]);
+//
+//
+            $currentRecipe=$em->getRepository(Recipes::class)->findOneBy(['id'=>$id]);
+            $recipeOwner=$currentRecipe->getUserId();
+//
+            $result=$em->getRepository(Following::class)->findBy(['userId'=>$user,'followingId'=>$recipeOwner]);
+            //if the returned array emty then user is not following the owner
+            $isFollowing = empty($result) ? true : false;
 
         }
         // echo "Fetched Recipe IDs:\n";
@@ -631,7 +643,8 @@ class TastyTableController extends AbstractController
         return $this->render('Pages/recipeDisplay.html.twig', [
             'recipe' => $recipe,
             'APIFlag' => $isFromApi,
-            'SaveFlag'=>$isSaveRecipe
+            'SaveFlag'=>$isSaveRecipe,
+            'followFlag'=>$isFollowing
         ]);
     }
 
