@@ -9,20 +9,20 @@
 
 {% block body %}
     <main>
-        {% if SaveFlag %}
-            <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '1','isDB':DbFlag}) }}" style="display: inline-block; padding: 10px 20px; font-size: 16px; font-weight: bold; text-align: center; color: white; background-color: #b2b2b2; border: none; border-radius: 5px; text-decoration: none;">
-                <h3 style="margin: 0; padding: 0; color: black">Save Recipe {{ recipe.id }}</h3>
-            </a>
+{#        {% if SaveFlag %}#}
+{#            <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '1','isDB':DbFlag}) }}" style="display: inline-block; padding: 10px 20px; font-size: 16px; font-weight: bold; text-align: center; color: white; background-color: #b2b2b2; border: none; border-radius: 5px; text-decoration: none;">#}
+{#                <h3 style="margin: 0; padding: 0; color: black">Save Recipe {{ recipe.id }}</h3>#}
+{#            </a>#}
 
-        {% else %}
+{#        {% else %}#}
 
-            <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '0','isDB':DbFlag}) }}" style="display: inline-block; padding: 10px 20px; font-size: 16px; font-weight: bold; text-align: center; color: white; background-color: #b2b2b2; border: none; border-radius: 5px; text-decoration: none;">
-                <h3 style="margin: 0; padding: 0; color: black">Delete Recipe {{ recipe.id }}</h3>
-            </a>
+{#            <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '0','isDB':DbFlag}) }}" style="display: inline-block; padding: 10px 20px; font-size: 16px; font-weight: bold; text-align: center; color: white; background-color: #b2b2b2; border: none; border-radius: 5px; text-decoration: none;">#}
+{#                <h3 style="margin: 0; padding: 0; color: black">Delete Recipe {{ recipe.id }}</h3>#}
+{#            </a>#}
 
-        {% endif %}
+{#        {% endif %}#}
 
-        {% if DbFlag==0 %}
+        {% if DbFlag==1 %}
         <div class="container">
             <!-- Recipe Image -->
             <aside>

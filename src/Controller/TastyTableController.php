@@ -526,6 +526,7 @@ class TastyTableController extends AbstractController
         return $this->render('Pages/recipeDisplay.html.twig', [
             'recipe' => $recipe,
             'DbFlag' => $isFromDb,
+            'SaveFlag'=>1
         ]);
     }
 
