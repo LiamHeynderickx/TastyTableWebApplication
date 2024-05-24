@@ -740,21 +740,19 @@ class TastyTableController extends AbstractController
         ]);
     }
 
-    #[Route('/recipe/delete/{id}', name: 'recipe_delete', methods: ['POST'])]
-    public function delete(int $id, EntityManagerInterface $em, Request $request): Response
+    #[Route('/recipe_delete/{id}', name: 'recipe_delete')]
+    public function recipe_delete(Request $request, EntityManagerInterface $em, $id): Response
     {
         $recipe = $em->getRepository(Recipes::class)->find($id);
 
-        if ($recipe) {
-            $em->remove($recipe);
-            $em->flush();
-
-            $this->addFlash('success', 'Recipe deleted successfully.');
-        } else {
-            $this->addFlash('error', 'Recipe not found.');
+        if (!$recipe) {
+            throw $this->createNotFoundException('No recipe found for id '.$id);
         }
 
-        return $this->redirectToRoute('homePage'); // Change 'home' to your desired route
+        $em->remove($recipe);
+        $em->flush();
+
+        return $this->redirectToRoute('homePage'); // Replace 'homepage' with the name of your homepage route
     }
 
 

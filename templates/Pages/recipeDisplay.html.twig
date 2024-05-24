@@ -62,6 +62,7 @@
                         <button onclick="addComment()">Add Comment</button>
                     </div>
                 </div>
+                <button onclick="deleteRecipe()">Delete Recipe</button>
                 {% if SaveFlag %}
                     <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '1','isApi':APIFlag}) }}" style="display: inline-block; padding: 10px 20px; font-size: 16px; font-weight: bold; text-align: center; color: white; background-color: #b2b2b2; border: none; border-radius: 5px; text-decoration: none;">
                         <h3 style="margin: 0; padding: 0; color: black">Save Recipe </h3>
@@ -186,7 +187,6 @@
                     </a>
                     {% endif %}
 
-
                 </aside>
 
                 <!-- Recipe Info -->
@@ -272,6 +272,7 @@
 
         function deleteRecipe() {
             alert('Recipe has been deleted!');
+            window.location.href = "{{ path('recipe_delete', {'id': recipe.id}) }}";
         }
 
         function addComment() {
