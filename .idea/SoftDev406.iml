@@ -150,6 +150,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/willdurand/jsonp-callback-validator" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/friendsofsymfony/rest-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/apache-pack" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/dbrekelmans/bdi" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

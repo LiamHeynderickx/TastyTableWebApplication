@@ -56,12 +56,12 @@ class SavedRecipes
         return $this;
     }
 
-    public function getRecipeId(): ?string
+    public function getRecipeId(): ?int
     {
         return $this->recipeId;
     }
 
-    public function setRecipeId(string $recipeId): static
+    public function setRecipeId(int $recipeId): static
     {
         $this->recipeId = $recipeId;
 

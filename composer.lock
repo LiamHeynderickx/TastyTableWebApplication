@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6901bef31a8ece519984d2ac7f407f3f",
+    "content-hash": "51bc208e93ab995a794a3d59ea8563c5",
     "packages": [
         {
             "name": "composer/semver",
@@ -8284,6 +8284,55 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "dbrekelmans/bdi",
+            "version": "1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dbrekelmans/bdi.git",
+                "reference": "46e5f8ec09bac842ab569c02e64476408aa46ef8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dbrekelmans/bdi/zipball/46e5f8ec09bac842ab569c02e64476408aa46ef8",
+                "reference": "46e5f8ec09bac842ab569c02e64476408aa46ef8",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-zip": "*",
+                "ext-zlib": "*",
+                "php": "^8.1"
+            },
+            "bin": [
+                "bdi",
+                "bdi.phar"
+            ],
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniël Brekelmans",
+                    "homepage": "https://github.com/dbrekelmans"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/dbrekelmans/bdi/graphs/contributors"
+                }
+            ],
+            "description": "PHAR distribution of dbrekelmans/browser-driver-installer.",
+            "homepage": "https://github.com/dbrekelmans/bdi",
+            "keywords": [
+                "browser-driver-installer"
+            ],
+            "support": {
+                "source": "https://github.com/dbrekelmans/bdi/tree/1.3.0"
+            },
+            "time": "2024-02-22T15:29:35+00:00"
+        },
         {
             "name": "masterminds/html5",
             "version": "2.9.0",
