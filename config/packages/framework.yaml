@@ -13,7 +13,7 @@ framework:
             verify_peer: false
 
 parameters:
-    recipe_images_directory: '%kernel.project_dir%/public/style/images/recipeImages'
+    recipe_images_directory: '%kernel.project_dir%/public/uploads/recipeImages'
 
 
 when@test:

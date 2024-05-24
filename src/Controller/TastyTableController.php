@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Comments;
 use App\Entity\MithilTest;
 
 use App\Entity\Recipes;
@@ -174,11 +175,38 @@ class TastyTableController extends AbstractController
     #[Route('/LogOut', name: 'logOut')]
     public function LogOut(Request $request, EntityManagerInterface $em, SessionInterface $session,UserPasswordHasherInterface $passwordHasher): Response
     {
-
+        $form = $this->createFormBuilder()->getForm();
         $session->clear();
-        return $this->redirectToRoute('index');
-
+        return $this->render('Pages/homePage.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
+
+/*
+
+    #[Route('/search-recipes', name: 'search_recipes')]
+    public function searchRecipes(Request $request, SpoonacularApiService $apiService): Response
+    {
+        $params = [
+            'minCarbs' => $request->query->get('minCarbs', 10),
+            'maxCarbs' => $request->query->get('maxCarbs', 50),
+            'minProtein' => $request->query->get('minProtein', 10),
+            'maxProtein' => $request->query->get('maxProtein', 50),
+            'minFat' => $request->query->get('minFat', 10),
+            'maxFat' => $request->query->get('maxFat', 50)
+        ];
+
+        try {
+            $recipes = $apiService->searchRecipesByNutrients($params);
+        } catch (\Exception $e) {
+            return new Response('Error: ' . $e->getMessage());
+        }
+
+        return $this->render('Pages/search.html.twig', [
+            'recipes' => $recipes
+        ]);
+    }
+    */
 
     #[Route('/homePage', name: 'homePage')]
     public function homePage(Request $request, EntityManagerInterface $em, SessionInterface $session,SpoonacularApiService $apiService): Response
@@ -200,33 +228,14 @@ class TastyTableController extends AbstractController
             $recipes[] = $apiService->getRandomRecipe($filters);
         }
 
-        return $this->render('Pages/homePage.html.twig', [
-            'form' => $form->createView(),
-            'recipes' => $recipes,
-            'filters' => $filters
-        ]);
-    }
-
-    #[Route('/search', name: 'search_recipes')]
-    public function searchRecipes(Request $request, SpoonacularApiService $apiService): Response
-    {
-        $query = $request->query->get('query');
-
-        $filters = [
-            'vegetarian' => $request->query->get('vegetarian'),
-            'vegan' => $request->query->get('vegan'),
-            'gluten-free' => $request->query->get('gluten-free'),
-            'dairy-free' => $request->query->get('dairy-free')
-        ];
-
-        // Fetch recipes based on the search query
-        $form = $this->createFormBuilder()->getForm();
-
-        $recipes = array();
-        for ($x = 0; $x < 1; $x++) { //change loop limit to change number of recipes displayed in home
-            //display less recipes to save key usage for testing
-            $recipes[] = $apiService->searchRecipesByName($query);
-        }
+//        $recipeID = new Integer();
+//
+//        $form = $this->createFormBuilder($recipeID)
+//            ->add('recipeID', TextType::class, [
+//                'attr' => ['id' => 'id', 'placeholder' => 'recipeID']
+//            ])
+//            ->getForm();
+//        $form->handleRequest($request);
 
         return $this->render('Pages/homePage.html.twig', [
             'form' => $form->createView(),
@@ -253,8 +262,6 @@ class TastyTableController extends AbstractController
             return $this->redirectToRoute('index');
         }
 
-        $user = $em->getRepository(User::class)->findOneBy(['username' => $session->get('username')]);
-
         $userId = $session->get('userId');
         $type = $request->query->get('type');
 
@@ -271,7 +278,6 @@ class TastyTableController extends AbstractController
         return $this->render('Pages/Follows.html.twig', [
             'follows' => $followData,
             'type' => $type,
-            'user' => $user
         ]);
     }
 
@@ -296,10 +302,9 @@ class TastyTableController extends AbstractController
             return $this->redirectToRoute('index');
         }
 
-        $user = $em->getRepository(User::class)->findOneBy(['username' => $session->get('username')]);
 
         $dietaryPreferences = [
-            'lacto ovo vegetarian' => 'lacto ovo vegetarian',
+            'none' => 'None',
             'lacto-vegetarian' => 'Lacto Vegetarian',
             'ovo-vegetarian' => 'Ovo Vegetarian',
             'ovolacto-vegetarian' => 'Ovo-Lacto Vegetarian',
@@ -312,7 +317,7 @@ class TastyTableController extends AbstractController
         $selectedDiets = $request->query->all('diets');
         $diets = !empty($selectedDiets) ? $selectedDiets : [];
 
-       // $logger->info('Selected diets:', ['diets' => $diets]);
+        $logger->info('Selected diets:', ['diets' => $diets]);
         $type = $request->query->get('type');
         $UserID=$session->get('userId');
 
@@ -330,54 +335,35 @@ class TastyTableController extends AbstractController
         if ($type === 'saved') {
             // Fetch saved recipes from the API & DB
             $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($UserID, 1,0);
-           // echo "Fetched Recipe IDs:\n";
-            //print_r($recipeIds);
             $ApiRecipes=[];
             if (!empty($recipeIds)) {
                 // return new Response('No saved recipes found.');
                 //From the API
-                $filteredArrays=[];
                 try {
                     $ApiRecipes = $apiService->getRecipesInformationBulk($recipeIds);
-
-                    foreach ($ApiRecipes as $apiRecipe){
-
-                        if (!empty($selectedDiets)){
-
-
-                            if (array_intersect($apiRecipe['diets'], $selectedDiets))
-                            {
-
-                                $filteredArrays []= $apiRecipe;
-                              //  print_r( $filteredArrays);
-
-                            }
-                        }
-
-                        if (!empty($selectedDiets))
-                        {
-                            $ApiRecipes=$filteredArrays;
-                        }
-
-                    }
-
+                   // $logger->info('Selected diets:', ['diets' => $ApiRecipes]);
                 } catch (\Exception $e) {
                     //return new Response('Error: ' . $e->getMessage());
                 }
             }
-
             $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($UserID, 0,0);
             //$DbRecipes = $em->getRepository(Recipes::class)->findBy(['id' => $recipeIds]);
             $DbRecipes = $em->getRepository(Recipes::class)->findRecipesByIdsAndDiets($recipeIds, $diets);
 
-
+            foreach ($DbRecipes as $recipe) {
+                if ($recipe->getPicture()) {
+                    $pictureStream = stream_get_contents($recipe->getPicture());
+                    $recipe->base64Picture = base64_encode($pictureStream);
+                } else {
+                    $recipe->base64Picture = null;
+                }
+            }
 
             return $this->render('Pages/Profile.html.twig', [
                 'dietaryPreferences' => $dietaryPreferences,
                 'selectedDiets' => $selectedDiets,
                 'API_recipes' => $ApiRecipes,
-                'Db_recipes'=>$DbRecipes,
-                'user' => $user
+                'Db_recipes'=>$DbRecipes
             ]);
 
         }elseif ($type === 'my'){
@@ -386,22 +372,39 @@ class TastyTableController extends AbstractController
             //$DbRecipes = $em->getRepository(Recipes::class)->findBy(['id' => $recipeIds]);
             $DbRecipes = $em->getRepository(Recipes::class)->findRecipesByIdsAndDiets($recipeIds, $diets);
 
-
+            foreach ($DbRecipes as $recipe) {
+                if ($recipe->getPicture()) {
+                    $pictureStream = stream_get_contents($recipe->getPicture());
+                    $recipe->base64Picture = base64_encode($pictureStream);
+                } else {
+                    $recipe->base64Picture = null;
+                }
+            }
 
             return $this->render('Pages/Profile.html.twig', [
                     'dietaryPreferences' => $dietaryPreferences,
                     'selectedDiets' => $selectedDiets,
                     'API_recipes' => [],
-                    'Db_recipes'=>$DbRecipes,
-                    'user' => $user
+                    'Db_recipes'=>$DbRecipes
+
                 ]);
 
         }
         else{
             // Fetch my recipes from the DB and set is my TRUE
-             echo "Fetched Recipe IDs:\n";
-            //print_r($recipe[0]);
-            return $this->redirectToRoute('update_profile');
+            $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($UserID, 0,1);
+          //  $DbRecipes = $em->getRepository(Recipes::class)->findBy(['id' => $recipeIds]);
+            $DbRecipes = $em->getRepository(Recipes::class)->findRecipesByIdsAndDiets($recipeIds, $diets);
+
+
+            return $this->render('Pages/Profile.html.twig', [
+                'dietaryPreferences' => $dietaryPreferences,
+                'selectedDiets' => $selectedDiets,
+                'API_recipes' => [],
+                'Db_recipes'=>$DbRecipes
+
+            ]);
+
         }
 
     }
@@ -417,8 +420,6 @@ class TastyTableController extends AbstractController
             throw $this->createAccessDeniedException('You must be logged in to submit a recipe.');
         }
         $recipe->setUserId($userId);
-
-        //$recipe->setUserId(1);
 
         $form = $this->createFormBuilder($recipe)
             ->add('recipeName', TextType::class, ['label' => 'Recipe Name'])
@@ -467,7 +468,7 @@ class TastyTableController extends AbstractController
                     );
                 } catch (FileException $e) {
                     // Handle exception if something happens during file upload
-                   // $logger->error('Error uploading file: ' . $e->getMessage());
+                    $logger->error('Error uploading file: ' . $e->getMessage());
                 }
 
                 // Store the file name in the entity
@@ -498,79 +499,55 @@ class TastyTableController extends AbstractController
         ]);
     }
 
-
-    #[Route('/recipeDisplay/{id}', name: 'recipeDisplay')]
-    public function display($id,Request $request, EntityManagerInterface $em, SessionInterface $session,SpoonacularApiService $apiService): Response
+    #[Route('/recipeDisplay/{id}', name: 'recipeDisplay', methods: ['GET', 'POST'])]
+    public function display(int $id, Request $request, EntityManagerInterface $em, SessionInterface $session): Response
     {
+        // Retrieve the recipe by ID
         $recipe = $em->getRepository(Recipes::class)->find($id);
-        $isFromDb=1;
 
-        if (!$recipe) {
-            //throw $this->createNotFoundException('The recipe does not exist');
-           // $recipe=$apiService->getRecipeById($id);
-            //$ids[]=$id;
-
-            $recipe = ($apiService->getRecipeByIdFordisplay($id));
-            if ($recipe){
-                $isFromDb=0;
-            }
-            else
-            {
-                $recipe=[] ;
-            }
-
-        }
-        //Check if the recipe is in the saved recipes
-        $saveToUserRecipe=true; //DO  display add recipe
-        if ($recipe)
-        {
-            $userId = $session->get('userId');
-            $recipeIds = $em->getRepository(SavedRecipes::class)->findOneBy(['userId'=>$userId,'recipeId'=>$id]);
-            if ($recipeIds)
-            {
-                $saveToUserRecipe=false; //remove recipe
-            }
+        // Retrieve user ID from session and fetch the User entity
+        $userId = $session->get('userId');
+        if (!$userId) {
+            throw $this->createAccessDeniedException('You must be logged in to submit a comment.');
         }
 
+        $user = $em->getRepository(User::class)->find($userId);
+        if (!$user) {
+            throw $this->createNotFoundException('User not found.');
+        }
+
+//        if (!$recipe) {
+//            throw $this->createNotFoundException('The recipe does not exist');
+//        }
 
         return $this->render('Pages/recipeDisplay.html.twig', [
-            'recipe' => $recipe,
-            'DbFlag' => $isFromDb,
-            'SaveFlag'=>$saveToUserRecipe
+            'recipe' => $recipe
         ]);
     }
 
-    #[Route('/addSavedRecipe', name: 'addSaved')]
-    public function recipeSaveOrDelete(Request $request, EntityManagerInterface $em, SessionInterface $session,SpoonacularApiService $apiService): Response
+    #[Route('/recipe/delete/{id}', name: 'recipe_delete', methods: ['POST'])]
+    public function delete(int $id, EntityManagerInterface $em, Request $request): Response
     {
+        $recipe = $em->getRepository(Recipes::class)->find($id);
 
+        if ($recipe) {
+            $em->remove($recipe);
+            $em->flush();
 
-        $user = $em->getRepository(User::class)->findOneBy(['id' =>1]);
-        $user2=$em->getRepository(User::class)->findOneBy(['id' =>22]);
+            $this->addFlash('success', 'Recipe deleted successfully.');
+        } else {
+            $this->addFlash('error', 'Recipe not found.');
+        }
 
-        $follow=new Followers();
-        $follow->setUserId($user);
-        $follow->setFollowerId($user2);
-        $em->persist($follow);
-        $em->flush();
-
-            return $this->redirectToRoute('recipeDisplay', ['id' => 1]);
-
-
-
-
-
-
-
+        return $this->redirectToRoute('home'); // Change 'home' to your desired route
     }
-    #[Route('/profile/{username}/{isFollowing}', name: 'user_profile')]
-    public function showUserProfile(EntityManagerInterface $entityManager, string $username,string $isFollowing,Request $request,SessionInterface $session): Response
+
+
+    #[Route('/profile/{username}', name: 'user_profile')]
+    public function showUserProfile(EntityManagerInterface $entityManager, string $username): Response
     {
         // Find the user by username
         $user = $entityManager->getRepository(User::class)->findOneBy(['username' => $username]);
-
-        $type = $request->query->get('type');
-
 
         // If user not found, throw an exception or handle the error as needed
         if (!$user) {
@@ -580,127 +557,11 @@ class TastyTableController extends AbstractController
         if ($user->getDietPreference() === null) {
             $user -> setDietPreference('');
         }
-
-        if ($type === 'delete')
-        {
-            $userId = $session->get('userId');
-            //$mainUser = $entityManager->getRepository(User::class)->findOneBy(['username' => $userId]);
-            $following = $entityManager->getRepository(Following::class)->findOneBy(['userId' =>$userId, 'followingId' => $user->getId()]);
-
-            if ($following) {
-                echo "Following entity ID: " . $following->getId() . "<br>";
-                echo "Following entity User ID: " . $following->getUserId()->getId() . "<br>";
-                echo "Following entity Following ID: " . $following->getFollowingId()->getId() . "<br>";
-
-
-
-               // $entityManager->remove($following);
-                $entityManager->getRepository(Following::class)->removeFollowingByUserAndFollowing($following->getUserId()->getId() ,$following->getFollowingId()->getId());
-                // Debugging: Before flushing
-                echo "Before flush<br>";
-                try {
-                    $entityManager->flush();
-                   // echo "Flush successful<br>";
-                } catch (\Exception $e) {
-                    echo "Error during flush: " . $e->getMessage() . "<br>";
-                }
-                // Debugging: After flushing
-                //echo "After flush<br>";
-
-                // Redirect to the follows page
-                return $this->redirectToRoute('follows');
-            }
-
-
-        }
-        elseif ($type=='RemoveFollower')
-        {
-            $userId = $session->get('userId');
-            $followers = $entityManager->getRepository(Followers::class)->findOneBy(['userId' =>$userId, 'followerId' => $user->getId()]);
-
-            if ($followers) {
-                echo "Following entity ID: " . $followers->getId() . "<br>";
-                echo "Following entity User ID: " . $followers->getUserId()->getId() . "<br>";
-                echo "Following entity Following ID: " . $followers->getFollowerId()->getId() . "<br>";
-
-
-
-                // $entityManager->remove($following);
-                $entityManager->getRepository(Followers::class)->removeFollowingByUserAndFollowers($followers->getUserId()->getId() ,$followers->getFollowerId()->getId());
-                // Debugging: Before flushing
-                echo "Before flush<br>";
-                try {
-                    $entityManager->flush();
-                    // echo "Flush successful<br>";
-                } catch (\Exception $e) {
-                    echo "Error during flush: " . $e->getMessage() . "<br>";
-                }
-                // Debugging: After flushing
-                //echo "After flush<br>";
-
-                // Redirect to the follows page
-                return $this->redirectToRoute('follows');
-            }
-
-
-        }
         // Render the user profile template
         return $this->render('Pages/User.html.twig', [
             'user' => $user,
-            'isFollowing'=>$isFollowing,
         ]);
     }
-
-    #[Route('/updateProfile', name: 'update_profile')]
-    public function updateProfile(Request $request, EntityManagerInterface $em, LoggerInterface $logger, SessionInterface $session,UserPasswordHasherInterface $passwordHasher): Response
-    {
-        // Retrieve user ID from session
-        $userId = $session->get('userId');
-        if (!$userId) {
-            throw $this->createAccessDeniedException('You must be logged in to update your profile.');
-        }
-
-        // Find the user in the database
-        $user = $em->getRepository(User::class)->find($userId);
-        if (!$user) {
-            throw $this->createNotFoundException('User not found.');
-        }
-
-        $form = $this->createFormBuilder($user)
-            ->add('name', TextType::class, ['label' => 'Name'])
-            ->add('surname', TextType::class, ['label' => 'Surname'])
-            ->add('email', EmailType::class, ['label' => 'Email'])
-            ->add('password', PasswordType::class, ['label' => 'Password', 'required' => true])
-            ->add('save', SubmitType::class, ['label' => 'Save'])
-            ->getForm();
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // If the password is not empty, encode it
-            if ($user->getPassword()) {
-                $password = $passwordHasher->hashPassword($user, $user->getPassword());
-
-                $user->setPassword($password);
-            }
-
-            $em->persist($user);
-            $em->flush();
-
-            $this->addFlash('success', 'Profile updated successfully!');
-            return $this->redirectToRoute('profile');
-        }
-
-        return $this->render('Pages/updateUserProfile.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-
-
-
-
-
-
 
 }
 

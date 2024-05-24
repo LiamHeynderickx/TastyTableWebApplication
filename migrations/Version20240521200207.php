@@ -10,7 +10,7 @@
 ///**
 // * Auto-generated Migration: Please modify to your needs!
 // */
-//final class Version20240521164150 extends AbstractMigration
+//final class Version20240521200207 extends AbstractMigration
 //{
 //    public function getDescription(): string
 //    {
@@ -20,12 +20,12 @@
 //    public function up(Schema $schema): void
 //    {
 //        // this up() migration is auto-generated, please modify it to your needs
-//        $this->addSql('ALTER TABLE recipes CHANGE picturePath picture_path VARCHAR(255) DEFAULT NULL');
+//        $this->addSql('ALTER TABLE recipes ADD picture_path VARCHAR(255) DEFAULT NULL, DROP picture');
 //    }
 //
 //    public function down(Schema $schema): void
 //    {
 //        // this down() migration is auto-generated, please modify it to your needs
-//        $this->addSql('ALTER TABLE recipes CHANGE picture_path picturePath VARCHAR(255) DEFAULT NULL');
+//        $this->addSql('ALTER TABLE recipes ADD picture LONGBLOB DEFAULT NULL, DROP picture_path');
 //    }
 //}
