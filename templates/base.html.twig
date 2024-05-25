@@ -50,21 +50,6 @@
 
     </header>
 
-    <div class="subHeader">
-        {% block subHeader %}
-        <div class="userRecipes">
-            {% block userRecipes %}
-                <a href="{{ path('homePage') }}"><h3>User Recipes</h3></a>
-            {% endblock %}
-        </div>
-
-        <div class="apiRecipes">
-            {% block apiRecipes %}
-                <a href="{{ path('homePageAPI') }}"><h3>TastyTable Recipes</h3></a>
-            {% endblock %}
-        </div>
-        {% endblock %}
-    </div>
 
 
         {% block body %}{% endblock %}

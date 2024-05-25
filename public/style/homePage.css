@@ -15,6 +15,7 @@ main {
 
 /* Dropdown Button */
 .dropdown {
+    justify-content: left;
     width: fit-content;
     height: fit-content;
     margin-left: 20px;
@@ -147,4 +148,22 @@ main {
     color: #c59b08;
 }
 
+.topOfHome{
+    justify-content: left;
+}
+
+
+.subHeader {
+    background-color: white;
+    padding-bottom: 5px;
+    display: flex;
+    justify-content: center; /* Distribute space around items */
+    align-items: center; /* Center elements vertically */
+}
+.userRecipes,
+.apiRecipes {
+    margin: 10px 0; /* Add margin to top and bottom */
+    margin-right: 20px;
+    margin-left: 20px;
+}
 
