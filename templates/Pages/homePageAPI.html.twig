@@ -6,29 +6,67 @@
         <link rel="stylesheet" href="{{ asset('style/homePage.css') }}">
     {% endblock %}
 
-    <div class="dropdown">
-        <button class="dropbtn"><i class="fa fa-bars"></i></button>
-        <div class="dropdown-content">
-            <a href="{{ path('homePage') }}">Homepage</a>
-            <a href="{{ path('profile') }}">Profile</a>
-            <a href="{{ path('aboutUs') }}">About Us/Contact</a>
+
+    <div class="topOfHome">
+
+        <div class="dropdown">
+            <button class="dropbtn"><i class="fa fa-bars"></i></button>
+            <div class="dropdown-content">
+                <a href="{{ path('homePage') }}">Homepage</a>
+                <a href="{{ path('profile') }}">Profile</a>
+                <a href="{{ path('aboutUs') }}">About Us/Contact</a>
+            </div>
         </div>
+
+        <div class="subHeader">
+            {% block subHeader %}
+                <link rel="stylesheet" href="{{ asset('style/homePage.css') }}">
+                <div class="userRecipes">
+                    {% block userRecipes %}
+                        <a href="{{ path('homePage') }}"><h1>User Recipes</h1></a>
+                    {% endblock %}
+                </div>
+
+                <div class="apiRecipes">
+                    {% block apiRecipes %}
+                        <a href="{{ path('homePageAPI') }}"><h1>TastyTable Recipes</h1></a>
+                    {% endblock %}
+                </div>
+
+                <div class="CreateRecipe">
+                    {% block createRecipe %}
+                        <a href="{{ path('recipeSubmission') }}"><h1>Create Recipe</h1></a>
+                    {% endblock %}
+                </div>
+
+            {% endblock %}
+        </div>
+
     </div>
-    <div class="filter-section">
-        <h3>Filter Recipes</h3>
-        <form method="get" action="{{ path('homePage') }}">
-            <input type="checkbox" id="vegetarian" name="vegetarian" {% if filters.vegetarian %}checked{% endif %}>
-            <label for="vegetarian">Vegetarian</label><br>
-            <input type="checkbox" id="vegan" name="vegan" {% if filters.vegan %}checked{% endif %}>
-            <label for="vegan">Vegan</label><br>
-            <input type="checkbox" id="gluten-free" name="gluten-free" {% if filters['gluten-free'] %}checked{% endif %}>
-            <label for="gluten-free">Gluten-Free</label><br>
-            <input type="checkbox" id="dairy-free" name="dairy-free" {% if filters['dairy-free'] %}checked{% endif %}>
-            <label for="dairy-free">Dairy-Free</label><br>
-            <button type="submit">Apply Filters</button>
-        </form>
-    </div>
+
+
     <main>
+
+        <div class="filter-section">
+
+            <br><br>
+
+            <h2>Filter Recipes</h2>
+            <br>
+            <form method="get" action="{{ path('homePage') }}">
+                <input type="checkbox" id="vegetarian" name="vegetarian" {% if filters.vegetarian %}checked{% endif %}>
+                <label for="vegetarian">Vegetarian</label><br>
+                <input type="checkbox" id="vegan" name="vegan" {% if filters.vegan %}checked{% endif %}>
+                <label for="vegan">Vegan</label><br>
+                <input type="checkbox" id="gluten-free" name="gluten-free" {% if filters['gluten-free'] %}checked{% endif %}>
+                <label for="gluten-free">Gluten-Free</label><br>
+                <input type="checkbox" id="dairy-free" name="dairy-free" {% if filters['dairy-free'] %}checked{% endif %}>
+                <label for="dairy-free">Dairy-Free</label>
+                <br><br>
+                <button type="submit">Apply Filters</button>
+            </form>
+        </div>
+
         <div class="recipes">
 
             {% if recipes == [] %}

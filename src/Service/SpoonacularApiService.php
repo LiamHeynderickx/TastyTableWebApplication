@@ -105,7 +105,7 @@ class SpoonacularApiService
             $response = file_get_contents($urlID);
             $data2 = json_decode($response);
 
-            $image = $data2->image ?? 'style/images/WebTech Mascot.jpg';
+            $image = $data2->image ?? 'style/images/placeholderImage.jpeg';
             return [
                 'title' => $data2->title ?? 'No title available',
                 'image' => $image,

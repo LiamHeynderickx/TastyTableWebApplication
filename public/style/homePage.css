@@ -64,7 +64,7 @@ main {
     flex-direction: row;
     justify-content: center;
     flex-wrap: wrap;
-    margin-top: 20px;
+    margin-top: 10px;
     width: 90%;
 }
 
@@ -72,6 +72,7 @@ main {
 .recipe-card {
     flex-basis: calc(30% - 40px); /* Set width for three cards per row */
     margin: 10px;
+    margin-top: 0px;
     background-color: #f9f9f9;
     padding: 20px;
     border-radius: 5px;
@@ -160,12 +161,13 @@ main {
     padding-top: 20px;
     background-color: white;
     display: flex;
-    justify-content: center; /* Distribute space around items */
+    justify-content: space-evenly; /* Distribute space around items */
     align-items: center; /* Center elements vertically */
     flex-grow: 1;
+    margin: auto;
 }
 .userRecipes,
-.apiRecipes {
+.apiRecipes, .createRecipe {
     margin: 10px 0; /* Add margin to top and bottom */
     margin-right: 20px;
     margin-left: 20px;
@@ -179,4 +181,25 @@ main {
     /*        -1px 1px 0 #232323,*/
     /*        1px 1px 0 #232323; !* Outline color *!*/
     font-weight: bold;
+}
+
+.filter-section{
+    font-family: 'Poppins', sans-serif;
+    width: 10%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    color: #e1823a;
+    font-weight: bolder;
+    margin: 10px;
+}
+
+.filter-section button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
 }

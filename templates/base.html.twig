@@ -1,69 +1,55 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
-
-        {% block stylesheetsHeader %}
-            <link rel="stylesheet" href="{{ asset('style/header.css') }}">
-        {% endblock %}
-        {% block stylesheetsFooter %}
-            <link rel="stylesheet" href="{{ asset('style/footer.css') }}">
-        {% endblock %}
-
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-
-        {% endblock %}
-        </script>
-        <script src="https://kit.fontawesome.com/4c4c8749b1.js" crossorigin="anonymous"></script>
-    </head>
-
-    <body>
-    <header>
-        {% block header %}
-                <div class ="logo">
-                    <a href="{{ path('homePage') }}"><img src="{{ asset('style/images/WebTech Mascot.jpg') }}"></a>
-                    <h1>Tasty Table</h1>
-                </div>
-            <div class="search-bar">
-                {% block search_bar %}
-                    <form method="get" action="{{ path('search_recipes') }}">
-                        <input type="search" name="query" placeholder="Find a recipe or ingredient">
-                        <button type="submit" style="background-color: transparent"><i class="fa fa-search"></i></button>
-                    </form>
-                {% endblock %}
-            </div>
-
-            <div class="user">
-                {% block profile_user %}
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+    {% block stylesheets %}{% endblock %}
+    {% block stylesheetsHeader %}
+        <link rel="stylesheet" href="{{ asset('style/header.css') }}">
+    {% endblock %}
+    {% block stylesheetsFooter %}
+        <link rel="stylesheet" href="{{ asset('style/footer.css') }}">
+    {% endblock %}
+    {% block javascripts %}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
+    <script src="https://kit.fontawesome.com/4c4c8749b1.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<header>
+    {% block header %}
+        <div class="logo">
+            <a href="{{ path('homePage') }}"><img src="{{ asset('style/images/WebTech Mascot.jpg') }}"></a>
+            <h1>Tasty Table</h1>
+        </div>
+        <div class="search-bar">
+            {% block search_bar %}
+                <form method="get" action="{{ path('search_recipes') }}">
+                    <input type="search" name="query" placeholder="Find a recipe or ingredient">
+                    <button type="submit" style="background-color: transparent"><i class="fa fa-search"></i></button>
+                </form>
+            {% endblock %}
+        </div>
+        <div class="user">
+            {% block profile_user %}
                 <a href="{{ path('profile') }}"><i class="fa fa-user"></i></a>
-                {% endblock %}
-            </div>
+            {% endblock %}
+        </div>
+    {% endblock %}
+</header>
 
+<div class="content">
+    {% block body %}{% endblock %}
+</div>
 
-        {% endblock %}
-
-
-    </header>
-
-
-
-        {% block body %}{% endblock %}
-
-        <footer>
-        {% block footer %}
-
-                <p class="footer-left">TastyTable.inc</p>
-                <div class="footer-right">
-                    <a href="{{ path('aboutUs') }}">About | Contact</a>
-                </div>
-
-        {% endblock %}
-        </footer>
-    </body>
-
+<footer>
+    {% block footer %}
+        <p class="footer-left">TastyTable.inc</p>
+        <div class="footer-right">
+            <a href="{{ path('aboutUs') }}">About | Contact</a>
+        </div>
+    {% endblock %}
+</footer>
+</body>
 </html>

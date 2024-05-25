@@ -1,3 +1,22 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column; /* Arrange children in a column */
+    min-height: 100vh; /* Ensure the body takes up at least the full height of the viewport */
+}
+
+header, .content, footer {
+    flex-shrink: 0; /* Prevent shrinking */
+}
+
+.content {
+    flex: 1; /* This makes the content take up the remaining space */
+}
+
 footer {
     background-color: rgba(220, 126, 77, 0.82);
     color: white;
@@ -5,7 +24,7 @@ footer {
     padding-bottom: 15px;
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Added to space out the items */
+    justify-content: space-between; /* Space out the items */
     width: 100%;
 }
 
@@ -18,12 +37,12 @@ footer {
 }
 
 .footer-right a {
-    color: white; /* Ensures the links are white */
-    text-decoration: none; /* Removes underline */
-    margin: 0 10px; /* Adds space between the links */
+    color: white; /* Ensure the links are white */
+    text-decoration: none; /* Remove underline */
+    margin: 0 10px; /* Add space between the links */
     transition: color 0.3s; /* Smooth transition for hover effect */
 }
 
 .footer-right a:hover {
-    color: #e0e0e0; /* Changes color on hover */
+    color: #e0e0e0; /* Change color on hover */
 }
