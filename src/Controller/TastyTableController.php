@@ -657,90 +657,96 @@ class TastyTableController extends AbstractController
 
 
     #[Route('/profile/{username}/{isFollowing}', name: 'user_profile')]
-    public function showUserProfile(EntityManagerInterface $entityManager, string $username,string $isFollowing,Request $request,SessionInterface $session): Response
-    {
+    public function showUserProfile(
+        EntityManagerInterface $entityManager,
+        string $username,
+        string $isFollowing,
+        Request $request,
+        SessionInterface $session,
+        LoggerInterface $logger,
+        SpoonacularApiService $apiService
+    ): Response {
         // Find the user by username
         $user = $entityManager->getRepository(User::class)->findOneBy(['username' => $username]);
-
-        $type = $request->query->get('type');
-
 
         // If user not found, throw an exception or handle the error as needed
         if (!$user) {
             throw $this->createNotFoundException('User not found');
         }
 
-        if ($user->getDietPreference() === null) {
-            $user -> setDietPreference('');
-        }
+        $type = $request->query->get('type');
+        $profileUserId = $user->getId();
 
-        if ($type === 'delete')
-        {
-            $userId = $session->get('userId');
-            //$mainUser = $entityManager->getRepository(User::class)->findOneBy(['username' => $userId]);
-            $following = $entityManager->getRepository(Following::class)->findOneBy(['userId' =>$userId, 'followingId' => $user->getId()]);
+        $API_recipes = [];
+        $Db_recipes = [];
+
+        if ($type === 'delete') {
+            $sessionUserId = $session->get('userId');
+            $following = $entityManager->getRepository(Following::class)->findOneBy([
+                'userId' => $sessionUserId,
+                'followingId' => $profileUserId
+            ]);
 
             if ($following) {
-                echo "Following entity ID: " . $following->getId() . "<br>";
-                echo "Following entity User ID: " . $following->getUserId()->getId() . "<br>";
-                echo "Following entity Following ID: " . $following->getFollowingId()->getId() . "<br>";
-
-
-
-                // $entityManager->remove($following);
-                $entityManager->getRepository(Following::class)->removeFollowingByUserAndFollowing($following->getUserId()->getId() ,$following->getFollowingId()->getId());
-                // Debugging: Before flushing
-                echo "Before flush<br>";
                 try {
+                    $entityManager->getRepository(Following::class)->removeFollowingByUserAndFollowing(
+                        $following->getUserId()->getId(),
+                        $following->getFollowingId()->getId()
+                    );
                     $entityManager->flush();
-                    // echo "Flush successful<br>";
                 } catch (\Exception $e) {
-                    echo "Error during flush: " . $e->getMessage() . "<br>";
+                    $logger->error('Error during following deletion flush: ' . $e->getMessage());
                 }
-                // Debugging: After flushing
-                //echo "After flush<br>";
 
                 // Redirect to the follows page
                 return $this->redirectToRoute('follows');
             }
-
-
-        }
-        elseif ($type=='RemoveFollower')
-        {
-            $userId = $session->get('userId');
-            $followers = $entityManager->getRepository(Followers::class)->findOneBy(['userId' =>$userId, 'followerId' => $user->getId()]);
+        } elseif ($type === 'RemoveFollower') {
+            $sessionUserId = $session->get('userId');
+            $followers = $entityManager->getRepository(Followers::class)->findOneBy([
+                'userId' => $sessionUserId,
+                'followerId' => $profileUserId
+            ]);
 
             if ($followers) {
-                echo "Following entity ID: " . $followers->getId() . "<br>";
-                echo "Following entity User ID: " . $followers->getUserId()->getId() . "<br>";
-                echo "Following entity Following ID: " . $followers->getFollowerId()->getId() . "<br>";
-
-
-
-                // $entityManager->remove($following);
-                $entityManager->getRepository(Followers::class)->removeFollowingByUserAndFollowers($followers->getUserId()->getId() ,$followers->getFollowerId()->getId());
-                // Debugging: Before flushing
-                echo "Before flush<br>";
                 try {
+                    $entityManager->getRepository(Followers::class)->removeFollowingByUserAndFollowers(
+                        $followers->getUserId()->getId(),
+                        $followers->getFollowerId()->getId()
+                    );
                     $entityManager->flush();
-                    // echo "Flush successful<br>";
                 } catch (\Exception $e) {
-                    echo "Error during flush: " . $e->getMessage() . "<br>";
+                    $logger->error('Error during follower deletion flush: ' . $e->getMessage());
                 }
-                // Debugging: After flushing
-                //echo "After flush<br>";
 
                 // Redirect to the follows page
                 return $this->redirectToRoute('follows');
             }
+        } elseif ($type === 'saved') {
+            // Fetch saved recipes from the API & DB
+            $recipeIds = $entityManager->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($profileUserId, 1, 0);
+            if (!empty($recipeIds)) {
+                try {
+                    $API_recipes = $apiService->getRecipesInformationBulk($recipeIds);
+                } catch (\Exception $e) {
+                    $logger->error('Error fetching API recipes: ' . $e->getMessage());
+                }
+            }
 
-
+            $recipeIds = $entityManager->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($profileUserId, 0, 0);
+            $Db_recipes = $entityManager->getRepository(Recipes::class)->findRecipesByIdsAndDiets($recipeIds);
+        } elseif ($type === 'user recipe') {
+            // Fetch user's own recipes
+            $recipeIds = $entityManager->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($profileUserId, 0, 1);
+            $Db_recipes = $entityManager->getRepository(Recipes::class)->findRecipesByIdsAndDiets($recipeIds);
         }
+
         // Render the user profile template
         return $this->render('Pages/User.html.twig', [
             'user' => $user,
-            'isFollowing'=>$isFollowing,
+            'isFollowing' => $isFollowing,
+            'API_recipes' => $API_recipes,
+            'Db_recipes' => $Db_recipes,
         ]);
     }
 
@@ -855,40 +861,47 @@ class TastyTableController extends AbstractController
             throw $this->createNotFoundException('User not found.');
         }
 
-        $originalPassword = $user->getPassword(); // Store the original password
-
         $form = $this->createFormBuilder($user)
             ->add('username', TextType::class, ['label' => 'Username'])
             ->add('name', TextType::class, ['label' => 'Name'])
             ->add('surname', TextType::class, ['label' => 'Surname'])
             ->add('email', EmailType::class, ['label' => 'Email'])
-            ->add('password', PasswordType::class, ['label' => 'Password', 'required' => false]) // Make password optional
+            ->add('current_password', PasswordType::class, [
+                'label' => 'Current Password',
+                'mapped' => false,
+                'required' => true, // Password is required to update profile info
+            ])
             ->add('save', SubmitType::class, ['label' => 'Save'])
             ->getForm();
 
         $form->handleRequest($request);
 
+        $alertMessage = null;
+
         if ($form->isSubmitted() && $form->isValid()) {
-            // If the password is not empty, encode it
-            if ($form->get('password')->getData()) {
-                $password = $passwordHasher->hashPassword($user, $form->get('password')->getData());
-                $user->setPassword($password);
+            // Verify the current password
+            $currentPassword = $form->get('current_password')->getData();
+            if (!$passwordHasher->isPasswordValid($user, $currentPassword)) {
+                // Set alert message if the current password is incorrect
+                $alertMessage = 'Current password is incorrect.';
             } else {
-                $user->setPassword($originalPassword); // Keep the original password if no new password is provided
+                // Proceed with updating the user
+                $em->persist($user);
+                $em->flush();
+                $session->set('username', $user->getUsername());
+
+                $alertMessage = 'Profile updated successfully!';
+                return $this->redirectToRoute('profile');
             }
-
-            $em->persist($user);
-            $em->flush();
-
-            $this->addFlash('success', 'Profile updated successfully!');
-            return $this->redirectToRoute('profile');
         }
 
         return $this->render('Pages/updateUserProfile.html.twig', [
             'form' => $form->createView(),
-            'user' => $user
+            'user' => $user,
+            'alertMessage' => $alertMessage
         ]);
     }
+
 
 
     #[Route('/addSavedRecipe', name: 'addSaved')]

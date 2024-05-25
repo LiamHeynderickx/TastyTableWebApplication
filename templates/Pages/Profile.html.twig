@@ -3,6 +3,9 @@
 {% block search_bar %}
     <!-- Overriding and making it invisible -->
 {% endblock %}
+{% block subHeader %}
+    <!-- Overriding and making it invisible -->
+{% endblock %}
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('style/Profile.css') }}">
 {% endblock %}
@@ -31,13 +34,16 @@
                 </ul>
                 <hr class="rounded">
 
+                {% if user is not null %}
                 {# Display Profile Information #}
                 <div>
                     <p><strong>Name:</strong> <span id="name-display">{{ user.name }}</span></p>
                     <p><strong>Surname:</strong> <span id="surname-display">{{ user.surname }}</span></p>
                     <p><strong>Email:</strong> <span id="email-display">{{ user.email }}</span></p>
                 </div>
-
+                {% else %}
+                    <p>User information not available.</p>
+                {% endif %}
                 <!--Dropdown-->
                 <nav>
                     <button class="dropbtn" onclick="toggleDropdown()" style="background-color: #00aaff; color: white; padding: 10px 20px; border: none; border-radius: 5px;">

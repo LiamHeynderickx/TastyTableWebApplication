@@ -25,13 +25,21 @@
             {{ form_widget(form.email) }}
         </div>
         <div class="form-group">
-            {{ form_label(form.password) }}
-            {{ form_widget(form.password) }}
+            {{ form_label(form.current_password) }}
+            {{ form_widget(form.current_password) }}
         </div>
         <div class="form-group">
             {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
         </div>
         {{ form_end(form) }}
     </div>
+
+    {% if alertMessage %}
+        <script>
+            window.onload = function() {
+                alert("{{ alertMessage }}");
+            };
+        </script>
+    {% endif %}
 
 {% endblock %}
