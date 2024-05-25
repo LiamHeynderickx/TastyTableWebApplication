@@ -6,7 +6,7 @@
 {% block body %}
 
     {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('style/index.css') }}">
+        <link rel="stylesheet" href="{{ asset('style/index.css') }}?v={{ 'now' | date('U') }}">
     {% endblock %}
 
     {% if alertMessage%}

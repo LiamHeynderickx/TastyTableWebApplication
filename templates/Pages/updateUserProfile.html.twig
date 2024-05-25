@@ -3,7 +3,7 @@
 {% block body %}
 
     {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('style/updateUserProfile.css') }}">
+        <link rel="stylesheet" href="{{ asset('style/updateUserProfile.css') }}?v={{ 'now' | date('U') }}">
     {% endblock %}
 
     <div class="form-container">
