@@ -443,6 +443,8 @@ class TastyTableController extends AbstractController
 
     }
 
+
+
     #[Route('/recipeSubmission', name: 'recipeSubmission')]
     public function recipeSubmission(Request $request, EntityManagerInterface $em, LoggerInterface $logger, SessionInterface $session): Response
     {
@@ -481,8 +483,8 @@ class TastyTableController extends AbstractController
             ->add('diet', TextType::class, ['label' => 'Diet'])
             ->add('type', TextType::class, ['label' => 'Meal Type'])
             ->add('ingredients', HiddenType::class, ['mapped' => false])
-            ->add('ingredientsAmounts', HiddenType::class, ['mapped' => false])
-            ->add('ingredientsUnits', HiddenType::class, ['mapped' => false])
+            ->add('ingredientsAmounts', HiddenType::class, ['mapped' => false, 'required' => false])
+            ->add('ingredientsUnits', HiddenType::class, ['mapped' => false, 'required' => false])
             ->add('instructions', HiddenType::class, ['mapped' => false])
             ->getForm();
 
@@ -536,6 +538,8 @@ class TastyTableController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+
 
     #[Route('/SaveRecipeDisplay/{id}/{save}/{isApi}', name: 'SaveRecipeDisplay')]
     public function SaveRecipeDisplay($id,$save,$isApi,Request $request, EntityManagerInterface $em, SessionInterface $session,SpoonacularApiService $apiService): Response
@@ -755,7 +759,7 @@ class TastyTableController extends AbstractController
         return $this->redirectToRoute('homePage'); // Replace 'homepage' with the name of your homepage route
     }
 
-    #[Route('/recipe/edit/{id}', name: 'recipe_edit')]
+    #[Route('/recipe_edit/{id}', name: 'recipe_edit')]
     public function edit($id, Request $request, EntityManagerInterface $em, LoggerInterface $logger): Response
     {
         $recipe = $em->getRepository(Recipes::class)->find($id);
@@ -768,20 +772,8 @@ class TastyTableController extends AbstractController
         $form = $this->createFormBuilder($recipe)
             ->add('recipeName', TextType::class, ['label' => 'Recipe Name', 'data' => $recipe->getRecipeName()])
             ->add('recipeDescription', TextareaType::class, ['label' => 'Recipe Description', 'required' => false, 'data' => $recipe->getRecipeDescription()])
-            ->add('picture', FileType::class, [
-                'label' => 'Recipe Image',
-                'required' => false,
-                'mapped' => false, // Not mapped directly to the entity
-                'attr' => ['accept' => 'image/*'], // Limit to image files
-                'data_class' => null, // To prevent errors related to file types
-            ])
-            ->add('cost', ChoiceType::class, [
-                'choices' => ['€' => '1', '€€' => '2', '€€€' => '3'],
-                'expanded' => true,
-                'multiple' => false,
-                'attr' => ['class' => 'form-label-cost'],
-                'data' => $recipe->getCost(),
-            ])
+            ->add('picture', FileType::class, ['label' => 'Recipe Image', 'required' => false, 'mapped' => false, 'attr' => ['accept' => 'image/*'],'data_class' => null])
+            ->add('cost', ChoiceType::class, ['choices' => ['€' => '1', '€€' => '2', '€€€' => '3'], 'expanded' => true, 'multiple' => false, 'attr' => ['class' => 'form-label-cost'], 'data' => $recipe->getCost(),])
             ->add('time', IntegerType::class, ['label' => 'Cooking Time (minutes)', 'data' => $recipe->getTime()])
             ->add('calories', IntegerType::class, ['label' => 'Calories', 'required' => false, 'data' => $recipe->getCalories()])
             ->add('fat', IntegerType::class, ['label' => 'Fat', 'required' => false, 'data' => $recipe->getFat()])
@@ -791,8 +783,8 @@ class TastyTableController extends AbstractController
             ->add('diet', TextType::class, ['label' => 'Diet', 'data' => $recipe->getDiet()])
             ->add('type', TextType::class, ['label' => 'Meal Type', 'data' => $recipe->getType()])
             ->add('ingredients', HiddenType::class, ['mapped' => false, 'data' => json_encode($recipe->getIngredients())])
-            ->add('ingredientsAmounts', HiddenType::class, ['mapped' => false, 'data' => json_encode($recipe->getIngredientsAmounts())])
-            ->add('ingredientsUnits', HiddenType::class, ['mapped' => false, 'data' => json_encode($recipe->getIngredientsUnits())])
+            ->add('ingredientsAmounts', HiddenType::class, ['mapped' => false, 'required' => false, 'data' => json_encode($recipe->getIngredientsAmounts())])
+            ->add('ingredientsUnits', HiddenType::class, ['mapped' => false, 'required' => false, 'data' => json_encode($recipe->getIngredientsUnits())])
             ->add('instructions', HiddenType::class, ['mapped' => false, 'data' => json_encode($recipe->getInstructions())])
             ->getForm();
 

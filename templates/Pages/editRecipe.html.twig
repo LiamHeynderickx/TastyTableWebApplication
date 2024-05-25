@@ -32,7 +32,7 @@
         {% for index, ingredient in recipe.ingredients %}
             <div class="ingredient">
                 <input type="text" name="ingredient[]" value="{{ ingredient }}" placeholder="Ingredient" required>
-                <input type="text" name="amount[]" value="{{ recipe.ingredientsAmounts[index] }}" placeholder="Quantity" pattern="\d+(\.\d+)?" required>
+                <input type="text" name="amount[]" value="{{ recipe.ingredientsAmounts[index] }}" placeholder="Quantity">
                 <input type="text" name="unit[]" value="{{ recipe.ingredientsUnits[index] }}" placeholder="Unit">
                 <button type="button" class="remove-button">Remove</button>
             </div>
@@ -72,15 +72,15 @@
                 const units = [];
                 $('#ingredients_list .ingredient').each(function() {
                     ingredients.push($(this).find('input[name="ingredient[]"]').val());
-                    amounts.push($(this).find('input[name="amount[]"]').val());
-                    units.push($(this).find('input[name="unit[]"]').val());
+                    amounts.push($(this).find('input[name="amount[]"]').val() || '');
+                    units.push($(this).find('input[name="unit[]"]').val() || '');
                 });
                 $('#form_ingredients').val(JSON.stringify(ingredients));
                 $('#form_ingredientsAmounts').val(JSON.stringify(amounts));
                 $('#form_ingredientsUnits').val(JSON.stringify(units));
 
                 const instructions = [];
-                $('#instructions_list .instruction textarea').each(function(index) {
+                $('#instructions_list .instruction textarea').each(function() {
                     instructions.push($(this).val());
                 });
                 $('#form_instructions').val(JSON.stringify(instructions));
@@ -90,7 +90,7 @@
                 var newIngredient = `
                     <div class="ingredient">
                         <input type="text" name="ingredient[]" placeholder="Ingredient" required>
-                        <input type="text" name="amount[]" placeholder="Quantity" pattern="\\d+(\\.\\d+)?">
+                        <input type="text" name="amount[]" placeholder="Quantity">
                         <input type="text" name="unit[]" placeholder="Unit">
                         <button type="button" class="remove-button">Remove</button>
                     </div>
