@@ -3,7 +3,7 @@
 {% block body %}
 
     {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('style/homePage.css') }}?v={{ 'now' | date('U') }}">
+        <link rel="stylesheet" href="{{ asset('style/homePage.css') }}">
     {% endblock %}
 
 
@@ -20,7 +20,7 @@
 
         <div class="subHeader">
             {% block subHeader %}
-                <link rel="stylesheet" href="{{ asset('style/homePage.css') }}?v={{ 'now' | date('U') }}">
+                <link rel="stylesheet" href="{{ asset('style/homePage.css') }}">
                 <div class="userRecipes">
                     {% block userRecipes %}
                         <a href="{{ path('homePage') }}"><h1>User Recipes</h1></a>
