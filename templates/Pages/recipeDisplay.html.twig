@@ -115,9 +115,12 @@
                     </div>
 
                     <!-- Button to mark as done -->
-                    <div>
-                        <button onclick="markAsDone()">Mark as Done</button>
+                    <div class="buttons-container">
+                        <button class="mark-as-done" onclick="markAsDone()">Mark as Done</button>
+                        <button class="edit-recipe" onclick="editRecipe()">Edit Recipe</button>
+                        <button class="delete-recipe" onclick="deleteRecipe()">Delete Recipe</button>
                     </div>
+
                 </div>
             </div>
 
@@ -275,9 +278,14 @@
         }
 
         function deleteRecipe() {
-            alert('Recipe has been deleted!');
-            window.location.href = "{{ path('recipe_delete', {'id': recipe.id}) }}";
+            if (confirm('Are you sure you want to delete this recipe? This action cannot be undone.')) {
+                alert('Recipe has been deleted!');
+                window.location.href = "{{ path('recipe_delete', {'id': recipe.id}) }}";
+            } else {
+                alert('Recipe deletion canceled.');
+            }
         }
+
 
         function editRecipe() {
             window.location.href = "{{ path('recipe_edit', {'id': recipe.id}) }}";
