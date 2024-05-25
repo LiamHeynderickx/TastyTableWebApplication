@@ -625,19 +625,18 @@ class TastyTableController extends AbstractController
             $savedRecipe=$em->getRepository(SavedRecipes::class)->findBy(['userId'=>$userId,'recipeId'=>$id]);
             $isSaveRecipe = empty($savedRecipe) ? true : false;
 
-            //Check if you follow the owner of the recipe
+            if ($isFromApi == 0) {
+                //Check if you follow the owner of the recipe
+                $userId = $session->get('userId');
+                $user = $em->getRepository(User::class)->findOneBy(['id' =>$userId]);
 
+                $currentRecipe=$em->getRepository(Recipes::class)->findOneBy(['id'=>$id]);
+                $recipeOwner=$currentRecipe->getUserId();
 
-            $userId = $session->get('userId');
-            $user = $em->getRepository(User::class)->findOneBy(['id' =>$userId]);
-//
-//
-            $currentRecipe=$em->getRepository(Recipes::class)->findOneBy(['id'=>$id]);
-            $recipeOwner=$currentRecipe->getUserId();
-//
-            $result=$em->getRepository(Following::class)->findBy(['userId'=>$user,'followingId'=>$recipeOwner]);
-            //if the returned array emty then user is not following the owner
-            $isFollowing = empty($result) ? true : false;
+                $result=$em->getRepository(Following::class)->findBy(['userId'=>$user,'followingId'=>$recipeOwner]);
+                //if the returned array emty then user is not following the owner
+                $isFollowing = empty($result) ? true : false;
+            }
 
         }
         // echo "Fetched Recipe IDs:\n";

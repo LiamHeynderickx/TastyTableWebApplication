@@ -174,28 +174,7 @@
                             <textarea id="comment" placeholder="Add your comment"></textarea><br>
                             <button onclick="addComment()">Add Comment</button>
                         </div>
-
-
-
                     </div>
-                    {% if SaveFlag %}
-                        <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '1','isApi':APIFlag}) }}" style="display: inline-block; padding: 10px 20px; font-size: 16px; font-weight: bold; text-align: center; color: white; background-color: #b2b2b2; border: none; border-radius: 5px; text-decoration: none;">
-                            <h3 style="margin: 0; padding: 0; color: black">Save Recipe </h3>
-                        </a>
-
-                    {% else %}
-
-                        <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '0','isApi':APIFlag}) }}" style="display: inline-block; padding: 10px 20px; font-size: 16px; font-weight: bold; text-align: center; color: white; background-color: #b2b2b2; border: none; border-radius: 5px; text-decoration: none;">
-                            <h3 style="margin: 0; padding: 0; color: black">Delete Recipe </h3>
-                        </a>
-
-                    {% endif %}
-                    {% if followFlag %}
-                    <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '3','isApi':APIFlag}) }}" style="display: inline-block; padding: 10px 20px; font-size: 16px; font-weight: bold; text-align: center; color: white; background-color: #b2b2b2; border: none; border-radius: 5px; text-decoration: none;">
-                        <h3 style="margin: 0; padding: 0; color: black">Delete Recipe </h3>
-                    </a>
-                    {% endif %}
-
                 </aside>
 
                 <!-- Recipe Info -->
@@ -231,9 +210,26 @@
                         {% endif %}
                     </div>
 
-                    <!-- Buttons to like recipe and mark as done -->
+                    {% if SaveFlag %}
+                        <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '1','isApi':APIFlag}) }}" style="display: inline-block; padding: 10px 20px; font-size: 16px; font-weight: bold; text-align: center; color: white; background-color: #b2b2b2; border: none; border-radius: 5px; text-decoration: none;">
+                            <h3 style="margin: 0; padding: 0; color: black">Save Recipe </h3>
+                        </a>
+
+                    {% else %}
+
+                        <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '0','isApi':APIFlag}) }}" style="display: inline-block; padding: 10px 20px; font-size: 16px; font-weight: bold; text-align: center; color: white; background-color: #b2b2b2; border: none; border-radius: 5px; text-decoration: none;">
+                            <h3 style="margin: 0; padding: 0; color: black">Unsave Recipe </h3>
+                        </a>
+
+                    {% endif %}
+                    {% if followFlag %}
+                        <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '3','isApi':APIFlag}) }}" style="display: inline-block; padding: 10px 20px; font-size: 16px; font-weight: bold; text-align: center; color: white; background-color: #b2b2b2; border: none; border-radius: 5px; text-decoration: none;">
+                            <h3 style="margin: 0; padding: 0; color: black">Unsave Recipe </h3>
+                        </a>
+                    {% endif %}
+
+                    <!-- Button to mark as done -->
                     <div>
-                        <button onclick="likeRecipe()">Like</button>
                         <button onclick="markAsDone()">Mark as Done</button>
                     </div>
                 </div>
