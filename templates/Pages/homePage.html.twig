@@ -20,6 +20,7 @@
 
             <div class="subHeader">
                 {% block subHeader %}
+                    <link rel="stylesheet" href="{{ asset('style/homePage.css') }}">
                 <div class="userRecipes">
                     {% block userRecipes %}
                         <a href="{{ path('homePage') }}"><h3>User Recipes</h3></a>

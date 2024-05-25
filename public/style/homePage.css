@@ -155,7 +155,6 @@ main {
 
 .subHeader {
     background-color: white;
-    padding-bottom: 5px;
     display: flex;
     justify-content: center; /* Distribute space around items */
     align-items: center; /* Center elements vertically */
