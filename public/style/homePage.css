@@ -29,6 +29,7 @@ main {
     font-size: 16px;
     border: none;
     border-radius: 20px;
+    margin-right: auto;
 }
 
 /* Dropdown Content (Hidden by Default) */
@@ -150,14 +151,18 @@ main {
 
 .topOfHome{
     justify-content: left;
+    display: flex;
 }
 
 
 .subHeader {
+    padding: 10px;
+    padding-top: 20px;
     background-color: white;
     display: flex;
     justify-content: center; /* Distribute space around items */
     align-items: center; /* Center elements vertically */
+    flex-grow: 1;
 }
 .userRecipes,
 .apiRecipes {
@@ -165,4 +170,13 @@ main {
     margin-right: 20px;
     margin-left: 20px;
 }
-
+.subHeader a {
+    text-decoration: none;
+    color: rgba(225, 129, 58, 0.78);
+    /*text-shadow:*/
+    /*        -1px -1px 0 #232323,*/
+    /*        1px -1px 0 #232323,*/
+    /*        -1px 1px 0 #232323,*/
+    /*        1px 1px 0 #232323; !* Outline color *!*/
+    font-weight: bold;
+}
