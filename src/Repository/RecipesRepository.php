@@ -41,6 +41,17 @@ class RecipesRepository extends ServiceEntityRepository
     //        ;
     //    }
 
+
+    public function findIdsByUserId($userId)
+    {
+        $queryBuilder = $this->createQueryBuilder('r')
+            ->select('r.id')
+            ->where('r.userId = :userId')
+            ->setParameter('userId', $userId);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
     public function findRecipesByIdsAndDiets(array $recipeIds, ?array $diets = null): array
     {
         $queryBuilder = $this->createQueryBuilder('r')
