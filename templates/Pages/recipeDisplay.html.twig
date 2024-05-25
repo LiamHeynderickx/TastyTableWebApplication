@@ -32,7 +32,7 @@
                     <!-- Ingredients -->
                     <div class="ingredients">
                         {% if recipe.ingredients is not empty %}
-                            <h2>Ingredients:</h2>
+                            <h2>Ingredients</h2>
                             <ul id="ingredients-list">
                                 {% for index, ingredient in recipe.ingredients %}
                                     <li>
@@ -114,12 +114,16 @@
                         {% endif %}
                     </div>
 
-                    <!-- Button to mark as done -->
+                    <!-- Buttons to interact with recipe -->
                     <div class="buttons-container">
                         <button class="mark-as-done" onclick="markAsDone()">Mark as Done</button>
-                        <button class="edit-recipe" onclick="editRecipe()">Edit Recipe</button>
-                        <button class="delete-recipe" onclick="deleteRecipe()">Delete Recipe</button>
+                        <!-- Only the user who made the recipe can edit or delete it -->
+                        {% if userId == recipe.userId %}
+                            <button class="edit-recipe" onclick="editRecipe()">Edit Recipe</button>
+                            <button class="delete-recipe" onclick="deleteRecipe()">Delete Recipe</button>
+                        {% endif %}
                     </div>
+
 
                 </div>
             </div>

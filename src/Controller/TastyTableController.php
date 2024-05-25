@@ -457,8 +457,6 @@ class TastyTableController extends AbstractController
         }
         $recipe->setUserId($userId);
 
-        //$recipe->setUserId(1);
-
         $form = $this->createFormBuilder($recipe)
             ->add('recipeName', TextType::class, ['label' => 'Recipe Name'])
             ->add('recipeDescription', TextareaType::class, ['label' => 'Recipe Description', 'required' => false])
@@ -651,7 +649,8 @@ class TastyTableController extends AbstractController
             'recipe' => $recipe,
             'APIFlag' => $isFromApi,
             'SaveFlag'=>$isSaveRecipe,
-            'followFlag'=>$isFollowing
+            'followFlag'=>$isFollowing,
+            'userId' => $userId
         ]);
     }
 
