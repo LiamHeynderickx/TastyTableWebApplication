@@ -295,7 +295,7 @@ class TastyTableController extends AbstractController
     #[Route('/searchDB', name: 'searchDB')]
     public function searchRecipesDB(Request $request, EntityManagerInterface $em): Response
     {
-        $query = $request->query->get('query', '');
+        $query = $request->query->get('query');
 
         $filters = [
             'vegetarian' => $request->query->get('vegetarian'),
@@ -307,11 +307,7 @@ class TastyTableController extends AbstractController
         // Fetch recipes based on the search query
         $form = $this->createFormBuilder()->getForm();
 
-//        $filters['vegetarian'] = "bbb";
-
-        echo $filters['vegetarian'];
-
-        $allRecipes = $em->getRepository(Recipes::class)->findRecipesByNameAndDiet($query, $filters);
+        $allRecipes = $em->getRepository(Recipes::class)->findRecipesByName($query);
 
         return $this->render('Pages/homePage.html.twig', [
             'form' => $form->createView(),

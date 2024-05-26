@@ -67,38 +67,37 @@ class RecipesRepository extends ServiceEntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
-    public function findRecipesByNameAndDiet($name, ?array $filters = null): array
-    {
-        $queryBuilder = $this->createQueryBuilder('r')
-            ->where('r.recipeName LIKE :name')
-            ->setParameter('name', '%' . $name . '%');
-
-        if (!empty($filters)) {
-            $dietConditions = [];
-            foreach ($filters as $diet => $value) {
-                if ($value === 'true') {
-                    $dietConditions[] = 'r.diet LIKE :'. $diet;
-                    $queryBuilder->setParameter($diet, '%' . $diet . '%');
-                }
-            }
-
-            if (!empty($dietConditions)) {
-                $queryBuilder->andWhere(implode(' OR ', $dietConditions));
-            }
-        }
-
-        return $queryBuilder->getQuery()->getResult();
-    }
+//    public function findRecipesByNameAndDiet($name, ?array $filters = null): array
+//    {
+//        $queryBuilder = $this->createQueryBuilder('r')
+//            ->where('r.recipeName LIKE :name')
+//            ->setParameter('name', '%' . $name . '%');
+//
+//        if (!empty($filters)) {
+//            $dietConditions = [];
+//            foreach ($filters as $diet => $value) {
+//                if ($value === 'true') {
+//                    $dietConditions[] = 'r.diet LIKE :'. $diet;
+//                    $queryBuilder->setParameter($diet, '%' . $diet . '%');
+//                }
+//            }
+//
+//            if (!empty($dietConditions)) {
+//                $queryBuilder->andWhere(implode(' OR ', $dietConditions));
+//            }
+//        }
+//
+//        return $queryBuilder->getQuery()->getResult();
+//    }
 
 
     public function findRecipesByName($name): array
     {
         $queryBuilder = $this->createQueryBuilder('r')
-            ->where('r.recipeName LIKE (:name)')
-            ->setParameter('name', $name);
+            ->where('r.recipeName LIKE :name')
+            ->setParameter('name', '%' . $name . '%');
 
         return $queryBuilder->getQuery()->getResult();
     }
-
 
 }
