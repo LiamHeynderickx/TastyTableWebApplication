@@ -80,18 +80,55 @@
                         <h2>{{ recipe.recipeName }}</h2>
                         <strong>A recipe by <a href="{{ path('user_profile', {'username': recipeOwner.username, 'isFollowing': followFlag ? '1' : '0'}) }}">{{ recipeOwner.username }}</a></strong>
                         <p>{{ recipe.recipeDescription }}</p>
-                        <p>Cooking Time: {{ recipe.time }} minutes &nbsp; | &nbsp; Calories: {{ recipe.calories }} kcal</p>
-                        <p>Fats: {{ recipe.fat }}g &nbsp; | &nbsp; Carbs: {{ recipe.carbs }}g &nbsp; | &nbsp; Proteins: {{ recipe.protein }}g</p>
-                        <p>Price range:
-                            {% if recipe.cost == 1 %}
-                                €
-                            {% elseif recipe.cost == 2 %}
-                                €€
-                            {% elseif recipe.cost == 3 %}
-                                €€€
-                            {% endif %}
-                            &nbsp; | &nbsp; Rating: ★★★★★
-                        </p>
+                        <div class="recipe-info">
+                            <p>
+                                <span class="detail-item">
+                                    <span class="icon">🍽</span> Meal type: <span>{{ recipe.type }}</span>
+                                </span>
+                                &nbsp; | &nbsp;
+                                <span class="detail-item">
+                                    <span class="icon">🥗</span> Diet: <span>{{ recipe.diet }}</span>
+                                </span>
+                            </p>
+                            <p>
+                                <span class="detail-item">
+                                    <span class="icon">⏱</span> Cooking Time: <span>{{ recipe.time }} minutes</span>
+                                </span>
+                                &nbsp; | &nbsp;
+                                <span class="detail-item">
+                                    <span class="icon">🔥</span> Calories: <span>{{ recipe.calories }} kcal</span>
+                                </span>
+                            </p>
+                            <p>
+                                <span class="detail-item">
+                                    <span class="icon">🍔</span> Fats: <span>{{ recipe.fat }}g</span>
+                                </span>
+                                &nbsp; | &nbsp;
+                                <span class="detail-item">
+                                    <span class="icon">🍞</span> Carbs: <span>{{ recipe.carbs }}g</span>
+                                </span>
+                                &nbsp; | &nbsp;
+                                <span class="detail-item">
+                                    <span class="icon">🍗</span> Proteins: <span>{{ recipe.protein }}g</span>
+                                </span>
+                            </p>
+                            <p>
+                                <span class="detail-item">
+                                    <span class="icon">💰</span> Price range:
+                                    {% if recipe.cost == 1 %}
+                                        €
+                                    {% elseif recipe.cost == 2 %}
+                                        €€
+                                    {% elseif recipe.cost == 3 %}
+                                        €€€
+                                    {% endif %}
+                                </span>
+                                &nbsp; | &nbsp;
+                                <span class="detail-item">
+                                    <span class="icon">⭐</span> Rating: ★★★★★
+                                </span>
+                            </p>
+                        </div>
                     </div>
 
                     <!-- Instructions -->

@@ -626,8 +626,28 @@ class TastyTableController extends AbstractController
             ->add('carbs', IntegerType::class, ['label' => 'Carbohydrates', 'required' => false])
             ->add('protein', IntegerType::class, ['label' => 'Protein', 'required' => false])
             ->add('servings', IntegerType::class, ['label' => 'Number of Servings'])
-            ->add('diet', TextType::class, ['label' => 'Diet'])
-            ->add('type', TextType::class, ['label' => 'Meal Type'])
+            ->add('diet', ChoiceType::class, [
+                'label' => 'Diet',
+                'choices' => [
+                    'Vegetarian' => 'vegetarian',
+                    'Vegan' => 'vegan',
+                    'Gluten Free' => 'gluten_free',
+                    'Keto' => 'keto',
+                    'Paleo' => 'paleo'
+                ],
+                'placeholder' => 'Select a diet',
+            ])
+            ->add('type', ChoiceType::class, [
+                'label' => 'Meal Type',
+                'choices' => [
+                    'Breakfast' => 'breakfast',
+                    'Lunch' => 'lunch',
+                    'Dinner' => 'dinner',
+                    'Snack' => 'snack',
+                    'Dessert' => 'dessert'
+                ],
+                'placeholder' => 'Select a meal type',
+            ])
             ->add('ingredients', HiddenType::class, ['mapped' => false])
             ->add('ingredientsAmounts', HiddenType::class, ['mapped' => false, 'required' => false])
             ->add('ingredientsUnits', HiddenType::class, ['mapped' => false, 'required' => false])
@@ -1115,8 +1135,31 @@ class TastyTableController extends AbstractController
             ->add('carbs', IntegerType::class, ['label' => 'Carbohydrates', 'required' => false, 'data' => $recipe->getCarbs()])
             ->add('protein', IntegerType::class, ['label' => 'Protein', 'required' => false, 'data' => $recipe->getProtein()])
             ->add('servings', IntegerType::class, ['label' => 'Number of Servings', 'data' => $recipe->getServings()])
-            ->add('diet', TextType::class, ['label' => 'Diet', 'data' => $recipe->getDiet()])
-            ->add('type', TextType::class, ['label' => 'Meal Type', 'data' => $recipe->getType()])
+            ->add('diet', ChoiceType::class, [
+                'label' => 'Diet',
+                'choices' => [
+                    'No diet' => 'no diet',
+                    'Vegetarian' => 'vegetarian',
+                    'Vegan' => 'vegan',
+                    'Gluten Free' => 'gluten_free',
+                    'Keto' => 'keto',
+                    'Paleo' => 'paleo'
+                ],
+                'data' => $recipe->getDiet(),
+                'placeholder' => 'Select a diet',
+            ])
+            ->add('type', ChoiceType::class, [
+                'label' => 'Meal Type',
+                'choices' => [
+                    'Breakfast' => 'breakfast',
+                    'Lunch' => 'lunch',
+                    'Dinner' => 'dinner',
+                    'Snack' => 'snack',
+                    'Dessert' => 'dessert'
+                ],
+                'data' => $recipe->getType(),
+                'placeholder' => 'Select a meal type',
+            ])
             ->add('ingredients', HiddenType::class, ['mapped' => false, 'data' => json_encode($recipe->getIngredients())])
             ->add('ingredientsAmounts', HiddenType::class, ['mapped' => false, 'required' => false, 'data' => json_encode($recipe->getIngredientsAmounts())])
             ->add('ingredientsUnits', HiddenType::class, ['mapped' => false, 'required' => false, 'data' => json_encode($recipe->getIngredientsUnits())])
