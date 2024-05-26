@@ -31,6 +31,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Service\SpoonacularApiService;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\Email;
 
 
 class TastyTableController extends AbstractController
@@ -113,25 +116,56 @@ class TastyTableController extends AbstractController
 
         $form = $this->createFormBuilder($person)
             ->add('username', TextType::class, [
-                'attr' => ['id' => 'username', 'placeholder' => 'Username']
+                'attr' => ['id' => 'username', 'placeholder' => 'Username'],
+                'constraints' => [
+                    new NotBlank(),
+                    new Regex([
+                        'pattern' => '/^[a-zA-Z0-9]*$/',
+                        'message' => 'Username must not contain special characters.',
+                    ]),
+                ],
             ])
             ->add('name', TextType::class, [
-                'attr' => ['id' => 'name', 'placeholder' => 'Name']
+                'attr' => ['id' => 'name', 'placeholder' => 'Name'],
+                'constraints' => [
+                    new NotBlank(),
+                    new Regex([
+                        'pattern' => '/^[a-zA-Z0-9]*$/',
+                        'message' => 'Name must not contain special characters.',
+                    ]),
+                ],
             ])
             ->add('surname', TextType::class, [
-                'attr' => ['id' => 'surname', 'placeholder' => 'Surname']
+                'attr' => ['id' => 'surname', 'placeholder' => 'Surname'],
+                'constraints' => [
+                    new NotBlank(),
+                    new Regex([
+                        'pattern' => '/^[a-zA-Z0-9]*$/',
+                        'message' => 'Surname must not contain special characters.',
+                    ]),
+                ],
             ])
             ->add('email', EmailType::class, [
-                'attr' => ['id' => 'nameField', 'placeholder' => 'Email']
+                'attr' => ['id' => 'nameField', 'placeholder' => 'Email'],
+                'constraints' => [
+                    new NotBlank(),
+                    new Email([
+                        'message' => 'The email "{{ value }}" is not a valid email.',
+                    ]),
+                ],
             ])
             ->add('password', PasswordType::class, [
-                'attr' => ['id' => 'passwordField', 'placeholder' => 'Password']
+                'attr' => ['id' => 'passwordField', 'placeholder' => 'Password'],
+                'constraints' => [
+                    new NotBlank(),
+                ],
             ])
             ->add('save', SubmitType::class, [
                 'label' => 'Register',
-                'attr' => ['id' => 'register', 'class' => 'btn-field']
+                'attr' => ['id' => 'register', 'class' => 'btn-field'],
             ])
             ->getForm();
+
         $form->handleRequest($request);
         $alertMessage=null;
         //check if form is valid (filled in or not)

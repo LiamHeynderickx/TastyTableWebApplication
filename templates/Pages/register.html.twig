@@ -31,22 +31,27 @@
                 <div class="input-field" id="username">
                     <i class="fa-solid fa-user"></i>
                     {{ form_widget(form.username, {'attr': {'placeholder': 'Username'}}) }}
+                    {{ form_errors(form.username) }}
                 </div>
                 <div class="input-field" id="name">
                     <i class="fa-solid fa-user"></i>
                     {{ form_widget(form.name, {'attr': {'placeholder': 'Name'}}) }}
+                    {{ form_errors(form.name) }} <!-- Display errors for name -->
                 </div>
                 <div class="input-field" id="surname">
                     <i class="fa-solid fa-user"></i>
                     {{ form_widget(form.surname, {'attr': {'placeholder': 'Surname'}}) }}
+                    {{ form_errors(form.surname) }} <!-- Display errors for surname -->
                 </div>
                 <div class="input-field" id="nameField">
                     <i class="fa-solid fa-envelope"></i>
                     {{ form_widget(form.email, {'attr': {'placeholder': 'Email'}}) }}
+                    {{ form_errors(form.email) }} <!-- Display errors for email -->
                 </div>
                 <div class="input-field" id="passwordField">
                     <i class="fa-solid fa-lock"></i>
                     {{ form_widget(form.password, {'attr': {'placeholder': 'Password'}}) }}
+                    {{ form_errors(form.password) }} <!-- Display errors for password -->
                 </div>
             </div>
             <div class="btn-field">
@@ -56,7 +61,11 @@
             {{ form_end(form) }}
         </div>
     </div>
-<script>
+
+
+
+
+    <script>
     let loginBtn = document.getElementById("loginBtn");
     let nameField = document.getElementById("nameField");
     let passwordField = document.getElementById("passwordField");
