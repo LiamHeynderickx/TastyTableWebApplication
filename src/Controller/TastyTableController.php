@@ -133,10 +133,28 @@ class TastyTableController extends AbstractController
             ])
             ->getForm();
         $form->handleRequest($request);
-
+        $alertMessage=null;
         //check if form is valid (filled in or not)
         if ($form->isSubmitted() && $form->isValid()) {
             // Encode the password (you need to inject the password encoder)
+            $existingUser = $em->getRepository(User::class)->findOneBy([
+                'username' => $person->getUsername()
+            ]);
+            $existingEmail = $em->getRepository(User::class)->findOneBy([
+                'email' => $person->getEmail()
+            ]);
+            if ($existingUser) {
+                //$session->getFlashBag()->add('error', 'Username already taken. Please choose another.');
+                $alertMessage='Username already taken. Please choose another.';
+                return $this->render('Pages/register.html.twig', ['form' => $form->createView()
+                ,'alertMessage'=>$alertMessage]);
+            }
+            if ($existingEmail) {
+                //$session->getFlashBag()->add('error', 'Email already registered. Please use another email or log in.');
+                $alertMessage='Email already registered. Please use another email or log in.';
+                return $this->render('Pages/register.html.twig', ['form' => $form->createView()
+                    ,'alertMessage'=>$alertMessage]);
+            }
             $encodedPassword = $passwordHasher->hashPassword($person, $person->getPassword());
 
             $person->setPassword($encodedPassword);
@@ -160,7 +178,10 @@ class TastyTableController extends AbstractController
             } catch (\Exception $e) {
                 // Add an error message to the session flash bag
                 //TODOO ADD ALERT
-                $session->getFlashBag()->add('error', 'There was an error registering your account. Please try again.');
+                $alertMessage='There was an error registering your account. Please try again.';
+                return $this->render('Pages/register.html.twig', ['form' => $form->createView()
+                    ,'alertMessage'=>$alertMessage]);
+              //  $session->getFlashBag()->add('error', 'There was an error registering your account. Please try again.');
             }
 
 
@@ -360,6 +381,8 @@ class TastyTableController extends AbstractController
             return $this->redirectToRoute('index');
         }
 
+       $alertInfo=null;
+
         $user = $em->getRepository(User::class)->findOneBy(['username' => $session->get('username')]);
 
         $dietaryPreferences = [
@@ -378,7 +401,19 @@ class TastyTableController extends AbstractController
 
         // $logger->info('Selected diets:', ['diets' => $diets]);
         $type = $request->query->get('type');
+
+
+
+
         $UserID=$session->get('userId');
+
+        //!!!!Validation !!!!!!!!!
+        $userID = $session->get('userId');
+        if (empty($userID)) {
+            // Handle invalid or missing userID
+            $logger->error('Missing userID in session.');
+            return $this->redirectToRoute('login');
+        }
 
         if ($type!=='saved' and $type !== 'my')
         {
@@ -427,11 +462,23 @@ class TastyTableController extends AbstractController
 
                 } catch (\Exception $e) {
                     //return new Response('Error: ' . $e->getMessage());
+                    return $this->render('Pages/Profile.html.twig', [
+                        'dietaryPreferences' => $dietaryPreferences,
+                        'selectedDiets' => $selectedDiets,
+                        'API_recipes' => $ApiRecipes,
+                        'Db_recipes'=>[],
+                        'user' => $user,
+                        'alert'=>'API Request failed']);
                 }
             }
 
             $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($UserID, 0,0);
             //$DbRecipes = $em->getRepository(Recipes::class)->findBy(['id' => $recipeIds]);
+            if (empty($recipeIds)) {
+               // $logger->info('No recipes found for user.', ['userID' => $userID]);
+
+                $alertInfo='No recipes found for user.';
+            }
             $DbRecipes = $em->getRepository(Recipes::class)->findRecipesByIdsAndDiets($recipeIds, $diets);
 
 
@@ -441,7 +488,8 @@ class TastyTableController extends AbstractController
                 'selectedDiets' => $selectedDiets,
                 'API_recipes' => $ApiRecipes,
                 'Db_recipes'=>$DbRecipes,
-                'user' => $user
+                'user' => $user,
+                'alert'=>$alertInfo
             ]);
 
         }elseif ($type === 'my'){
@@ -452,14 +500,19 @@ class TastyTableController extends AbstractController
             //$DbRecipes = $em->getRepository(Recipes::class)->findBy(['id' => $recipeIds]);
             $DbRecipes = $em->getRepository(Recipes::class)->findRecipesByIdsAndDiets($recipeIds, $diets);
 
-
+            if (empty($DbRecipes) && empty($ApiRecipes)) {
+                //$logger->info('No recipes available to display.', ['userID' => $userID]);
+                //$this->addFlash('notice', 'No recipes available.');
+                $alertInfo='No recipes available to display.';
+            }
 
             return $this->render('Pages/Profile.html.twig', [
                 'dietaryPreferences' => $dietaryPreferences,
                 'selectedDiets' => $selectedDiets,
                 'API_recipes' => [],
                 'Db_recipes'=>$DbRecipes,
-                'user' => $user
+                'user' => $user,
+                'alert'=>$alertInfo
             ]);
 
         }
@@ -765,6 +818,7 @@ class TastyTableController extends AbstractController
                 // Redirect to the follows page
                 return $this->redirectToRoute('follows');
             }
+
         } elseif ($type === 'RemoveFollower') {
             $sessionUserId = $session->get('userId');
             $followers = $entityManager->getRepository(Followers::class)->findOneBy([

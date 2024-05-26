@@ -11,6 +11,15 @@
 {% endblock %}
 
 {% block body %}
+    {% if alert%}
+        <script>
+            window.onload = function() {
+                alert("{{ alert }}");
+            };
+        </script>
+    {% endif %}
+
+
     <div class="dropdown">
         <button class="dropbtn"><i class="fa fa-bars"></i></button>
         <div class="dropdown-content">
