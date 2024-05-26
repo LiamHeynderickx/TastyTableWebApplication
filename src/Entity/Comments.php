@@ -15,13 +15,13 @@ class Comments
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'userComments')]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $userId = null;
 
-    #[ORM\ManyToOne(inversedBy: 'PostsComments')]
+    #[ORM\ManyToOne(targetEntity: Recipes::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Posts $postId = null;
+    private ?Recipes $recipeId = null;
 
     #[ORM\Column(length: 255)]
     private ?string $comment = null;
@@ -39,19 +39,17 @@ class Comments
     public function setUserId(?User $userId): static
     {
         $this->userId = $userId;
-
         return $this;
     }
 
-    public function getPostId(): ?Posts
+    public function getRecipeId(): ?Recipes
     {
-        return $this->postId;
+        return $this->recipeId;
     }
 
-    public function setPostId(?Posts $postId): static
+    public function setRecipeId(?Recipes $recipeId): static
     {
-        $this->postId = $postId;
-
+        $this->recipeId = $recipeId;
         return $this;
     }
 
@@ -63,7 +61,7 @@ class Comments
     public function setComment(string $comment): static
     {
         $this->comment = $comment;
-
         return $this;
     }
 }
+
