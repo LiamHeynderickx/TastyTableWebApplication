@@ -84,3 +84,17 @@ input{
 #accountExist {
     font-size: small;
 }
+
+p{
+    color: red;
+    font-size: small;
+}
+
+ul{
+    color: red;
+    font-size: small;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    justify-content: left;
+}

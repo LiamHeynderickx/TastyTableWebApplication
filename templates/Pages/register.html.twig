@@ -31,28 +31,28 @@
                 <div class="input-field" id="username">
                     <i class="fa-solid fa-user"></i>
                     {{ form_widget(form.username, {'attr': {'placeholder': 'Username'}}) }}
-                    {{ form_errors(form.username) }}
                 </div>
+                <p>{{ form_errors(form.username) }} </p>
                 <div class="input-field" id="name">
                     <i class="fa-solid fa-user"></i>
                     {{ form_widget(form.name, {'attr': {'placeholder': 'Name'}}) }}
-                    {{ form_errors(form.name) }} <!-- Display errors for name -->
                 </div>
+                <p>{{ form_errors(form.name) }}</p>
                 <div class="input-field" id="surname">
                     <i class="fa-solid fa-user"></i>
                     {{ form_widget(form.surname, {'attr': {'placeholder': 'Surname'}}) }}
-                    {{ form_errors(form.surname) }} <!-- Display errors for surname -->
                 </div>
+                <p>{{ form_errors(form.surname) }}</p>
                 <div class="input-field" id="nameField">
                     <i class="fa-solid fa-envelope"></i>
                     {{ form_widget(form.email, {'attr': {'placeholder': 'Email'}}) }}
-                    {{ form_errors(form.email) }} <!-- Display errors for email -->
                 </div>
+                <p>{{ form_errors(form.email) }}</p>
                 <div class="input-field" id="passwordField">
                     <i class="fa-solid fa-lock"></i>
                     {{ form_widget(form.password, {'attr': {'placeholder': 'Password'}}) }}
-                    {{ form_errors(form.password) }} <!-- Display errors for password -->
                 </div>
+                <p>{{ form_errors(form.password) }}</p>
             </div>
             <div class="btn-field">
                 {{ form_widget(form.save, {'attr': {'class': 'button-label'}}) }}
