@@ -32,6 +32,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Service\SpoonacularApiService;
 
+
 class TastyTableController extends AbstractController
 {
     // Route for displaying the form
@@ -179,7 +180,7 @@ class TastyTableController extends AbstractController
     }
 
     #[Route('/homePage', name: 'homePage')]
-    public function homePage(Request $request, EntityManagerInterface $em, SessionInterface $session,SpoonacularApiService $apiService): Response
+    public function homePage(Request $request, EntityManagerInterface $em): Response
     {
 
         // Get filter criteria from the request
@@ -244,8 +245,8 @@ class TastyTableController extends AbstractController
         ]);
     }
 
-    #[Route('/search', name: 'search_recipes')]
-    public function searchRecipes(Request $request, SpoonacularApiService $apiService): Response
+    #[Route('/searchAPI', name: 'searchAPI')]
+    public function searchRecipesAPI(Request $request, SpoonacularApiService $apiService): Response
     {
         $query = $request->query->get('query');
 
@@ -270,7 +271,33 @@ class TastyTableController extends AbstractController
         ]);
     }
 
+    #[Route('/searchDB', name: 'searchDB')]
+    public function searchRecipesDB(Request $request, EntityManagerInterface $em): Response
+    {
+        $query = $request->query->get('query', '');
 
+        $filters = [
+            'vegetarian' => $request->query->get('vegetarian'),
+            'vegan' => $request->query->get('vegan'),
+            'gluten-free' => $request->query->get('gluten-free'),
+            'dairy-free' => $request->query->get('dairy-free')
+        ];
+
+        // Fetch recipes based on the search query
+        $form = $this->createFormBuilder()->getForm();
+
+//        $filters['vegetarian'] = "bbb";
+
+        echo $filters['vegetarian'];
+
+        $allRecipes = $em->getRepository(Recipes::class)->findRecipesByNameAndDiet($query, $filters);
+
+        return $this->render('Pages/homePage.html.twig', [
+            'form' => $form->createView(),
+            'recipes' => $allRecipes,
+            'filters' => $filters
+        ]);
+    }
 
     #[Route('/recipe/{id}', name: 'recipeDisplayAPI')] //not used rn
     public function recipeDisplayer($id, SpoonacularApiService $apiService): Response
@@ -892,8 +919,6 @@ class TastyTableController extends AbstractController
             'recipe' => $recipe,
         ]);
     }
-
-
 
     #[Route('/updateProfile', name: 'update_profile')]
     public function updateProfile(Request $request, EntityManagerInterface $em, LoggerInterface $logger, SessionInterface $session, UserPasswordHasherInterface $passwordHasher): Response

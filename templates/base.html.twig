@@ -19,17 +19,37 @@
 <body>
 <header>
     {% block header %}
+
+        {% set current_route = app.request.attributes.get('_route') %}
+
         <div class="logo">
             <a href="{{ path('homePage') }}"><img src="{{ asset('style/images/WebTech Mascot.jpg') }}"></a>
             <h1>Tasty Table</h1>
         </div>
         <div class="search-bar">
-            {% block search_bar %}
-                <form method="get" action="{{ path('search_recipes') }}">
-                    <input type="search" name="query" placeholder="Find a recipe or ingredient">
-                    <button type="submit" style="background-color: transparent"><i class="fa fa-search"></i></button>
-                </form>
-            {% endblock %}
+                {% block search_bar %}
+                    {% if current_route == 'homePage' %}
+                        <form method="get" action="{{ path('searchDB') }}">
+                            <input type="search" name="query" placeholder="Search User Recipes">
+                            <button type="submit" style="background-color: transparent"><i class="fa fa-search"></i></button>
+                        </form>
+                    {% elseif current_route == 'searchDB'%}
+                        <form method="get" action="{{ path('searchDB') }}">
+                            <input type="search" name="query" placeholder="Search User Recipes">
+                            <button type="submit" style="background-color: transparent"><i class="fa fa-search"></i></button>
+                        </form>
+                    {% elseif current_route == 'homePageAPI' %}
+                        <form method="get" action="{{ path('searchAPI') }}">
+                            <input type="search" name="query" placeholder="Search TastyTable Recipes">
+                            <button type="submit" style="background-color: transparent"><i class="fa fa-search"></i></button>
+                        </form>
+                    {% elseif current_route == 'searchAPI' %}
+                        <form method="get" action="{{ path('searchAPI') }}">
+                            <input type="search" name="query" placeholder="Search TastyTable Recipes">
+                            <button type="submit" style="background-color: transparent"><i class="fa fa-search"></i></button>
+                        </form>
+                    {% endif %}
+                {% endblock %}
         </div>
         <div class="user">
             {% block profile_user %}
