@@ -239,6 +239,41 @@ class TastyTableController extends AbstractController
         ]);
     }
 
+    #[Route('/homePageFiltered', name: 'homePageFiltered')]
+    public function homePageFiltered(Request $request, EntityManagerInterface $em): Response
+    {
+
+        // Get filter criteria from the request
+        $filters = [
+            'vegetarian' => $request->query->get('vegetarian'),
+            'vegan' => $request->query->get('vegan'),
+            'gluten-free' => $request->query->get('gluten-free'),
+            'dairy-free' => $request->query->get('dairy-free')
+        ];
+
+        $form = $this->createFormBuilder()->getForm();
+
+        $allRecipes = $em->getRepository(Recipes::class)->getFilteredRecipes($filters);
+
+        // Randomly select 9 recipes
+        $recipes = [];
+        if (count($allRecipes) > 9) {
+            $randomKeys = array_rand($allRecipes, 9);
+            foreach ($randomKeys as $key) {
+                $recipes[] = $allRecipes[$key];
+            }
+        } else {
+            // If there are less than or equal to 9 recipes, use all of them
+            $recipes = $allRecipes;
+        }
+
+        return $this->render('Pages/homePage.html.twig', [
+            'form' => $form->createView(),
+            'recipes' => $recipes,
+            'filters' => $filters
+        ]);
+    }
+
     #[Route('/homePageAPI', name: 'homePageAPI')]
     public function homePageAPI(Request $request, SpoonacularApiService $apiService): Response
     {

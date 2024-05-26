@@ -100,4 +100,88 @@ class RecipesRepository extends ServiceEntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
+    public function getFilteredRecipes(?array $filters = null): array
+    {
+        $queryBuilder = $this->createQueryBuilder('r');
+
+        $diets = [];
+
+        if($filters['vegetarian'] == 'on'){
+            $diets[] = 'vegetarian';
+        }
+        if($filters['vegan'] == 'on'){
+            $diets[] = 'vegan';
+        }
+        if($filters['gluten-free'] == 'on'){
+            $diets[] = 'gluten free';
+        }
+        if($filters['dairy-free'] == 'on'){
+            $diets[] = 'dairy free';
+        }
+
+        $queryBuilder->andWhere('LOWER(r.diet) IN (:diets)')
+            ->setParameter('diets', $diets);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+
+//    public function getFilteredRecipes(?array $filters = null): array
+//    {
+//        $queryBuilder = $this->createQueryBuilder('r');
+//
+//        if (!empty($filters)) {
+//            $dietConditions = [];
+//            $parameters = [];
+//            $index = 0;
+//
+//            foreach ($filters as $diet => $value) {
+//                if ($value === 'true') {
+//                    $dietConditions[] = 'r.diet LIKE :diet' . $index;
+//                    $parameters['diet' . $index] = '%' . $diet . '%';
+//                    $index++;
+//                }
+//            }
+//
+//            if (!empty($dietConditions)) {
+//                $queryBuilder->where(implode(' OR ', $dietConditions));
+//                foreach ($parameters as $key => $value) {
+//                    $queryBuilder->setParameter($key, $value);
+//                }
+//            }
+//        }
+//
+//        return $queryBuilder->getQuery()->getResult();
+//    }
+
+//    public function getFilteredRecipes(?array $filters = null): array
+//    {
+//        $queryBuilder = $this->createQueryBuilder('r');
+//
+//        if (!empty($filters)) {
+//            $dietConditions = [];
+//            $parameters = [];
+//            $index = 0;
+//
+//            foreach ($filters as $diet => $value) {
+//                if ($value === 'true') {
+//                    // Replace dashes with underscores in the parameter name
+//                    $sanitizedDiet = str_replace('-', '_', $diet);
+//                    $dietConditions[] = 'r.diet LIKE :diet' . $index;
+//                    $parameters['diet' . $index] = '%' . $diet . '%';
+//                    $index++;
+//                }
+//            }
+//
+//            if (!empty($dietConditions)) {
+//                $queryBuilder->where(implode(' OR ', $dietConditions));
+//                foreach ($parameters as $key => $value) {
+//                    $queryBuilder->setParameter($key, $value);
+//                }
+//            }
+//        }
+//
+//        return $queryBuilder->getQuery()->getResult();
+//    }
+
 }
