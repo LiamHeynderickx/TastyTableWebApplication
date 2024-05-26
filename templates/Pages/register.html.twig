@@ -10,6 +10,13 @@
 {% endblock %}
 
 {% block body %}
+    {% if alertMessage%}
+        <script>
+            window.onload = function() {
+                alert("{{ alertMessage }}");
+            };
+        </script>
+    {% endif %}
 
 
     {% block stylesheets %}
