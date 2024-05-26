@@ -91,21 +91,23 @@ main {
     margin-bottom: 5px;
 }
 
-.noRecipe{
+.noRecipe {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 20px;
+    align-items: center;
+    margin-top: 100px;
     width: 90%;
 }
-.noRecipe img{
-    width: 100%;
+
+.noRecipe img {
+    width: 300px;
     height: 300px;
     margin-bottom: 40px;
 }
-.noRecipe h2{
-    margin-top: 40px;
+
+.noRecipe h2 {
+    margin-top: 0; /* Remove top margin to prevent extra space */
 }
 
 
