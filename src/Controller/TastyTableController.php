@@ -661,11 +661,32 @@ class TastyTableController extends AbstractController
         }
 
 
+
+
         $userId = $session->get('userId');
         $user = $em->getRepository(User::class)->findOneBy(['id' =>$userId]);
 
+
+        //!!!!Validating the input !!!!!!///
+        if (!is_numeric($id) || !in_array($save, ['0', '1', '3']) || !in_array($isApi, ['0', '1'])) {
+            $this->addFlash('error', 'Invalid request parameters.');
+            return $this->redirectToRoute('index');
+        }
+
+
         if ($save=='1')
         {
+            $existingRecipe = $em->getRepository(SavedRecipes::class)->findOneBy([
+                'userId' => $user,
+                'recipeId' => $id,
+                'isApi' => $isApi
+            ]);
+
+            //!!!Validation!!!!!
+            if ($existingRecipe) {
+                $this->addFlash('error', 'Recipe already saved.');
+                return $this->redirectToRoute('recipeDisplay', ['id' => $id]);
+            }
 
             //$user = $em->getRepository(User::class)->findOneBy(['id' =>$userId]);
             $savedRecipe=new SavedRecipes();
@@ -679,6 +700,7 @@ class TastyTableController extends AbstractController
         }
         elseif ($save=='0')
         {
+            //!!!Validation!!!!!
 
             $savedRecipe = $em->getRepository(SavedRecipes::class)->findOneBy([
                 'userId' => $user, // Assuming this is an association with the User entity
@@ -703,7 +725,33 @@ class TastyTableController extends AbstractController
         {
 
             $user2Id = $em->getRepository(Recipes::class)->findOneBy(['id'=>$id])->getUserId();
+
+          //!!!Validation!!!!!
+            if (!$user2Id) {
+                $this->addFlash('error', 'Recipe not found.');
+                return $this->redirectToRoute('recipeDisplay', ['id' => $id]);
+            }
+
+
             $user2 = $em->getRepository(User::class)->findOneBy(['id' =>$user2Id]);
+
+            //!!!Validation!!!!!
+            if ($user2Id == $user->getId()) {
+                $this->addFlash('error', 'You cannot follow yourself.');
+                return $this->redirectToRoute('recipeDisplay', ['id' => $id]);
+            }
+
+            // Check if already following
+            $existingFollow = $em->getRepository(Following::class)->findOneBy([
+                'userId' => $user,
+                'followingId' => $user2Id
+            ]);
+            //!!!Validation!!!!!
+            if ($existingFollow) {
+                $this->addFlash('error', 'Already following this user.');
+                return $this->redirectToRoute('user_profile', ['username' => $user2Id->getUsername()]);
+            }
+
             //Add if there is no User2 :)
             $follow=new Following();
             $follow->setUserId($user);
@@ -735,21 +783,27 @@ class TastyTableController extends AbstractController
         {
             return $this->redirectToRoute('index');
         }
+
+        //!!!Validation!!!!!
+        if (!is_numeric($id)) {
+            $this->addFlash('error', 'Invalid recipe ID provided.');
+            return $this->redirectToRoute('index');
+        }
+        $userId = $session->get('userId');
         $recipe = $em->getRepository(Recipes::class)->find($id);
         $isFromApi=0;
 
         if (!$recipe) {
-            //throw $this->createNotFoundException('The recipe does not exist');
-            // $recipe=$apiService->getRecipeById($id);
-            //$ids[]=$id;
-
-            $recipe = ($apiService->getRecipeByIdFordisplay($id));
-            if ($recipe){
-                $isFromApi=1;
-            }
-            else
-            {
-                $recipe=[] ;
+            try {
+                $recipe = $apiService->getRecipeByIdFordisplay($id);
+                if ($recipe) {
+                    $isFromApi = 1;
+                } else {
+                    $recipe=[];
+                }
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Failed to fetch recipe: ' . $e->getMessage());
+                return $this->redirectToRoute('homePage');
             }
 
         }
@@ -757,7 +811,7 @@ class TastyTableController extends AbstractController
         $isFollowing=0;
         if ($recipe ) {
             //check if the recipe already saved to your recipes.
-            $userId = $session->get('userId');
+
             $savedRecipe = $em->getRepository(SavedRecipes::class)->findBy(['userId' => $userId, 'recipeId' => $id]);
             $isSaveRecipe = empty($savedRecipe) ? true : false;
 
@@ -765,7 +819,7 @@ class TastyTableController extends AbstractController
 
         }
         if ($recipe  and $isFromApi==0){
-            $userId = $session->get('userId');
+
             $user = $em->getRepository(User::class)->findOneBy(['id' =>$userId]);
 //
 //
@@ -778,8 +832,6 @@ class TastyTableController extends AbstractController
 
         }
 
-        // echo "Fetched Recipe IDs:\n";
-        //print_r($recipe[0]);
 
 
 
@@ -838,10 +890,14 @@ class TastyTableController extends AbstractController
                         'followerId' => $following->getUserId()->getId()
                     ]);
 
+                    if ($follower)
+                    {
+                        $entityManager->remove($follower);
+                        $entityManager->flush();
+
+                    }
 
 
-                    $entityManager->remove($follower);
-                    $entityManager->flush();
 
 
                 } catch (\Exception $e) {
@@ -872,10 +928,14 @@ class TastyTableController extends AbstractController
                         'followingId' => $followers->getUserId()->getId()
                     ]);
 
+                    if ($following)
+                    {
+                        $entityManager->remove($following);
+                        $entityManager->flush();
+                    }
 
 
-                    $entityManager->remove($following);
-                    $entityManager->flush();
+
 
 
                 } catch (\Exception $e) {
@@ -900,8 +960,26 @@ class TastyTableController extends AbstractController
             $Db_recipes = $entityManager->getRepository(Recipes::class)->findRecipesByIdsAndDiets($recipeIds);
         } elseif ($type === 'user recipe') {
             // Fetch user's own recipes
-            $recipeIds = $entityManager->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($profileUserId, 0, 1);
+            $recipeIds = $entityManager->getRepository(Recipes::class)->findIdsByUserId($profileUserId);
+
+           // $recipeIds = $entityManager->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($profileUserId, 0, 1);
             $Db_recipes = $entityManager->getRepository(Recipes::class)->findRecipesByIdsAndDiets($recipeIds);
+        }
+        else
+
+        {
+            $sessionUserId = $session->get('userId');
+            $following = $entityManager->getRepository(Following::class)->findOneBy([
+                'userId' => $sessionUserId,
+                'followingId' => $profileUserId]);
+            $followers = $entityManager->getRepository(Followers::class)->findOneBy([
+                'userId' => $sessionUserId,
+                'followerId' => $profileUserId
+            ]);
+            if ((!$followers) and (!$following))
+            {
+                $isFollowing='3';
+            }
         }
 
         // Render the user profile template
@@ -1065,21 +1143,7 @@ class TastyTableController extends AbstractController
 
 
 
-    #[Route('/addSavedRecipe', name: 'addSaved')]
-    public function recipeSaveOrDelete(Request $request, EntityManagerInterface $em, SessionInterface $session,SpoonacularApiService $apiService): Response
-    {
-//        $user = $em->getRepository(User::class)->findOneBy(['id' =>1]);
-//        $user2=$em->getRepository(User::class)->findOneBy(['id' =>22]);
-//
-//        $follow=new Followers();
-//        $follow->setUserId($user);
-//        $follow->setFollowerId($user2);
-//        $em->persist($follow);
-//        $em->flush();
 
-        return $this->redirectToRoute('index');
-
-    }
 
 }
 
