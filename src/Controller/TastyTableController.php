@@ -188,7 +188,9 @@ class TastyTableController extends AbstractController
         }
 
         return $this->render('Pages/register.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'alertMessage'=>$alertMessage,
+
         ]);
     }
     #[Route('/LogOut', name: 'logOut')]
