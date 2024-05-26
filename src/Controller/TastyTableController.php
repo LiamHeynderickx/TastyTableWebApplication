@@ -328,7 +328,7 @@ class TastyTableController extends AbstractController
     #[Route('/profile', name: 'profile')]
     public function getSavedRecipes(Request $request, EntityManagerInterface $em,SessionInterface $session,LoggerInterface $logger,SpoonacularApiService $apiService): Response
     {
-        if (!$session->get('isOnline'))
+       if (!$session->get('isOnline'))
         {
             return $this->redirectToRoute('index');
         }
@@ -444,8 +444,6 @@ class TastyTableController extends AbstractController
         }
 
     }
-
-
 
     #[Route('/recipeSubmission', name: 'recipeSubmission')]
     public function recipeSubmission(Request $request, EntityManagerInterface $em, LoggerInterface $logger, SessionInterface $session): Response
