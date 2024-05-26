@@ -104,6 +104,9 @@ class Recipes
 
     public function setRecipeName(string $recipeName): static
     {
+        if (strlen($recipeName) > 100) {
+            throw new \InvalidArgumentException('Recipe name cannot exceed 100 characters.');
+        }
         $this->recipeName = $recipeName;
 
         return $this;
@@ -116,6 +119,9 @@ class Recipes
 
     public function setRecipeDescription(?string $recipeDescription): static
     {
+        if (strlen($recipeDescription) > 255) {
+            throw new \InvalidArgumentException('Recipe description cannot exceed 255 characters.');
+        }
         $this->recipeDescription = $recipeDescription;
 
         return $this;
@@ -128,6 +134,9 @@ class Recipes
 
     public function setPicturePath(?string $picture): self
     {
+        if (strlen($picture) > 255) {
+            throw new \InvalidArgumentException('Picture path cannot exceed 255 characters.');
+        }
         $this->picturePath = $picture;
 
         return $this;
@@ -272,6 +281,9 @@ class Recipes
 
     public function setDiet(string $diet): static
     {
+        if (strlen($diet) > 100) {
+            throw new \InvalidArgumentException('Diet cannot exceed 100 characters.');
+        }
         $this->diet = $diet;
 
         return $this;
@@ -284,6 +296,9 @@ class Recipes
 
     public function setType(string $type): static
     {
+        if (strlen($type) > 100) {
+            throw new \InvalidArgumentException('Type cannot exceed 100 characters.');
+        }
         $this->type = $type;
 
         return $this;
