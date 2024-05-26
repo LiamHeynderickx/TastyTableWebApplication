@@ -53,7 +53,7 @@
 
             <h2>Filter Recipes</h2>
             <br>
-            <form method="get" action="{{ path('homePage') }}">
+            <form method="get" action="{{ path('homePageAPI') }}">
                 <input type="checkbox" id="vegetarian" name="vegetarian" {% if filters.vegetarian %}checked{% endif %}>
                 <label for="vegetarian">Vegetarian</label><br>
                 <input type="checkbox" id="vegan" name="vegan" {% if filters.vegan %}checked{% endif %}>

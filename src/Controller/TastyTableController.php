@@ -219,7 +219,7 @@ class TastyTableController extends AbstractController
     }
 
     #[Route('/homePageAPI', name: 'homePageAPI')]
-    public function homePageAPI(Request $request, EntityManagerInterface $em, SessionInterface $session,SpoonacularApiService $apiService): Response
+    public function homePageAPI(Request $request, SpoonacularApiService $apiService): Response
     {
 
         // Get filter criteria from the request
