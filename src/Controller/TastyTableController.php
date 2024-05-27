@@ -611,8 +611,8 @@ class TastyTableController extends AbstractController
             ->add('picture', FileType::class, [
                 'label' => 'Recipe Image',
                 'required' => false,
-                'mapped' => false, // Not mapped directly to the entity
-                'attr' => ['accept' => 'image/*'] // Limit to image files
+                'mapped' => false,
+                'attr' => ['accept' => 'image/*'] // Accepts all image files
             ])
             ->add('cost', ChoiceType::class, [
                 'choices' => ['€' => '1', '€€' => '2', '€€€' => '3'],
@@ -664,19 +664,17 @@ class TastyTableController extends AbstractController
                 // Generate a unique name for the file before saving it
                 $newFilename = uniqid() . '.' . $pictureFile->guessExtension();
 
-                // Move the file to the directory where brochures are stored
+                // Move the file to the directory where images are stored
                 try {
                     $pictureFile->move(
-                        $this->getParameter('recipe_images_directory'),
+                        $this->getParameter('recipe_images_directory'), // path to public/style/images/recipeImages
                         $newFilename
                     );
                 } catch (FileException $e) {
-                    // Handle exception if something happens during file upload
-                    // $logger->error('Error uploading file: ' . $e->getMessage());
                 }
 
                 // Store the file name in the entity
-                $recipe->setPicturePath($newFilename); // Corrected method name
+                $recipe->setPicturePath($newFilename);
             }
 
             // Get ingredients, quantities, units, and instructions from hidden fields
@@ -685,7 +683,7 @@ class TastyTableController extends AbstractController
             $ingredientsUnitsJSON = json_decode($form->get('ingredientsUnits')->getData(), true);
             $instructionsJSON = json_decode($form->get('instructions')->getData(), true);
 
-            // Set the data to the recipe entity
+            // Set the ingredients and instructions data to the recipe entity as JSON arrays
             $recipe->setIngredients($ingredientsJSON ?? []);
             $recipe->setIngredientsAmounts($ingredientsAmountsJSON ?? []);
             $recipe->setIngredientsUnits($ingredientsUnitsJSON ?? []);
@@ -715,9 +713,6 @@ class TastyTableController extends AbstractController
             return $this->redirectToRoute('index');
         }
 
-
-
-
         $userId = $session->get('userId');
         $user = $em->getRepository(User::class)->findOneBy(['id' =>$userId]);
 
@@ -727,7 +722,6 @@ class TastyTableController extends AbstractController
             $this->addFlash('error', 'Invalid request parameters.');
             return $this->redirectToRoute('index');
         }
-
 
         if ($save=='1')
         {
@@ -825,7 +819,6 @@ class TastyTableController extends AbstractController
 
         }
 
-
         return $this->redirectToRoute('recipeDisplay', ['id' => $id]);
 
     }
@@ -865,10 +858,8 @@ class TastyTableController extends AbstractController
         $isFollowing=0;
         if ($recipe ) {
             //check if the recipe already saved to your recipes.
-
             $savedRecipe = $em->getRepository(SavedRecipes::class)->findBy(['userId' => $userId, 'recipeId' => $id]);
             $isSaveRecipe = empty($savedRecipe) ? true : false;
-            //Check if you follow the owner of the recipe
 
         }
 
@@ -884,10 +875,8 @@ class TastyTableController extends AbstractController
         if ($request->isMethod('POST')) {
             $commentText = $request->request->get('comment');
 
-            // Create a new Comments entity
             $comment = new Comments();
 
-            // Set the user entity object directly
             $user = $em->getRepository(User::class)->find($userId);
             if (!$user) {
                 throw new \Exception('User not found for id: ' . $userId); // Handle error appropriately
@@ -896,14 +885,13 @@ class TastyTableController extends AbstractController
 
             $comment->setComment($commentText);
 
-            // Set recipeId based on $recipe
             if ($recipe instanceof Recipes) {
                 $comment->setRecipeId($recipe); // Set the Recipe entity object
             } elseif (is_array($recipe) && isset($recipe['id'])) {
-                // Alternatively, you can set the ID directly if fetched from API
+                // Set the ID directly if fetched from API
                 $comment->setRecipeId($recipe['id']); // Set the ID from the fetched API data
             } else {
-                // Handle the case where $recipe doesn't have a valid ID
+                // If $recipe doesn't have a valid ID
                 $this->addFlash('error', 'Recipe ID is missing or invalid.');
                 return $this->redirectToRoute('index');
             }
@@ -911,12 +899,11 @@ class TastyTableController extends AbstractController
             $em->persist($comment);
             $em->flush();
 
-            // After persisting, redirect to prevent form resubmission on refresh
             return $this->redirectToRoute('recipeDisplay', ['id' => $id]);
         }
 
 
-        // Fetch comments associated with the recipe
+        // Fetch comments for that recipe
         $comments = [];
         if ($recipe instanceof Recipes) {
             $comments = $em->getRepository(Comments::class)->findBy(['recipeId' => $recipe->getId()]);
@@ -1005,9 +992,6 @@ class TastyTableController extends AbstractController
 
                     }
 
-
-
-
                 } catch (\Exception $e) {
                     $logger->error('Error during following deletion flush: ' . $e->getMessage());
                 }
@@ -1041,9 +1025,6 @@ class TastyTableController extends AbstractController
                         $entityManager->remove($following);
                         $entityManager->flush();
                     }
-
-
-
 
 
                 } catch (\Exception $e) {
@@ -1111,7 +1092,7 @@ class TastyTableController extends AbstractController
         $em->remove($recipe);
         $em->flush();
 
-        return $this->redirectToRoute('homePage'); // Replace 'homepage' with the name of your homepage route
+        return $this->redirectToRoute('homePage');
     }
 
     #[Route('/recipe_edit/{id}', name: 'recipe_edit')]
@@ -1135,19 +1116,14 @@ class TastyTableController extends AbstractController
             ->add('carbs', IntegerType::class, ['label' => 'Carbohydrates', 'required' => false, 'data' => $recipe->getCarbs()])
             ->add('protein', IntegerType::class, ['label' => 'Protein', 'required' => false, 'data' => $recipe->getProtein()])
             ->add('servings', IntegerType::class, ['label' => 'Number of Servings', 'data' => $recipe->getServings()])
-            ->add('diet', ChoiceType::class, [
-                'label' => 'Diet',
-                'choices' => [
+            ->add('diet', ChoiceType::class, ['label' => 'Diet', 'choices' => [
                     'No diet' => 'no diet',
                     'Vegetarian' => 'vegetarian',
                     'Vegan' => 'vegan',
                     'Gluten Free' => 'gluten_free',
                     'Keto' => 'keto',
                     'Paleo' => 'paleo'
-                ],
-                'data' => $recipe->getDiet(),
-                'placeholder' => 'Select a diet',
-            ])
+                ], 'data' => $recipe->getDiet(), 'placeholder' => 'Select a diet'])
             ->add('type', ChoiceType::class, [
                 'label' => 'Meal Type',
                 'choices' => [
@@ -1156,10 +1132,7 @@ class TastyTableController extends AbstractController
                     'Dinner' => 'dinner',
                     'Snack' => 'snack',
                     'Dessert' => 'dessert'
-                ],
-                'data' => $recipe->getType(),
-                'placeholder' => 'Select a meal type',
-            ])
+                ], 'data' => $recipe->getType(), 'placeholder' => 'Select a meal type'])
             ->add('ingredients', HiddenType::class, ['mapped' => false, 'data' => json_encode($recipe->getIngredients())])
             ->add('ingredientsAmounts', HiddenType::class, ['mapped' => false, 'required' => false, 'data' => json_encode($recipe->getIngredientsAmounts())])
             ->add('ingredientsUnits', HiddenType::class, ['mapped' => false, 'required' => false, 'data' => json_encode($recipe->getIngredientsUnits())])
@@ -1188,7 +1161,7 @@ class TastyTableController extends AbstractController
                 }
 
                 // Store the file name in the entity
-                $recipe->setPicturePath($newFilename); // Corrected method name
+                $recipe->setPicturePath($newFilename);
             }
 
             // Get ingredients, quantities, units, and instructions from hidden fields
