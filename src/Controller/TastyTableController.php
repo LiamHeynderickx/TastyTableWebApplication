@@ -1143,15 +1143,14 @@ class TastyTableController extends AbstractController
                 // Generate a unique name for the file before saving it
                 $newFilename = uniqid() . '.' . $pictureFile->guessExtension();
 
-                // Move the file to the directory where brochures are stored
+                // Move the file to the directory where images are stored
                 try {
                     $pictureFile->move(
                         $this->getParameter('recipe_images_directory'),
                         $newFilename
                     );
                 } catch (FileException $e) {
-                    // Handle exception if something happens during file upload
-                    // $logger->error('Error uploading file: ' . $e->getMessage());
+                    $logger->error('Error uploading file: ' . $e->getMessage());
                 }
 
                 // Store the file name in the entity

@@ -58,7 +58,7 @@
                                 {% for comment in comments %}
                                     <li>
                                         {{ comment.comment }}<br>
-                                        -{{ user.username }}
+                                        -{{ comment.userId.username }}
                                     </li>
                                 {% endfor %}
                             </ul>
@@ -123,10 +123,6 @@
                                         €€€
                                     {% endif %}
                                 </span>
-                                &nbsp; | &nbsp;
-                                <span class="detail-item">
-                                    <span class="icon">⭐</span> Rating: ★★★★★
-                                </span>
                             </p>
                         </div>
                     </div>
@@ -148,11 +144,6 @@
                                 <h3 style="margin: 0; padding: 0; color: black">Follow Owner </h3>
                             </a>
                         {% endif %}
-{#                        {% if followFlag %}#}
-{#                            <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '','isApi':APIFlag}) }}" style="display: inline-block; padding: 8px 16px; font-size: 13px; font-weight: bold; text-align: center; color: white; background-color: #b2b2b2; border: none; border-radius: 5px; text-decoration: none;">#}
-{#                                <h3 style="margin: 0; padding: 0; color: black">Unfollow Owner </h3>#}
-{#                            </a>#}
-{#                        {% endif %}#}
 
                         {% if SaveFlag %}
                             <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '1','isApi':APIFlag}) }}" style="display: inline-block; padding: 8px 16px; font-size: 13px; font-weight: bold; text-align: center; color: white; background-color: #b2b2b2; border: none; border-radius: 5px; text-decoration: none;">
