@@ -138,27 +138,27 @@
                         {% else %}
                             <p>No instructions found.</p>
                         {% endif %}
-                        {% if not followFlag %}
+
+                        <!-- follow user button -->
+                        {% if not followFlag and userId != recipeOwner.id %}
                             <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '3','isApi':APIFlag}) }}" style="display: inline-block; padding: 8px 16px; font-size: 13px; font-weight: bold; text-align: center; color: white; background-color: #b2b2b2; border: none; border-radius: 5px; text-decoration: none;">
                                 <h3 style="margin: 0; padding: 0; color: black">Follow Owner </h3>
-                            </a>
-                        {% endif %}
-
-                        {% if SaveFlag %}
-                            <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '1','isApi':APIFlag}) }}" style="display: inline-block; padding: 8px 16px; font-size: 13px; font-weight: bold; text-align: center; color: white; background-color: #b2b2b2; border: none; border-radius: 5px; text-decoration: none;">
-                                <h3 style="margin: 0; padding: 0; color: black">Save Recipe </h3>
-                            </a>
-
-                        {% else %}
-                            <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '0','isApi':APIFlag}) }}" style="display: inline-block; padding: 8px 16px; font-size: 13px; font-weight: bold; text-align: center; color: white; background-color: #b2b2b2; border: none; border-radius: 5px; text-decoration: none;">
-                                <h3 style="margin: 0; padding: 0; color: black">Unsave Recipe </h3>
                             </a>
                         {% endif %}
                     </div>
 
                     <!-- Buttons to interact with recipe -->
                     <div class="buttons-container">
-                        <button class="mark-as-done" onclick="markAsDone()">Mark as Done</button>
+                        {% if SaveFlag %}
+                            <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '1','isApi':APIFlag}) }}" style="display: inline-block; padding: 8px 16px; font-size: 13px; font-weight: bold; text-align: center;  background-color: #4CAF50; border: none; border-radius: 5px; text-decoration: none;">
+                                <h3 style="margin: 0; padding: 0; color: white">Save Recipe </h3>
+                            </a>
+
+                        {% else %}
+                            <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '0','isApi':APIFlag}) }}" style="display: inline-block; padding: 8px 16px; font-size: 13px; font-weight: bold; text-align: center; color: white; background-color: #4CAF50; border: none; border-radius: 5px; text-decoration: none;">
+                                <h3 style="margin: 0; padding: 0; color: white">Unsave Recipe </h3>
+                            </a>
+                        {% endif %}
                         <!-- Only the user who made the recipe can edit or delete it -->
                         {% if userId == recipe.userId %}
                             <button class="edit-recipe" onclick="editRecipe()">Edit Recipe</button>
@@ -242,12 +242,8 @@
                         {% endif %}
                     </div>
 
-
-
-
-                    <!-- Button to mark as done -->
+                    <!-- save recipe button -->
                     <div>
-                        <button onclick="markAsDone()">Mark as Done</button>
                         {% if SaveFlag %}
                             <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '1','isApi':APIFlag}) }}" style="display: inline-block; padding: 8px 16px; font-size: 13px; font-weight: bold; text-align: center; color: white; background-color: #b2b2b2; border: none; border-radius: 5px; text-decoration: none;">
                                 <h3 style="margin: 0; padding: 0; color: black">Save Recipe </h3>
@@ -316,11 +312,6 @@
                     fieldElement.innerText = `${newValue.toFixed(1)} ${field.unit}`; // Round to the first decimal place
                 }
             });
-        }
-
-
-        function markAsDone() {
-            alert('Recipe marked as done!');
         }
 
         function deleteRecipe() {

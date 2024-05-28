@@ -86,15 +86,6 @@ button, .buttons-container a {
     transition: background-color 0.3s, box-shadow 0.3s;
 }
 
-button:hover, .buttons-container a:hover {
-    background-color: #45a049;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-button.mark-as-done {
-    background-color: #4CAF50;
-}
-
 button.edit-recipe {
     background-color: #2196F3;
 }
@@ -102,8 +93,6 @@ button.edit-recipe {
 button.delete-recipe {
     background-color: #f44336;
 }
-
-
 
 .buttons-container {
     display: flex;
