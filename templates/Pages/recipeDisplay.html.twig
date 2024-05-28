@@ -83,36 +83,13 @@
                         <div class="recipe-info">
                             <p>
                                 <span class="detail-item">
-                                    <span class="icon">🍽</span> Meal type: <span>{{ recipe.type }}</span>
+                                    <span class="icon">🍽</span> Type: <span>{{ recipe.type }}</span>
                                 </span>
-                                &nbsp; | &nbsp;
+                                 | &nbsp;
                                 <span class="detail-item">
                                     <span class="icon">🥗</span> Diet: <span>{{ recipe.diet }}</span>
                                 </span>
-                            </p>
-                            <p>
-                                <span class="detail-item">
-                                    <span class="icon">⏱</span> Cooking Time: <span>{{ recipe.time }} minutes</span>
-                                </span>
-                                &nbsp; | &nbsp;
-                                <span class="detail-item">
-                                    <span class="icon">🔥</span> Calories: <span>{{ recipe.calories }} kcal</span>
-                                </span>
-                            </p>
-                            <p>
-                                <span class="detail-item">
-                                    <span class="icon">🍔</span> Fats: <span>{{ recipe.fat }}g</span>
-                                </span>
-                                &nbsp; | &nbsp;
-                                <span class="detail-item">
-                                    <span class="icon">🍞</span> Carbs: <span>{{ recipe.carbs }}g</span>
-                                </span>
-                                &nbsp; | &nbsp;
-                                <span class="detail-item">
-                                    <span class="icon">🍗</span> Proteins: <span>{{ recipe.protein }}g</span>
-                                </span>
-                            </p>
-                            <p>
+                                 | &nbsp;
                                 <span class="detail-item">
                                     <span class="icon">💰</span> Price range:
                                     {% if recipe.cost == 1 %}
@@ -122,6 +99,28 @@
                                     {% elseif recipe.cost == 3 %}
                                         €€€
                                     {% endif %}
+                                </span>
+                            </p>
+                            <p>
+                                <span class="detail-item">
+                                    <span class="icon">⏱</span> Cooking Time: <span>{{ recipe.time }} minutes</span>
+                                </span>
+                                &nbsp; | &nbsp;
+                                <span class="detail-item">
+                                    <span class="icon">🔥</span> Calories: <span id="calories" data-original-value="{{ recipe.calories }}">{{ recipe.calories }} kcal</span>
+                                </span>
+                            </p>
+                            <p>
+                                <span class="detail-item">
+                                    <span class="icon">🍔</span> Fats: <span id="fat" data-original-value="{{ recipe.fat }}">{{ recipe.fat }}g</span>
+                                </span>
+                                |
+                                <span class="detail-item">
+                                    <span class="icon">🍞</span> Carbs: <span id="carbs" data-original-value="{{ recipe.carbs }}">{{ recipe.carbs }}g</span>
+                                </span>
+                                |
+                                <span class="detail-item">
+                                    <span class="icon">🍗</span> Proteins: <span id="protein" data-original-value="{{ recipe.protein }}">{{ recipe.protein }}g</span>
                                 </span>
                             </p>
                         </div>
@@ -277,6 +276,7 @@
             $("#footer").load("Footer.html");
         });
 
+        // function to multiply ingredient amounts and nutrition info based off of servings
         function adjustServings(change) {
             let servingsElement = document.getElementById('servings');
             let initialServings = parseFloat(servingsElement.getAttribute('data-initial'));
@@ -288,19 +288,36 @@
             servingsElement.innerText = newServings;
 
             let ingredientElements = document.querySelectorAll('.ingredient-amount');
-
             ingredientElements.forEach(element => {
                 let originalAmount = parseFloat(element.getAttribute('data-original-amount'));
-                if (!isNaN(originalAmount)) { // Check if originalAmount is not NaN (i.e., it's a valid number)
-                    let unit = element.innerText.split(' ')[1]; // Extract the unit
+                if (!isNaN(originalAmount)) {
+                    let unit = element.innerText.split(' ')[1];
                     let newAmount = (originalAmount * newServings) / initialServings;
                     element.innerText = `${newAmount.toFixed(1)} ${unit}`; // Round to the first decimal place
                     if (unit) {
-                        element.innerText += " of "; // Add "of" if unit is present
+                        element.innerText += " of ";
                     }
                 }
             });
+
+            // Update nutrition facts
+            let nutritionFields = [
+                { id: 'calories', unit: 'kcal' },
+                { id: 'fat', unit: 'g' },
+                { id: 'carbs', unit: 'g' },
+                { id: 'protein', unit: 'g' }
+            ];
+
+            nutritionFields.forEach(field => {
+                let fieldElement = document.getElementById(field.id);
+                let originalValue = parseFloat(fieldElement.getAttribute('data-original-value'));
+                if (!isNaN(originalValue)) {
+                    let newValue = (originalValue * newServings) / initialServings;
+                    fieldElement.innerText = `${newValue.toFixed(1)} ${field.unit}`; // Round to the first decimal place
+                }
+            });
         }
+
 
         function markAsDone() {
             alert('Recipe marked as done!');
