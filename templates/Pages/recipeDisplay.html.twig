@@ -58,7 +58,7 @@
                                 {% for comment in comments %}
                                     <li>
                                         {{ comment.comment }}<br>
-                                        -{{ comment.userId.username }}
+                                        -{{ user.username }}
                                     </li>
                                 {% endfor %}
                             </ul>
@@ -143,11 +143,16 @@
                         {% else %}
                             <p>No instructions found.</p>
                         {% endif %}
-                        {% if followFlag %}
+                        {% if not followFlag %}
                             <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '3','isApi':APIFlag}) }}" style="display: inline-block; padding: 8px 16px; font-size: 13px; font-weight: bold; text-align: center; color: white; background-color: #b2b2b2; border: none; border-radius: 5px; text-decoration: none;">
                                 <h3 style="margin: 0; padding: 0; color: black">Follow Owner </h3>
                             </a>
                         {% endif %}
+{#                        {% if followFlag %}#}
+{#                            <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '','isApi':APIFlag}) }}" style="display: inline-block; padding: 8px 16px; font-size: 13px; font-weight: bold; text-align: center; color: white; background-color: #b2b2b2; border: none; border-radius: 5px; text-decoration: none;">#}
+{#                                <h3 style="margin: 0; padding: 0; color: black">Unfollow Owner </h3>#}
+{#                            </a>#}
+{#                        {% endif %}#}
 
                         {% if SaveFlag %}
                             <a href="{{ path('SaveRecipeDisplay', {'id': recipe.id, 'save': '1','isApi':APIFlag}) }}" style="display: inline-block; padding: 8px 16px; font-size: 13px; font-weight: bold; text-align: center; color: white; background-color: #b2b2b2; border: none; border-radius: 5px; text-decoration: none;">
@@ -211,31 +216,6 @@
                             {% endif %}
                         </div>
 
-                        <!-- Comments Section -->
-                        <div>
-                            <!-- Comments Section -->
-                            <div>
-                                <h2>Comments</h2>
-                                {% if comments %}
-                                    <ul>
-                                        {% for comment in comments %}
-                                            <li>
-                                                {{ comment.comment }}<br>
-                                                -{{ comment.userId.username }}
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                {% else %}
-                                    <p>No comments yet.</p>
-                                {% endif %}
-
-                                <!-- Add your own comment -->
-                                <form action="{{ path('recipeDisplay', {'id': recipe.id}) }}" method="post">
-                                    <textarea name="comment" placeholder="Add your comment" required></textarea><br>
-                                    <button type="submit">Add Comment</button>
-                                </form>
-                            </div>
-                        </div>
                     </div>
                 </aside>
 

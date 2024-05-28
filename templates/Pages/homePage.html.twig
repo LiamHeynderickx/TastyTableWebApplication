@@ -3,7 +3,7 @@
 {% block body %}
 
     {% block stylesheets %}
-      <link rel="stylesheet" href="{{ asset('style/homePage.css') }}">
+        <link rel="stylesheet" href="{{ asset('style/homePage.css') }}">
     {% endblock %}
 
 
@@ -21,23 +21,23 @@
         <div class="subHeader">
             {% block subHeader %}
                 <link rel="stylesheet" href="{{ asset('style/homePage.css') }}">
-            <div class="userRecipes">
-                {% block userRecipes %}
-                    <a href="{{ path('homePage') }}"><h1>User Recipes</h1></a>
-                {% endblock %}
-            </div>
+                <div class="userRecipes">
+                    {% block userRecipes %}
+                        <a href="{{ path('homePage') }}"><h1>User Recipes</h1></a>
+                    {% endblock %}
+                </div>
 
-            <div class="apiRecipes">
-                {% block apiRecipes %}
-                    <a href="{{ path('homePageAPI') }}"><h1>TastyTable Recipes</h1></a>
-                {% endblock %}
-            </div>
+                <div class="apiRecipes">
+                    {% block apiRecipes %}
+                        <a href="{{ path('homePageAPI') }}"><h1>TastyTable Recipes</h1></a>
+                    {% endblock %}
+                </div>
 
-            <div class="CreateRecipe">
-                {% block createRecipe %}
-                    <a href="{{ path('recipeSubmission') }}"><h1>Create Recipe</h1></a>
-                {% endblock %}
-            </div>
+                <div class="CreateRecipe">
+                    {% block createRecipe %}
+                        <a href="{{ path('recipeSubmission') }}"><h1>Create Recipe</h1></a>
+                    {% endblock %}
+                </div>
 
             {% endblock %}
         </div>
@@ -48,63 +48,63 @@
 
     <main>
 
-      <div class="filter-section">
+        <div class="filter-section">
 
-        <br><br>
+            <br><br>
 
-        <h2>Filter Recipes</h2>
-        <br>
-        <form method="get" action="{{ path('homePageFiltered') }}">
-          <input type="checkbox" id="vegetarian" name="vegetarian" {% if filters.vegetarian %}checked{% endif %}>
-          <label for="vegetarian">Vegetarian</label><br>
-          <input type="checkbox" id="vegan" name="vegan" {% if filters.vegan %}checked{% endif %}>
-          <label for="vegan">Vegan</label><br>
-          <input type="checkbox" id="gluten-free" name="gluten-free" {% if filters['gluten-free'] %}checked{% endif %}>
-          <label for="gluten-free">Gluten-Free</label><br>
-          <input type="checkbox" id="dairy-free" name="dairy-free" {% if filters['dairy-free'] %}checked{% endif %}>
-          <label for="dairy-free">Dairy-Free</label>
-          <br><br>
-          <button type="submit">Apply Filters</button>
-        </form>
-      </div>
+            <h2>Filter Recipes</h2>
+            <br>
+            <form method="get" action="{{ path('homePageFiltered') }}">
+                <input type="checkbox" id="vegetarian" name="vegetarian" {% if filters.vegetarian %}checked{% endif %}>
+                <label for="vegetarian">Vegetarian</label><br>
+                <input type="checkbox" id="vegan" name="vegan" {% if filters.vegan %}checked{% endif %}>
+                <label for="vegan">Vegan</label><br>
+                <input type="checkbox" id="gluten-free" name="gluten-free" {% if filters['gluten-free'] %}checked{% endif %}>
+                <label for="gluten-free">Gluten-Free</label><br>
+                <input type="checkbox" id="dairy-free" name="dairy-free" {% if filters['dairy-free'] %}checked{% endif %}>
+                <label for="dairy-free">Dairy-Free</label>
+                <br><br>
+                <button type="submit">Apply Filters</button>
+            </form>
+        </div>
 
-      <div class="recipes">
+        <div class="recipes">
 
-        {% if recipes == [] %}
-          <section class="noRecipe">
-            <img src="{{ asset('style/images/sadFace.png') }}">
-            <h2>No Results Found</h2>
-          </section>
-        {% else %}
-          {% for recipe in recipes %}
-            {% if recipe is not null %}
-              <section class="recipe-card">
-                <a href="{{ path('recipeDisplay', { id: recipe.id }) }}">
-                    {% if recipe.picturePath %}
-                        <img src="{{ asset('style/images/recipeImages/' ~ recipe.picturePath) }}" alt="Recipe Image">
-                    {% else %}
-                        <img src="{{ asset('style/images/placeholderImage.jpeg') }}" alt="Recipe Image">
-                    {% endif %}
-                  <h2>{{ recipe.recipeName }}</h2>
-                  {% if recipe.time != '' %}
-                    <p>Time: {{ recipe.time }} minutes</p>
-{#                    <p>Rating: {{ recipe.score }}</p>#}
-                  {% endif %}
-                </a>
-              </section>
+            {% if recipes == [] %}
+                <section class="noRecipe">
+                    <img src="{{ asset('style/images/sadFace.png') }}">
+                    <h2>No Results Found</h2>
+                </section>
             {% else %}
-              <section class="recipe-card">
-                <img src="{{ recipe.image }}" alt="Recipe Image">
-                <h2>{{ recipe.title }}</h2>
-                <p>Time: {{ recipe.time }} minutes</p>
-                <p>Rating: {{ recipe.score }}</p>
-              </section>
+                {% for recipe in recipes %}
+                    {% if recipe is not null %}
+                        <section class="recipe-card">
+                            <a href="{{ path('recipeDisplay', { id: recipe.id }) }}">
+                                {% if recipe.picturePath %}
+                                    <img src="{{ asset('style/images/recipeImages/' ~ recipe.picturePath) }}" alt="Recipe Image">
+                                {% else %}
+                                    <img src="{{ asset('style/images/placeholderImage.jpeg') }}" alt="Recipe Image">
+                                {% endif %}
+                                <h2>{{ recipe.recipeName }}</h2>
+                                {% if recipe.time != '' %}
+                                    <p>Time: {{ recipe.time }} minutes</p>
+                                    {#                    <p>Rating: {{ recipe.score }}</p>#}
+                                {% endif %}
+                            </a>
+                        </section>
+                    {% else %}
+                        <section class="recipe-card">
+                            <img src="{{ recipe.image }}" alt="Recipe Image">
+                            <h2>{{ recipe.title }}</h2>
+                            <p>Time: {{ recipe.time }} minutes</p>
+                            <p>Rating: {{ recipe.score }}</p>
+                        </section>
+                    {% endif %}
+                {% endfor %}
             {% endif %}
-          {% endfor %}
-        {% endif %}
 
 
 
-      </div>
+        </div>
     </main>
 {% endblock %}

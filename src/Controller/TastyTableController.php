@@ -511,13 +511,10 @@ class TastyTableController extends AbstractController
 
                         if (!empty($selectedDiets)){
 
-
                             if (array_intersect($apiRecipe['diets'], $selectedDiets))
                             {
-
                                 $filteredArrays []= $apiRecipe;
                                 //  print_r( $filteredArrays);
-
                             }
                         }
 
@@ -629,11 +626,11 @@ class TastyTableController extends AbstractController
             ->add('diet', ChoiceType::class, [
                 'label' => 'Diet',
                 'choices' => [
+                    'No diet' => 'no diet',
                     'Vegetarian' => 'vegetarian',
                     'Vegan' => 'vegan',
-                    'Gluten Free' => 'gluten_free',
-                    'Keto' => 'keto',
-                    'Paleo' => 'paleo'
+                    'Gluten-Free' => 'gluten free',
+                    'Dairy-free' => 'dairy free'
                 ],
                 'placeholder' => 'Select a diet',
             ])
@@ -798,7 +795,7 @@ class TastyTableController extends AbstractController
             //!!!Validation!!!!!
             if ($existingFollow) {
                 $this->addFlash('error', 'Already following this user.');
-                return $this->redirectToRoute('user_profile', ['username' => $user2Id->getUsername()]);
+                return $this->redirectToRoute('homePage');
             }
 
             //Add if there is no User2 :)
@@ -814,9 +811,7 @@ class TastyTableController extends AbstractController
             $follower->setFollowerId($user);
             $em->persist($follower);
             $em->flush();
-            return $this->redirectToRoute('user_profile', ['username' => $user2->getUsername(),
-                'isFollowing'=>'1']);
-
+            return $this->redirectToRoute('user_profile', ['username' => $user2->getUsername(), 'isFollowing'=>'1']);
         }
 
         return $this->redirectToRoute('recipeDisplay', ['id' => $id]);
@@ -1117,12 +1112,11 @@ class TastyTableController extends AbstractController
             ->add('protein', IntegerType::class, ['label' => 'Protein', 'required' => false, 'data' => $recipe->getProtein()])
             ->add('servings', IntegerType::class, ['label' => 'Number of Servings', 'data' => $recipe->getServings()])
             ->add('diet', ChoiceType::class, ['label' => 'Diet', 'choices' => [
-                    'No diet' => 'no diet',
-                    'Vegetarian' => 'vegetarian',
-                    'Vegan' => 'vegan',
-                    'Gluten Free' => 'gluten_free',
-                    'Keto' => 'keto',
-                    'Paleo' => 'paleo'
+                'No diet' => 'no diet',
+                'Vegetarian' => 'vegetarian',
+                'Vegan' => 'vegan',
+                'Gluten-Free' => 'gluten free',
+                'Dairy-free' => 'dairy free'
                 ], 'data' => $recipe->getDiet(), 'placeholder' => 'Select a diet'])
             ->add('type', ChoiceType::class, [
                 'label' => 'Meal Type',

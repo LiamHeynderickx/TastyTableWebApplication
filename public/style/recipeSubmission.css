@@ -9,6 +9,10 @@ form {
     margin: 0 auto 20px;
 }
 
+.Title {
+    color: darkorange;
+}
+
 form label {
     display: block;
     margin-bottom: 10px;

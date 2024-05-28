@@ -29,7 +29,7 @@
             {% elseif  isFollowing=='0'%}
             <a href="{{ path('user_profile', { 'username': user.username, 'isFollowing': '0', 'type': 'RemoveFollower' }) }}">Remove Follower</a>
             {% else %}
-                <a href="">/</a>
+                <a href="">Follow</a>
             {% endif %}
         </div>
 

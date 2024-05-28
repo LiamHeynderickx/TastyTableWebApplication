@@ -8,13 +8,16 @@
 {% endblock %}
 
 {% block body %}
-    <center><h1>Create Your Recipe</h1></center>
+    <div class="Title">
+        <center><h1>Create Your Recipe</h1></center>
+    </div>
 
     {{ form_start(form) }}
 
     {{ form_row(form.recipeName, {'label': 'Recipe Name'}) }}
-    {{ form_row(form.type, {'label': 'Meal Type'}) }}
     {{ form_row(form.recipeDescription, {'label': 'Recipe Description'}) }}
+    {{ form_row(form.type, {'label': 'Meal Type'}) }}
+    {{ form_row(form.diet, {'label': 'Diet'}) }}
     {{ form_row(form.picture, {'label': 'Recipe Image'}) }}<br>
     {{ form_row(form.servings, {'label': 'Number of Servings'}) }}
     {{ form_row(form.time, {'label': 'Cooking Time (minutes)'}) }}
@@ -22,7 +25,6 @@
     {{ form_row(form.fat, {'label': 'Fat'}) }}
     {{ form_row(form.carbs, {'label': 'Carbohydrates'}) }}
     {{ form_row(form.protein, {'label': 'Protein'}) }}
-    {{ form_row(form.diet, {'label': 'Diet'}) }}
 
     <label>Price Range:</label><br>
     {{ form_widget(form.cost) }}<br><br>
