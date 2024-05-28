@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Dashboard for C:\Users\mithi\SoftDev406\src</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="_css/bootstrap.min.css?v=9.2.31" rel="stylesheet" type="text/css">
+  <link href="_css/nv.d3.min.css?v=9.2.31" rel="stylesheet" type="text/css">
+  <link href="_css/style.css?v=9.2.31" rel="stylesheet" type="text/css">
+  <link href="_css/custom.css" rel="stylesheet" type="text/css">
+ </head>
+ <body>
+  <header>
+   <div class="container-fluid">
+    <div class="row">
+     <div class="col-md-12">
+      <nav aria-label="breadcrumb">
+       <ol class="breadcrumb">
+         <li class="breadcrumb-item"><a href="index.html">C:\Users\mithi\SoftDev406\src</a></li>
+         <li class="breadcrumb-item active">(Dashboard)</li>
+
+       </ol>
+      </nav>
+     </div>
+    </div>
+   </div>
+  </header>
+  <div class="container-fluid">
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Classes</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="classCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="classComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Entity/MithilTest.php.html#9">App\Entity\MithilTest</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/Posts.php.html#11">App\Entity\Posts</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repository/FollowingRepository.php.html#12">App\Repository\FollowingRepository</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repository/MithilTestRepository.php.html#12">App\Repository\MithilTestRepository</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repository/PostsRepository.php.html#12">App\Repository\PostsRepository</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repository/RatingsRepository.php.html#12">App\Repository\RatingsRepository</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/SpoonacularApiService.php.html#7">App\Service\SpoonacularApiService</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#40">App\Controller\TastyTableController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repository/UserRepository.php.html#18">App\Repository\UserRepository</a></td><td class="text-right">25%</td></tr>
+       <tr><td><a href="Entity/User.php.html#18">App\Entity\User</a></td><td class="text-right">40%</td></tr>
+       <tr><td><a href="Repository/RecipesRepository.php.html#12">App\Repository\RecipesRepository</a></td><td class="text-right">58%</td></tr>
+       <tr><td><a href="Entity/SavedRecipes.php.html#9">App\Entity\SavedRecipes</a></td><td class="text-right">83%</td></tr>
+       <tr><td><a href="Entity/Followers.php.html#9">App\Entity\Followers</a></td><td class="text-right">85%</td></tr>
+       <tr><td><a href="Entity/Following.php.html#9">App\Entity\Following</a></td><td class="text-right">85%</td></tr>
+       <tr><td><a href="Entity/Recipes.php.html#12">App\Entity\Recipes</a></td><td class="text-right">87%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Controller/TastyTableController.php.html#40">App\Controller\TastyTableController</a></td><td class="text-right">12885</td></tr>
+       <tr><td><a href="Service/SpoonacularApiService.php.html#7">App\Service\SpoonacularApiService</a></td><td class="text-right">992</td></tr>
+       <tr><td><a href="Entity/User.php.html#18">App\Entity\User</a></td><td class="text-right">532</td></tr>
+       <tr><td><a href="Entity/Posts.php.html#11">App\Entity\Posts</a></td><td class="text-right">156</td></tr>
+       <tr><td><a href="Entity/Recipes.php.html#12">App\Entity\Recipes</a></td><td class="text-right">51</td></tr>
+       <tr><td><a href="Repository/RecipesRepository.php.html#12">App\Repository\RecipesRepository</a></td><td class="text-right">17</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Methods</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="methodCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="methodComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Controller/TastyTableController.php.html#45"><abbr title="App\Controller\TastyTableController::index">index</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#112"><abbr title="App\Controller\TastyTableController::register">register</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#231"><abbr title="App\Controller\TastyTableController::LogOut">LogOut</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#240"><abbr title="App\Controller\TastyTableController::homePage">homePage</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#279"><abbr title="App\Controller\TastyTableController::homePageFiltered">homePageFiltered</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#314"><abbr title="App\Controller\TastyTableController::homePageAPI">homePageAPI</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#341"><abbr title="App\Controller\TastyTableController::searchRecipesAPI">searchRecipesAPI</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#367"><abbr title="App\Controller\TastyTableController::searchRecipesDB">searchRecipesDB</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#391"><abbr title="App\Controller\TastyTableController::recipeDisplayer">recipeDisplayer</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#402"><abbr title="App\Controller\TastyTableController::follows">follows</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#444"><abbr title="App\Controller\TastyTableController::getSavedRecipes">getSavedRecipes</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#596"><abbr title="App\Controller\TastyTableController::recipeSubmission">recipeSubmission</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#708"><abbr title="App\Controller\TastyTableController::SaveRecipeDisplay">SaveRecipeDisplay</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#827"><abbr title="App\Controller\TastyTableController::display">display</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#944"><abbr title="App\Controller\TastyTableController::showUserProfile">showUserProfile</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#1083"><abbr title="App\Controller\TastyTableController::recipe_delete">recipe_delete</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#1098"><abbr title="App\Controller\TastyTableController::edit">edit</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#1192"><abbr title="App\Controller\TastyTableController::updateProfile">updateProfile</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/Followers.php.html#26"><abbr title="App\Entity\Followers::getId">getId</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/Following.php.html#26"><abbr title="App\Entity\Following::getId">getId</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/MithilTest.php.html#21"><abbr title="App\Entity\MithilTest::getId">getId</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/MithilTest.php.html#26"><abbr title="App\Entity\MithilTest::getCol1">getCol1</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/MithilTest.php.html#31"><abbr title="App\Entity\MithilTest::setCol1">setCol1</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/Posts.php.html#33"><abbr title="App\Entity\Posts::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/Posts.php.html#38"><abbr title="App\Entity\Posts::getId">getId</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/Posts.php.html#43"><abbr title="App\Entity\Posts::getCreatorId">getCreatorId</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/Posts.php.html#48"><abbr title="App\Entity\Posts::setCreatorId">setCreatorId</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/Posts.php.html#55"><abbr title="App\Entity\Posts::getRecipeId">getRecipeId</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/Posts.php.html#60"><abbr title="App\Entity\Posts::setRecipeId">setRecipeId</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/Posts.php.html#70"><abbr title="App\Entity\Posts::getPostsComments">getPostsComments</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/Posts.php.html#75"><abbr title="App\Entity\Posts::addPostsComment">addPostsComment</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/Posts.php.html#85"><abbr title="App\Entity\Posts::removePostsComment">removePostsComment</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/Recipes.php.html#310"><abbr title="App\Entity\Recipes::getRecipePosts">getRecipePosts</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/Recipes.php.html#315"><abbr title="App\Entity\Recipes::addRecipePost">addRecipePost</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/Recipes.php.html#325"><abbr title="App\Entity\Recipes::removeRecipePost">removeRecipePost</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/SavedRecipes.php.html#32"><abbr title="App\Entity\SavedRecipes::getIsMyRecipe">getIsMyRecipe</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/SavedRecipes.php.html#42"><abbr title="App\Entity\SavedRecipes::getId">getId</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/User.php.html#155"><abbr title="App\Entity\User::getRoles">getRoles</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/User.php.html#161"><abbr title="App\Entity\User::getSalt">getSalt</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/User.php.html#167"><abbr title="App\Entity\User::eraseCredentials">eraseCredentials</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/User.php.html#171"><abbr title="App\Entity\User::getUserIdentifier">getUserIdentifier</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/User.php.html#184"><abbr title="App\Entity\User::addUserFollowing">addUserFollowing</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/User.php.html#194"><abbr title="App\Entity\User::removeUserFollowing">removeUserFollowing</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/User.php.html#214"><abbr title="App\Entity\User::addUserFollower">addUserFollower</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/User.php.html#224"><abbr title="App\Entity\User::removeUserFollower">removeUserFollower</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/User.php.html#244"><abbr title="App\Entity\User::addUserPost">addUserPost</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/User.php.html#254"><abbr title="App\Entity\User::removeUserPost">removeUserPost</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/User.php.html#274"><abbr title="App\Entity\User::addUserComment">addUserComment</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/User.php.html#284"><abbr title="App\Entity\User::removeUserComment">removeUserComment</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/User.php.html#304"><abbr title="App\Entity\User::addSavedRecipes">addSavedRecipes</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/User.php.html#314"><abbr title="App\Entity\User::removeSavedRecipes">removeSavedRecipes</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repository/FollowingRepository.php.html#14"><abbr title="App\Repository\FollowingRepository::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repository/FollowingRepository.php.html#44"><abbr title="App\Repository\FollowingRepository::findFollowingByUser">findFollowingByUser</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repository/FollowingRepository.php.html#53"><abbr title="App\Repository\FollowingRepository::removeFollowingByUserAndFollowing">removeFollowingByUserAndFollowing</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repository/MithilTestRepository.php.html#14"><abbr title="App\Repository\MithilTestRepository::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repository/PostsRepository.php.html#14"><abbr title="App\Repository\PostsRepository::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repository/RatingsRepository.php.html#14"><abbr title="App\Repository\RatingsRepository::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repository/RecipesRepository.php.html#103"><abbr title="App\Repository\RecipesRepository::getFilteredRecipes">getFilteredRecipes</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repository/UserRepository.php.html#25"><abbr title="App\Repository\UserRepository::retrieveUserData">retrieveUserData</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/SpoonacularApiService.php.html#12"><abbr title="App\Service\SpoonacularApiService::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/SpoonacularApiService.php.html#72"><abbr title="App\Service\SpoonacularApiService::getRandomRecipe">getRandomRecipe</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/SpoonacularApiService.php.html#128"><abbr title="App\Service\SpoonacularApiService::getScoreStars">getScoreStars</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/SpoonacularApiService.php.html#150"><abbr title="App\Service\SpoonacularApiService::getRecipeById">getRecipeById</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/SpoonacularApiService.php.html#182"><abbr title="App\Service\SpoonacularApiService::searchRecipesByName">searchRecipesByName</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/SpoonacularApiService.php.html#208"><abbr title="App\Service\SpoonacularApiService::getRecipeByIdFordisplay">getRecipeByIdFordisplay</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/SpoonacularApiService.php.html#230"><abbr title="App\Service\SpoonacularApiService::searchRecipesByNutrients">searchRecipesByNutrients</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/SpoonacularApiService.php.html#274"><abbr title="App\Service\SpoonacularApiService::getRecipesInformationBulk">getRecipesInformationBulk</abbr></a></td><td class="text-right">0%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Controller/TastyTableController.php.html#827"><abbr title="App\Controller\TastyTableController::display">display</abbr></a></td><td class="text-right">420</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#444"><abbr title="App\Controller\TastyTableController::getSavedRecipes">getSavedRecipes</abbr></a></td><td class="text-right">306</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#944"><abbr title="App\Controller\TastyTableController::showUserProfile">showUserProfile</abbr></a></td><td class="text-right">272</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#708"><abbr title="App\Controller\TastyTableController::SaveRecipeDisplay">SaveRecipeDisplay</abbr></a></td><td class="text-right">182</td></tr>
+       <tr><td><a href="Service/SpoonacularApiService.php.html#128"><abbr title="App\Service\SpoonacularApiService::getScoreStars">getScoreStars</abbr></a></td><td class="text-right">132</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#112"><abbr title="App\Controller\TastyTableController::register">register</abbr></a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#596"><abbr title="App\Controller\TastyTableController::recipeSubmission">recipeSubmission</abbr></a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#1098"><abbr title="App\Controller\TastyTableController::edit">edit</abbr></a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#1192"><abbr title="App\Controller\TastyTableController::updateProfile">updateProfile</abbr></a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="Service/SpoonacularApiService.php.html#72"><abbr title="App\Service\SpoonacularApiService::getRandomRecipe">getRandomRecipe</abbr></a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#45"><abbr title="App\Controller\TastyTableController::index">index</abbr></a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="Repository/RecipesRepository.php.html#103"><abbr title="App\Repository\RecipesRepository::getFilteredRecipes">getFilteredRecipes</abbr></a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#402"><abbr title="App\Controller\TastyTableController::follows">follows</abbr></a></td><td class="text-right">20</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#240"><abbr title="App\Controller\TastyTableController::homePage">homePage</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#279"><abbr title="App\Controller\TastyTableController::homePageFiltered">homePageFiltered</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Entity/Posts.php.html#85"><abbr title="App\Entity\Posts::removePostsComment">removePostsComment</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Entity/Recipes.php.html#325"><abbr title="App\Entity\Recipes::removeRecipePost">removeRecipePost</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Entity/User.php.html#194"><abbr title="App\Entity\User::removeUserFollowing">removeUserFollowing</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Entity/User.php.html#224"><abbr title="App\Entity\User::removeUserFollower">removeUserFollower</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Entity/User.php.html#254"><abbr title="App\Entity\User::removeUserPost">removeUserPost</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Entity/User.php.html#284"><abbr title="App\Entity\User::removeUserComment">removeUserComment</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Entity/User.php.html#314"><abbr title="App\Entity\User::removeSavedRecipes">removeSavedRecipes</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Service/SpoonacularApiService.php.html#150"><abbr title="App\Service\SpoonacularApiService::getRecipeById">getRecipeById</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Service/SpoonacularApiService.php.html#182"><abbr title="App\Service\SpoonacularApiService::searchRecipesByName">searchRecipesByName</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Service/SpoonacularApiService.php.html#208"><abbr title="App\Service\SpoonacularApiService::getRecipeByIdFordisplay">getRecipeByIdFordisplay</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#314"><abbr title="App\Controller\TastyTableController::homePageAPI">homePageAPI</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Controller/TastyTableController.php.html#1083"><abbr title="App\Controller\TastyTableController::recipe_delete">recipe_delete</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Entity/Posts.php.html#75"><abbr title="App\Entity\Posts::addPostsComment">addPostsComment</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Entity/Recipes.php.html#315"><abbr title="App\Entity\Recipes::addRecipePost">addRecipePost</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Entity/User.php.html#184"><abbr title="App\Entity\User::addUserFollowing">addUserFollowing</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Entity/User.php.html#214"><abbr title="App\Entity\User::addUserFollower">addUserFollower</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Entity/User.php.html#244"><abbr title="App\Entity\User::addUserPost">addUserPost</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Entity/User.php.html#274"><abbr title="App\Entity\User::addUserComment">addUserComment</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Entity/User.php.html#304"><abbr title="App\Entity\User::addSavedRecipes">addSavedRecipes</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Service/SpoonacularApiService.php.html#230"><abbr title="App\Service\SpoonacularApiService::searchRecipesByNutrients">searchRecipesByNutrients</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Service/SpoonacularApiService.php.html#274"><abbr title="App\Service\SpoonacularApiService::getRecipesInformationBulk">getRecipesInformationBulk</abbr></a></td><td class="text-right">6</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <footer>
+    <hr/>
+    <p>
+     <small>Generated by <a href="https://github.com/sebastianbergmann/php-code-coverage" target="_top">php-code-coverage 9.2.31</a> using <a href="https://secure.php.net/" target="_top">PHP 8.3.3</a> and <a href="https://phpunit.de/">PHPUnit 9.6.19</a> at Mon May 27 15:27:53 UTC 2024.</small>
+    </p>
+   </footer>
+  </div>
+  <script src="_js/jquery.min.js?v=9.2.31" type="text/javascript"></script>
+  <script src="_js/d3.min.js?v=9.2.31" type="text/javascript"></script>
+  <script src="_js/nv.d3.min.js?v=9.2.31" type="text/javascript"></script>
+  <script type="text/javascript">
+$(document).ready(function() {
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#classCoverageDistribution svg')
+      .datum(getCoverageDistributionData([7,1,0,1,0,1,1,0,0,4,0,6], "Class Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#methodCoverageDistribution svg')
+      .datum(getCoverageDistributionData([67,0,0,0,0,0,0,0,0,0,0,96], "Method Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getCoverageDistributionData(data, label) {
+    var labels = [
+      '0%',
+      '0-10%',
+      '10-20%',
+      '20-30%',
+      '30-40%',
+      '40-50%',
+      '50-60%',
+      '60-70%',
+      '70-80%',
+      '80-90%',
+      '90-100%',
+      '100%'
+    ];
+    var values = [];
+    $.each(labels, function(key) {
+      values.push({x: labels[key], y: data[key]});
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Cyclomatic Complexity');
+
+    d3.select('#classComplexity svg')
+      .datum(getComplexityData([[0.5797101449275363,114,"<a href=\"Controller\/TastyTableController.php.html#40\">App\\Controller\\TastyTableController<\/a>"],[100,7,"<a href=\"Entity\/Comments.php.html#9\">App\\Entity\\Comments<\/a>"],[85.71428571428571,5,"<a href=\"Entity\/Followers.php.html#9\">App\\Entity\\Followers<\/a>"],[85.71428571428571,5,"<a href=\"Entity\/Following.php.html#9\">App\\Entity\\Following<\/a>"],[0,3,"<a href=\"Entity\/MithilTest.php.html#9\">App\\Entity\\MithilTest<\/a>"],[0,12,"<a href=\"Entity\/Posts.php.html#11\">App\\Entity\\Posts<\/a>"],[100,8,"<a href=\"Entity\/Ratings.php.html#9\">App\\Entity\\Ratings<\/a>"],[87.5,47,"<a href=\"Entity\/Recipes.php.html#12\">App\\Entity\\Recipes<\/a>"],[83.33333333333334,9,"<a href=\"Entity\/SavedRecipes.php.html#9\">App\\Entity\\SavedRecipes<\/a>"],[40.54054054054054,48,"<a href=\"Entity\/User.php.html#18\">App\\Entity\\User<\/a>"],[100,0,"<a href=\"Kernel.php.html#8\">App\\Kernel<\/a>"],[100,1,"<a href=\"Repository\/CommentsRepository.php.html#12\">App\\Repository\\CommentsRepository<\/a>"],[100,3,"<a href=\"Repository\/FollowersRepository.php.html#12\">App\\Repository\\FollowersRepository<\/a>"],[0,3,"<a href=\"Repository\/FollowingRepository.php.html#12\">App\\Repository\\FollowingRepository<\/a>"],[0,1,"<a href=\"Repository\/MithilTestRepository.php.html#12\">App\\Repository\\MithilTestRepository<\/a>"],[0,1,"<a href=\"Repository\/PostsRepository.php.html#12\">App\\Repository\\PostsRepository<\/a>"],[0,1,"<a href=\"Repository\/RatingsRepository.php.html#12\">App\\Repository\\RatingsRepository<\/a>"],[58.06451612903226,10,"<a href=\"Repository\/RecipesRepository.php.html#12\">App\\Repository\\RecipesRepository<\/a>"],[100,2,"<a href=\"Repository\/SavedRecipesRepository.php.html#15\">App\\Repository\\SavedRecipesRepository<\/a>"],[25,2,"<a href=\"Repository\/UserRepository.php.html#18\">App\\Repository\\UserRepository<\/a>"],[0,31,"<a href=\"Service\/SpoonacularApiService.php.html#7\">App\\Service\\SpoonacularApiService<\/a>"]], 'Class Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Method Complexity');
+
+    d3.select('#methodComplexity svg')
+      .datum(getComplexityData([[0,5,"<a href=\"Controller\/TastyTableController.php.html#45\">App\\Controller\\TastyTableController::index<\/a>"],[0,6,"<a href=\"Controller\/TastyTableController.php.html#112\">App\\Controller\\TastyTableController::register<\/a>"],[0,1,"<a href=\"Controller\/TastyTableController.php.html#231\">App\\Controller\\TastyTableController::LogOut<\/a>"],[0,3,"<a href=\"Controller\/TastyTableController.php.html#240\">App\\Controller\\TastyTableController::homePage<\/a>"],[0,3,"<a href=\"Controller\/TastyTableController.php.html#279\">App\\Controller\\TastyTableController::homePageFiltered<\/a>"],[0,2,"<a href=\"Controller\/TastyTableController.php.html#314\">App\\Controller\\TastyTableController::homePageAPI<\/a>"],[0,1,"<a href=\"Controller\/TastyTableController.php.html#341\">App\\Controller\\TastyTableController::searchRecipesAPI<\/a>"],[0,1,"<a href=\"Controller\/TastyTableController.php.html#367\">App\\Controller\\TastyTableController::searchRecipesDB<\/a>"],[0,1,"<a href=\"Controller\/TastyTableController.php.html#391\">App\\Controller\\TastyTableController::recipeDisplayer<\/a>"],[0,4,"<a href=\"Controller\/TastyTableController.php.html#402\">App\\Controller\\TastyTableController::follows<\/a>"],[100,1,"<a href=\"Controller\/TastyTableController.php.html#433\">App\\Controller\\TastyTableController::aboutUs<\/a>"],[0,17,"<a href=\"Controller\/TastyTableController.php.html#444\">App\\Controller\\TastyTableController::getSavedRecipes<\/a>"],[0,6,"<a href=\"Controller\/TastyTableController.php.html#596\">App\\Controller\\TastyTableController::recipeSubmission<\/a>"],[0,13,"<a href=\"Controller\/TastyTableController.php.html#708\">App\\Controller\\TastyTableController::SaveRecipeDisplay<\/a>"],[0,20,"<a href=\"Controller\/TastyTableController.php.html#827\">App\\Controller\\TastyTableController::display<\/a>"],[0,16,"<a href=\"Controller\/TastyTableController.php.html#944\">App\\Controller\\TastyTableController::showUserProfile<\/a>"],[0,2,"<a href=\"Controller\/TastyTableController.php.html#1083\">App\\Controller\\TastyTableController::recipe_delete<\/a>"],[0,6,"<a href=\"Controller\/TastyTableController.php.html#1098\">App\\Controller\\TastyTableController::edit<\/a>"],[0,6,"<a href=\"Controller\/TastyTableController.php.html#1192\">App\\Controller\\TastyTableController::updateProfile<\/a>"],[100,1,"<a href=\"Entity\/Comments.php.html#29\">App\\Entity\\Comments::getId<\/a>"],[100,1,"<a href=\"Entity\/Comments.php.html#34\">App\\Entity\\Comments::getUserId<\/a>"],[100,1,"<a href=\"Entity\/Comments.php.html#39\">App\\Entity\\Comments::setUserId<\/a>"],[100,1,"<a href=\"Entity\/Comments.php.html#45\">App\\Entity\\Comments::getRecipeId<\/a>"],[100,1,"<a href=\"Entity\/Comments.php.html#50\">App\\Entity\\Comments::setRecipeId<\/a>"],[100,1,"<a href=\"Entity\/Comments.php.html#56\">App\\Entity\\Comments::getComment<\/a>"],[100,1,"<a href=\"Entity\/Comments.php.html#61\">App\\Entity\\Comments::setComment<\/a>"],[0,1,"<a href=\"Entity\/Followers.php.html#26\">App\\Entity\\Followers::getId<\/a>"],[100,1,"<a href=\"Entity\/Followers.php.html#31\">App\\Entity\\Followers::getUserId<\/a>"],[100,1,"<a href=\"Entity\/Followers.php.html#36\">App\\Entity\\Followers::setUserId<\/a>"],[100,1,"<a href=\"Entity\/Followers.php.html#43\">App\\Entity\\Followers::getFollowerId<\/a>"],[100,1,"<a href=\"Entity\/Followers.php.html#48\">App\\Entity\\Followers::setFollowerId<\/a>"],[0,1,"<a href=\"Entity\/Following.php.html#26\">App\\Entity\\Following::getId<\/a>"],[100,1,"<a href=\"Entity\/Following.php.html#31\">App\\Entity\\Following::getUserId<\/a>"],[100,1,"<a href=\"Entity\/Following.php.html#36\">App\\Entity\\Following::setUserId<\/a>"],[100,1,"<a href=\"Entity\/Following.php.html#43\">App\\Entity\\Following::getFollowingId<\/a>"],[100,1,"<a href=\"Entity\/Following.php.html#48\">App\\Entity\\Following::setFollowingId<\/a>"],[0,1,"<a href=\"Entity\/MithilTest.php.html#21\">App\\Entity\\MithilTest::getId<\/a>"],[0,1,"<a href=\"Entity\/MithilTest.php.html#26\">App\\Entity\\MithilTest::getCol1<\/a>"],[0,1,"<a href=\"Entity\/MithilTest.php.html#31\">App\\Entity\\MithilTest::setCol1<\/a>"],[0,1,"<a href=\"Entity\/Posts.php.html#33\">App\\Entity\\Posts::__construct<\/a>"],[0,1,"<a href=\"Entity\/Posts.php.html#38\">App\\Entity\\Posts::getId<\/a>"],[0,1,"<a href=\"Entity\/Posts.php.html#43\">App\\Entity\\Posts::getCreatorId<\/a>"],[0,1,"<a href=\"Entity\/Posts.php.html#48\">App\\Entity\\Posts::setCreatorId<\/a>"],[0,1,"<a href=\"Entity\/Posts.php.html#55\">App\\Entity\\Posts::getRecipeId<\/a>"],[0,1,"<a href=\"Entity\/Posts.php.html#60\">App\\Entity\\Posts::setRecipeId<\/a>"],[0,1,"<a href=\"Entity\/Posts.php.html#70\">App\\Entity\\Posts::getPostsComments<\/a>"],[0,2,"<a href=\"Entity\/Posts.php.html#75\">App\\Entity\\Posts::addPostsComment<\/a>"],[0,3,"<a href=\"Entity\/Posts.php.html#85\">App\\Entity\\Posts::removePostsComment<\/a>"],[100,1,"<a href=\"Entity\/Ratings.php.html#29\">App\\Entity\\Ratings::getId<\/a>"],[100,1,"<a href=\"Entity\/Ratings.php.html#34\">App\\Entity\\Ratings::getUserId<\/a>"],[100,1,"<a href=\"Entity\/Ratings.php.html#39\">App\\Entity\\Ratings::setUserId<\/a>"],[100,1,"<a href=\"Entity\/Ratings.php.html#46\">App\\Entity\\Ratings::getRecipeId<\/a>"],[100,1,"<a href=\"Entity\/Ratings.php.html#51\">App\\Entity\\Ratings::setRecipeId<\/a>"],[100,1,"<a href=\"Entity\/Ratings.php.html#58\">App\\Entity\\Ratings::getRating<\/a>"],[100,2,"<a href=\"Entity\/Ratings.php.html#63\">App\\Entity\\Ratings::setRating<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#78\">App\\Entity\\Recipes::__construct<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#83\">App\\Entity\\Recipes::getId<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#88\">App\\Entity\\Recipes::getUserId<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#93\">App\\Entity\\Recipes::setUserId<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#100\">App\\Entity\\Recipes::getRecipeName<\/a>"],[100,2,"<a href=\"Entity\/Recipes.php.html#105\">App\\Entity\\Recipes::setRecipeName<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#115\">App\\Entity\\Recipes::getRecipeDescription<\/a>"],[100,2,"<a href=\"Entity\/Recipes.php.html#120\">App\\Entity\\Recipes::setRecipeDescription<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#130\">App\\Entity\\Recipes::getPicturePath<\/a>"],[100,2,"<a href=\"Entity\/Recipes.php.html#135\">App\\Entity\\Recipes::setPicturePath<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#145\">App\\Entity\\Recipes::getCost<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#150\">App\\Entity\\Recipes::setCost<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#157\">App\\Entity\\Recipes::getIngredients<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#162\">App\\Entity\\Recipes::setIngredients<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#169\">App\\Entity\\Recipes::getIngredientsAmounts<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#174\">App\\Entity\\Recipes::setIngredientsAmounts<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#181\">App\\Entity\\Recipes::getIngredientsUnits<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#186\">App\\Entity\\Recipes::setIngredientsUnits<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#193\">App\\Entity\\Recipes::getInstructions<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#198\">App\\Entity\\Recipes::setInstructions<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#205\">App\\Entity\\Recipes::getTime<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#210\">App\\Entity\\Recipes::setTime<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#217\">App\\Entity\\Recipes::getCalories<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#222\">App\\Entity\\Recipes::setCalories<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#229\">App\\Entity\\Recipes::getFat<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#234\">App\\Entity\\Recipes::setFat<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#241\">App\\Entity\\Recipes::getCarbs<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#246\">App\\Entity\\Recipes::setCarbs<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#253\">App\\Entity\\Recipes::getProtein<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#258\">App\\Entity\\Recipes::setProtein<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#265\">App\\Entity\\Recipes::getServings<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#270\">App\\Entity\\Recipes::setServings<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#277\">App\\Entity\\Recipes::getDiet<\/a>"],[100,2,"<a href=\"Entity\/Recipes.php.html#282\">App\\Entity\\Recipes::setDiet<\/a>"],[100,1,"<a href=\"Entity\/Recipes.php.html#292\">App\\Entity\\Recipes::getType<\/a>"],[100,2,"<a href=\"Entity\/Recipes.php.html#297\">App\\Entity\\Recipes::setType<\/a>"],[0,1,"<a href=\"Entity\/Recipes.php.html#310\">App\\Entity\\Recipes::getRecipePosts<\/a>"],[0,2,"<a href=\"Entity\/Recipes.php.html#315\">App\\Entity\\Recipes::addRecipePost<\/a>"],[0,3,"<a href=\"Entity\/Recipes.php.html#325\">App\\Entity\\Recipes::removeRecipePost<\/a>"],[0,1,"<a href=\"Entity\/SavedRecipes.php.html#32\">App\\Entity\\SavedRecipes::getIsMyRecipe<\/a>"],[100,1,"<a href=\"Entity\/SavedRecipes.php.html#37\">App\\Entity\\SavedRecipes::setIsMyRecipe<\/a>"],[0,1,"<a href=\"Entity\/SavedRecipes.php.html#42\">App\\Entity\\SavedRecipes::getId<\/a>"],[100,1,"<a href=\"Entity\/SavedRecipes.php.html#47\">App\\Entity\\SavedRecipes::getUserId<\/a>"],[100,1,"<a href=\"Entity\/SavedRecipes.php.html#52\">App\\Entity\\SavedRecipes::setUserId<\/a>"],[100,1,"<a href=\"Entity\/SavedRecipes.php.html#59\">App\\Entity\\SavedRecipes::getRecipeId<\/a>"],[100,1,"<a href=\"Entity\/SavedRecipes.php.html#64\">App\\Entity\\SavedRecipes::setRecipeId<\/a>"],[100,1,"<a href=\"Entity\/SavedRecipes.php.html#71\">App\\Entity\\SavedRecipes::getIsApi<\/a>"],[100,1,"<a href=\"Entity\/SavedRecipes.php.html#76\">App\\Entity\\SavedRecipes::setIsApi<\/a>"],[100,1,"<a href=\"Entity\/User.php.html#74\">App\\Entity\\User::__construct<\/a>"],[100,1,"<a href=\"Entity\/User.php.html#84\">App\\Entity\\User::getId<\/a>"],[100,1,"<a href=\"Entity\/User.php.html#89\">App\\Entity\\User::getEmail<\/a>"],[100,1,"<a href=\"Entity\/User.php.html#94\">App\\Entity\\User::setEmail<\/a>"],[100,1,"<a href=\"Entity\/User.php.html#100\">App\\Entity\\User::getPassword<\/a>"],[100,1,"<a href=\"Entity\/User.php.html#105\">App\\Entity\\User::setPassword<\/a>"],[100,1,"<a href=\"Entity\/User.php.html#111\">App\\Entity\\User::getUsername<\/a>"],[100,1,"<a href=\"Entity\/User.php.html#116\">App\\Entity\\User::setUsername<\/a>"],[100,1,"<a href=\"Entity\/User.php.html#122\">App\\Entity\\User::getName<\/a>"],[100,1,"<a href=\"Entity\/User.php.html#127\">App\\Entity\\User::setName<\/a>"],[100,1,"<a href=\"Entity\/User.php.html#133\">App\\Entity\\User::getSurname<\/a>"],[100,1,"<a href=\"Entity\/User.php.html#138\">App\\Entity\\User::setSurname<\/a>"],[100,1,"<a href=\"Entity\/User.php.html#144\">App\\Entity\\User::getDietPreference<\/a>"],[100,1,"<a href=\"Entity\/User.php.html#149\">App\\Entity\\User::setDietPreference<\/a>"],[0,1,"<a href=\"Entity\/User.php.html#155\">App\\Entity\\User::getRoles<\/a>"],[0,1,"<a href=\"Entity\/User.php.html#161\">App\\Entity\\User::getSalt<\/a>"],[0,1,"<a href=\"Entity\/User.php.html#167\">App\\Entity\\User::eraseCredentials<\/a>"],[0,1,"<a href=\"Entity\/User.php.html#171\">App\\Entity\\User::getUserIdentifier<\/a>"],[100,1,"<a href=\"Entity\/User.php.html#179\">App\\Entity\\User::getUserFollowing<\/a>"],[0,2,"<a href=\"Entity\/User.php.html#184\">App\\Entity\\User::addUserFollowing<\/a>"],[0,3,"<a href=\"Entity\/User.php.html#194\">App\\Entity\\User::removeUserFollowing<\/a>"],[100,1,"<a href=\"Entity\/User.php.html#209\">App\\Entity\\User::getUserFollowers<\/a>"],[0,2,"<a href=\"Entity\/User.php.html#214\">App\\Entity\\User::addUserFollower<\/a>"],[0,3,"<a href=\"Entity\/User.php.html#224\">App\\Entity\\User::removeUserFollower<\/a>"],[100,1,"<a href=\"Entity\/User.php.html#239\">App\\Entity\\User::getUserPosts<\/a>"],[0,2,"<a href=\"Entity\/User.php.html#244\">App\\Entity\\User::addUserPost<\/a>"],[0,3,"<a href=\"Entity\/User.php.html#254\">App\\Entity\\User::removeUserPost<\/a>"],[100,1,"<a href=\"Entity\/User.php.html#269\">App\\Entity\\User::getUserComments<\/a>"],[0,2,"<a href=\"Entity\/User.php.html#274\">App\\Entity\\User::addUserComment<\/a>"],[0,3,"<a href=\"Entity\/User.php.html#284\">App\\Entity\\User::removeUserComment<\/a>"],[100,1,"<a href=\"Entity\/User.php.html#299\">App\\Entity\\User::getSavedRecipes<\/a>"],[0,2,"<a href=\"Entity\/User.php.html#304\">App\\Entity\\User::addSavedRecipes<\/a>"],[0,3,"<a href=\"Entity\/User.php.html#314\">App\\Entity\\User::removeSavedRecipes<\/a>"],[100,1,"<a href=\"Repository\/CommentsRepository.php.html#14\">App\\Repository\\CommentsRepository::__construct<\/a>"],[100,1,"<a href=\"Repository\/FollowersRepository.php.html#14\">App\\Repository\\FollowersRepository::__construct<\/a>"],[100,1,"<a href=\"Repository\/FollowersRepository.php.html#44\">App\\Repository\\FollowersRepository::findFollowersByUser<\/a>"],[100,1,"<a href=\"Repository\/FollowersRepository.php.html#53\">App\\Repository\\FollowersRepository::removeFollowingByUserAndFollowers<\/a>"],[0,1,"<a href=\"Repository\/FollowingRepository.php.html#14\">App\\Repository\\FollowingRepository::__construct<\/a>"],[0,1,"<a href=\"Repository\/FollowingRepository.php.html#44\">App\\Repository\\FollowingRepository::findFollowingByUser<\/a>"],[0,1,"<a href=\"Repository\/FollowingRepository.php.html#53\">App\\Repository\\FollowingRepository::removeFollowingByUserAndFollowing<\/a>"],[0,1,"<a href=\"Repository\/MithilTestRepository.php.html#14\">App\\Repository\\MithilTestRepository::__construct<\/a>"],[0,1,"<a href=\"Repository\/PostsRepository.php.html#14\">App\\Repository\\PostsRepository::__construct<\/a>"],[0,1,"<a href=\"Repository\/RatingsRepository.php.html#14\">App\\Repository\\RatingsRepository::__construct<\/a>"],[100,1,"<a href=\"Repository\/RecipesRepository.php.html#14\">App\\Repository\\RecipesRepository::__construct<\/a>"],[100,1,"<a href=\"Repository\/RecipesRepository.php.html#45\">App\\Repository\\RecipesRepository::findIdsByUserId<\/a>"],[100,2,"<a href=\"Repository\/RecipesRepository.php.html#55\">App\\Repository\\RecipesRepository::findRecipesByIdsAndDiets<\/a>"],[100,1,"<a href=\"Repository\/RecipesRepository.php.html#94\">App\\Repository\\RecipesRepository::findRecipesByName<\/a>"],[0,5,"<a href=\"Repository\/RecipesRepository.php.html#103\">App\\Repository\\RecipesRepository::getFilteredRecipes<\/a>"],[100,1,"<a href=\"Repository\/SavedRecipesRepository.php.html#17\">App\\Repository\\SavedRecipesRepository::__construct<\/a>"],[100,1,"<a href=\"Repository\/SavedRecipesRepository.php.html#48\">App\\Repository\\SavedRecipesRepository::findRecipeIdsByUserAndIsApi<\/a>"],[100,1,"<a href=\"Repository\/UserRepository.php.html#20\">App\\Repository\\UserRepository::__construct<\/a>"],[0,1,"<a href=\"Repository\/UserRepository.php.html#25\">App\\Repository\\UserRepository::retrieveUserData<\/a>"],[0,1,"<a href=\"Service\/SpoonacularApiService.php.html#12\">App\\Service\\SpoonacularApiService::__construct<\/a>"],[0,6,"<a href=\"Service\/SpoonacularApiService.php.html#72\">App\\Service\\SpoonacularApiService::getRandomRecipe<\/a>"],[0,11,"<a href=\"Service\/SpoonacularApiService.php.html#128\">App\\Service\\SpoonacularApiService::getScoreStars<\/a>"],[0,3,"<a href=\"Service\/SpoonacularApiService.php.html#150\">App\\Service\\SpoonacularApiService::getRecipeById<\/a>"],[0,3,"<a href=\"Service\/SpoonacularApiService.php.html#182\">App\\Service\\SpoonacularApiService::searchRecipesByName<\/a>"],[0,3,"<a href=\"Service\/SpoonacularApiService.php.html#208\">App\\Service\\SpoonacularApiService::getRecipeByIdFordisplay<\/a>"],[0,2,"<a href=\"Service\/SpoonacularApiService.php.html#230\">App\\Service\\SpoonacularApiService::searchRecipesByNutrients<\/a>"],[0,2,"<a href=\"Service\/SpoonacularApiService.php.html#274\">App\\Service\\SpoonacularApiService::getRecipesInformationBulk<\/a>"]], 'Method Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getComplexityData(data, label) {
+    var values = [];
+    $.each(data, function(key) {
+      var value = Math.round(data[key][0]*100) / 100;
+      values.push({
+        x: value,
+        y: data[key][1],
+        class: data[key][2],
+        size: 0.05,
+        shape: 'diamond'
+      });
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+});
+  </script>
+ </body>
+</html>
