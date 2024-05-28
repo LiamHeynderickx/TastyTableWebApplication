@@ -23,11 +23,15 @@
         </testsuite>
     </testsuites>
 
-    <coverage processUncoveredFiles="true">
-        <include>
-            <directory suffix=".php">src</directory>
-        </include>
-    </coverage>
+    <<coverage processUncoveredFiles="true">
+    <include>
+        <directory suffix=".php">src</directory>
+    </include>
+    <exclude>
+        <directory suffix=".php">tests</directory>
+    </exclude>
+
+</coverage>
 
     <listeners>
         <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
