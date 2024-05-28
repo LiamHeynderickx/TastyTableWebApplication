@@ -62,9 +62,6 @@ class Ratings
 
     public function setRating(int $rating): static
     {
-        if ($rating > 5) {
-            throw new \InvalidArgumentException('Rating cannot exceed 5.');
-        }
         $this->rating = $rating;
 
         return $this;
