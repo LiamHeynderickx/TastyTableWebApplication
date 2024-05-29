@@ -23,7 +23,7 @@
         </testsuite>
     </testsuites>
 
-    <<coverage processUncoveredFiles="true">
+    <coverage processUncoveredFiles="true">
     <include>
         <directory suffix=".php">src</directory>
     </include>
