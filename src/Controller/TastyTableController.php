@@ -94,11 +94,6 @@ class TastyTableController extends AbstractController
                 $session->set('userId', $user->getId());
                 $session->set('type', 'saved');
 
-                //          $logger->info('User logged in', [
-                //            'userId' => $user->getId(),
-                //          'username' => $user->getUsername(),
-                //        'email' => $user->getEmail(),
-                //  ]);
                 return $this->redirectToRoute('homePage');
             }
         }
@@ -205,7 +200,7 @@ class TastyTableController extends AbstractController
                 $session->set('isOnline', true);
                 $session->set('username', $person->getUsername());
                 $session->set('mail', $person->getEmail());
-                $session->set('userId', $person->getId());
+                //$session->set('userId', $person->getId());
 
                 // Redirect to a thank you page or login page
                 return $this->redirectToRoute('homePage');
