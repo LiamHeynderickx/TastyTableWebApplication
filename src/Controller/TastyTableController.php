@@ -813,7 +813,6 @@ class TastyTableController extends AbstractController
             $em->flush();
             return $this->redirectToRoute('user_profile', ['username' => $user2->getUsername(), 'isFollowing'=>'1']);
         }
-
         return $this->redirectToRoute('recipeDisplay', ['id' => $id]);
 
     }
@@ -932,7 +931,6 @@ class TastyTableController extends AbstractController
                 'recipeOwner' => $recipeOwner
             ]);
         }
-
     }
 
 
