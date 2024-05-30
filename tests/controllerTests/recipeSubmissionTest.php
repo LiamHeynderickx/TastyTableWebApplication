@@ -76,11 +76,15 @@ class recipeSubmissionTest extends WebTestCase {
     public function testAccessDeniedForUnauthenticatedUser()
     {
         $client = static::createClient();
+
+        // Make a request to the recipeSubmission endpoint
         $crawler = $client->request('GET', '/recipeSubmission');
 
-        // Assertions
-        $this->assertResponseRedirects('/login');
-        // Check if the user is redirected to the login page
+        // Assert that the response is a redirect
+        $this->assertTrue($client->getResponse()->isRedirect());
+
+        // Assert that the redirect is to the correct URL (http://127.0.0.1:8000/)
+        $this->assertEquals('/', $client->getResponse()->getTargetUrl());
     }
 
     public function testFileUpload() // unfinished

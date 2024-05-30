@@ -112,5 +112,18 @@ class recipeDisplayTest extends WebTestCase
         $this->assertResponseRedirects('/recipeDisplay/7'); // Ensure redirect back to the recipe page
     }
 
+    public function testAccessDeniedForUnauthenticatedUser()
+    {
+        $client = static::createClient();
+
+        // Make a request to the recipeSubmission endpoint
+        $crawler = $client->request('GET', '/recipeSubmission');
+
+        // Assert that the response is a redirect
+        $this->assertTrue($client->getResponse()->isRedirect());
+
+        // Assert that the redirect is to the correct URL (http://127.0.0.1:8000/)
+        $this->assertEquals('/', $client->getResponse()->getTargetUrl());
+    }
 
 }

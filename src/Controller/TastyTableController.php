@@ -480,7 +480,7 @@ class TastyTableController extends AbstractController
         if (empty($userID)) {
             // Handle invalid or missing userID
             $logger->error('Missing userID in session.');
-            return $this->redirectToRoute('login');
+            return $this->redirectToRoute('index');
         }
 
         if ($type!=='saved' and $type !== 'my')
@@ -596,10 +596,11 @@ class TastyTableController extends AbstractController
         $recipe = new Recipes();
 
         // Retrieve user ID from session and set it to the recipe entity
-        $userId = $session->get('userId');
-        if (!$userId) {
-            throw $this->createAccessDeniedException('You must be logged in to submit a recipe.');
+        if (!$session->get('isOnline'))
+        {
+            return $this->redirectToRoute('index');
         }
+        $userId = $session->get('userId');
         $recipe->setUserId($userId);
 
         $form = $this->createFormBuilder($recipe)
