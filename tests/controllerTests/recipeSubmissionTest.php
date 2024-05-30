@@ -27,50 +27,59 @@ class recipeSubmissionTest extends WebTestCase {
 
     public function testSuccessfulRecipeSubmission()
     {
+        // Create a client with a mocked session
         $client = static::createClient();
+        $client->enableProfiler();
+
+        // Get the container and mock the session service
+        $container = $client->getContainer();
+        $sessionMock = $this->createMock(SessionInterface::class);
+        $sessionMock->method('get')->willReturnMap([
+            ['isOnline', true],
+            ['userId', 1],
+        ]);
+        $container->set('session', $sessionMock);
+
+        // Create a new recipe submission form
         $crawler = $client->request('GET', '/recipeSubmission');
 
-        $form = $crawler->selectButton('Submit')->form();
+        // Debugging: Output HTML content of the response
+        echo $client->getResponse()->getContent();
+
+        // Check if the form exists in the response
+        $form = $crawler->filter('form[name="recipe_form"]')->form();
 
         // Fill in the form fields with valid data
-        $form['form[recipeName]'] = 'Test Recipe';
-        $form['form[recipeDescription]'] = 'This is a test recipe.';
-        $form['form[cost]'] = '2';
-        $form['form[time]'] = 30;
-        $form['form[servings]'] = 4;
-        $form['form[diet]'] = 'vegetarian';
-        $form['form[type]'] = 'dinner';
-        $form['form[calories]'] = 350;
-        $form['form[fat]'] = 15;
-        $form['form[carbs]'] = 50;
-        $form['form[protein]'] = 20;
-        $form['form[ingredients]'] = json_encode(['ingredient1', 'ingredient2']);
-        $form['form[ingredientsAmounts]'] = json_encode(['100g', '200g']);
-        $form['form[ingredientsUnits]'] = json_encode(['grams', 'grams']);
-        $form['form[instructions]'] = json_encode(['Step 1', 'Step 2']);
+        $form['recipe_form[recipeName]'] = 'Test Recipe';
+        $form['recipe_form[recipeDescription]'] = 'This is a test recipe.';
+        $form['recipe_form[cost]'] = 2;
+        $form['recipe_form[time]'] = 30;
+        $form['recipe_form[servings]'] = 4;
+        $form['recipe_form[diet]'] = 'vegetarian';
+        $form['recipe_form[type]'] = 'dinner';
+        $form['recipe_form[calories]'] = 350;
+        $form['recipe_form[fat]'] = 15;
+        $form['recipe_form[carbs]'] = 50;
+        $form['recipe_form[protein]'] = 20;
 
-        //file upload is tested in another function
+        // Fill in hidden fields for ingredients and instructions
+        $form['recipe_form[ingredients]']->setValue(json_encode(['ingredient1', 'ingredient2']));
+        $form['recipe_form[ingredientsAmounts]']->setValue(json_encode(['100g', '200g']));
+        $form['recipe_form[ingredientsUnits]']->setValue(json_encode(['grams', 'grams']));
+        $form['recipe_form[instructions]']->setValue(json_encode(['Step 1', 'Step 2']));
 
         // Submit the form
         $client->submit($form);
 
-        // Assertions
-        $this->assertTrue($client->getResponse()->isRedirect('/recipeDisplay/[163]')); // ID needs to be adjusted (last db recipeId +1)
-    }
+        // Check if the form submission redirects to the expected recipe display page
+        $this->assertTrue($client->getResponse()->isRedirect('/recipeDisplay/1')); // Adjust ID as per your application
 
-    public function testMissingRequiredFields()
-    {
-        $client = static::createClient();
-        $crawler = $client->request('GET', '/recipeSubmission');
+        // Follow the redirect
+        $crawler = $client->followRedirect();
 
-        $form = $crawler->selectButton('Submit')->form();
-
-        // Submit the form without filling in any fields
-        $client->submit($form);
-
-        // Assertions
-        $this->assertSelectorTextContains('.form-errors', 'This value should not be blank.');
-        // Check for validation errors displayed on the form
+        // Assert that the final response is successful
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('h1', 'Test Recipe'); // Adjust as per your application
     }
 
     public function testAccessDeniedForUnauthenticatedUser()

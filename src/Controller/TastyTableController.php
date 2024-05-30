@@ -595,11 +595,13 @@ class TastyTableController extends AbstractController
     {
         $recipe = new Recipes();
 
-        // Retrieve user ID from session and set it to the recipe entity
-        if (!$session->get('isOnline'))
-        {
+        // Check if user is authenticated
+        if (!$this->getUser()) {
+            // Redirect to login or home page if not authenticated
             return $this->redirectToRoute('index');
         }
+
+        // Set userId
         $userId = $session->get('userId');
         $recipe->setUserId($userId);
 
