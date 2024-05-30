@@ -321,7 +321,7 @@ class TastyTableController extends AbstractController
         $form = $this->createFormBuilder()->getForm();
 
         $recipes = array();
-        for ($x = 0; $x < 1; $x++) { //change loop limit to change number of recipes displayed in home
+        for ($x = 0; $x < 6; $x++) { //change loop limit to change number of recipes displayed in home
             //display less recipes to save key usage for testing
             $recipes[] = $apiService->getRandomRecipe($filters);
         }
@@ -475,7 +475,7 @@ class TastyTableController extends AbstractController
         if (empty($userID)) {
             // Handle invalid or missing userID
             $logger->error('Missing userID in session.');
-            return $this->redirectToRoute('login');
+            return $this->redirectToRoute('index');
         }
 
         if ($type!=='saved' and $type !== 'my')
@@ -590,11 +590,14 @@ class TastyTableController extends AbstractController
     {
         $recipe = new Recipes();
 
-        // Retrieve user ID from session and set it to the recipe entity
-        $userId = $session->get('userId');
-        if (!$userId) {
-            throw $this->createAccessDeniedException('You must be logged in to submit a recipe.');
+        // Check if user is authenticated
+        if (!$this->getUser()) {
+            // Redirect to login or home page if not authenticated
+            return $this->redirectToRoute('index');
         }
+
+        // Set userId
+        $userId = $session->get('userId');
         $recipe->setUserId($userId);
 
         $form = $this->createFormBuilder($recipe)
