@@ -39,9 +39,6 @@ use Symfony\Component\Validator\Constraints\Email;
 
 class TastyTableController extends AbstractController
 {
-    // Route for displaying the form
-
-    // Route for handling form submission
     #[Route('/', name: 'index')]
     public function index(Request $request, EntityManagerInterface $em, SessionInterface $session,LoggerInterface $logger,UserPasswordHasherInterface $passwordHasher): Response
     {
@@ -174,13 +171,12 @@ class TastyTableController extends AbstractController
                 'email' => $person->getEmail()
             ]);
             if ($existingUser) {
-                //$session->getFlashBag()->add('error', 'Username already taken. Please choose another.');
+
                 $alertMessage='Username already taken. Please choose another.';
                 return $this->render('Pages/register.html.twig', ['form' => $form->createView()
                     ,'alertMessage'=>$alertMessage]);
             }
             if ($existingEmail) {
-                //$session->getFlashBag()->add('error', 'Email already registered. Please use another email or log in.');
                 $alertMessage='Email already registered. Please use another email or log in.';
                 return $this->render('Pages/register.html.twig', ['form' => $form->createView()
                     ,'alertMessage'=>$alertMessage]);
@@ -202,16 +198,11 @@ class TastyTableController extends AbstractController
                 $session->set('mail', $person->getEmail());
                 //$session->set('userId', $person->getId());
 
-                // Redirect to a thank you page or login page
                 return $this->redirectToRoute('homePage');
-                //return $this->redirectToRoute('login');
             } catch (\Exception $e) {
-                // Add an error message to the session flash bag
-                //TODOO ADD ALERT
                 $alertMessage='There was an error registering your account. Please try again.';
                 return $this->render('Pages/register.html.twig', ['form' => $form->createView()
                     ,'alertMessage'=>$alertMessage]);
-                //  $session->getFlashBag()->add('error', 'There was an error registering your account. Please try again.');
             }
 
 
@@ -246,9 +237,6 @@ class TastyTableController extends AbstractController
 
         $form = $this->createFormBuilder()->getForm();
 
-        $recipes = array(); //populate this with database
-
-        $recipe = new Recipes();
 
         $allRecipes = $em->getRepository(Recipes::class)->findAll();
 
@@ -383,7 +371,7 @@ class TastyTableController extends AbstractController
         ]);
     }
 
-    #[Route('/recipe/{id}', name: 'recipeDisplayAPI')] //not used rn
+    #[Route('/recipe/{id}', name: 'recipeDisplayAPI')] //not used
     public function recipeDisplayer($id, SpoonacularApiService $apiService): Response
     {
         // Fetch the recipe details using the API service
@@ -462,7 +450,6 @@ class TastyTableController extends AbstractController
         $selectedDiets = $request->query->all('diets');
         $diets = !empty($selectedDiets) ? $selectedDiets : [];
 
-        // $logger->info('Selected diets:', ['diets' => $diets]);
         $type = $request->query->get('type');
 
 
@@ -492,12 +479,9 @@ class TastyTableController extends AbstractController
         if ($type === 'saved') {
             // Fetch saved recipes from the API & DB
             $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($UserID, 1,0);
-            // echo "Fetched Recipe IDs:\n";
-            //print_r($recipeIds);
             $ApiRecipes=[];
             if (!empty($recipeIds)) {
-                // return new Response('No saved recipes found.');
-                //From the API
+
                 $filteredArrays=[];
                 try {
                     $ApiRecipes = $apiService->getRecipesInformationBulk($recipeIds);
@@ -509,7 +493,6 @@ class TastyTableController extends AbstractController
                             if (array_intersect($apiRecipe['diets'], $selectedDiets))
                             {
                                 $filteredArrays []= $apiRecipe;
-                                //  print_r( $filteredArrays);
                             }
                         }
 
@@ -521,7 +504,6 @@ class TastyTableController extends AbstractController
                     }
 
                 } catch (\Exception $e) {
-                    //return new Response('Error: ' . $e->getMessage());
                     return $this->render('Pages/Profile.html.twig', [
                         'dietaryPreferences' => $dietaryPreferences,
                         'selectedDiets' => $selectedDiets,
@@ -533,9 +515,7 @@ class TastyTableController extends AbstractController
             }
 
             $recipeIds = $em->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($UserID, 0,0);
-            //$DbRecipes = $em->getRepository(Recipes::class)->findBy(['id' => $recipeIds]);
             if (empty($recipeIds)) {
-                // $logger->info('No recipes found for user.', ['userID' => $userID]);
 
                 $alertInfo='No recipes found for user.';
             }
@@ -553,16 +533,12 @@ class TastyTableController extends AbstractController
             ]);
 
         }elseif ($type === 'my'){
-            // Fetch my recipes from the DB and set is my TRUE
             $recipeIds = $em->getRepository(Recipes::class)->findIdsByUserId($UserID);
 
 
-            //$DbRecipes = $em->getRepository(Recipes::class)->findBy(['id' => $recipeIds]);
             $DbRecipes = $em->getRepository(Recipes::class)->findRecipesByIdsAndDiets($recipeIds, $diets);
 
             if (empty($DbRecipes) && empty($ApiRecipes)) {
-                //$logger->info('No recipes available to display.', ['userID' => $userID]);
-                //$this->addFlash('notice', 'No recipes available.');
                 $alertInfo='No recipes available to display.';
             }
 
@@ -577,9 +553,7 @@ class TastyTableController extends AbstractController
 
         }
         else{
-            // Fetch my recipes from the DB and set is my TRUE
             echo "Fetched Recipe IDs:\n";
-            //print_r($recipe[0]);
             return $this->redirectToRoute('update_profile');
         }
 
@@ -590,9 +564,7 @@ class TastyTableController extends AbstractController
     {
         $recipe = new Recipes();
 
-        // Check if user is authenticated
         if (!$this->getUser()) {
-            // Redirect to login or home page if not authenticated
             return $this->redirectToRoute('index');
         }
 
@@ -712,7 +684,6 @@ class TastyTableController extends AbstractController
         $user = $em->getRepository(User::class)->findOneBy(['id' =>$userId]);
 
 
-        //!!!!Validating the input !!!!!!///
         if (!is_numeric($id) || !in_array($save, ['0', '1', '3']) || !in_array($isApi, ['0', '1'])) {
             $this->addFlash('error', 'Invalid request parameters.');
             return $this->redirectToRoute('index');
@@ -732,7 +703,6 @@ class TastyTableController extends AbstractController
                 return $this->redirectToRoute('recipeDisplay', ['id' => $id]);
             }
 
-            //$user = $em->getRepository(User::class)->findOneBy(['id' =>$userId]);
             $savedRecipe=new SavedRecipes();
             $savedRecipe->setRecipeId($id);
             $savedRecipe->setUserId($user);
@@ -744,8 +714,6 @@ class TastyTableController extends AbstractController
         }
         elseif ($save=='0')
         {
-            //!!!Validation!!!!!
-
             $savedRecipe = $em->getRepository(SavedRecipes::class)->findOneBy([
                 'userId' => $user, // Assuming this is an association with the User entity
                 'recipeId' => $id, // The recipe ID you are looking to delete
@@ -753,14 +721,11 @@ class TastyTableController extends AbstractController
             ]);
 
             if ($savedRecipe) {
-                // Remove the recipe from the database
                 $em->remove($savedRecipe);
-                $em->flush(); // Commit the changes to the database
+                $em->flush();
 
-                // Optionally, add a success message or some form of confirmation
                 $this->addFlash('success', 'Recipe has been successfully deleted.');
             } else {
-                // Optionally, handle the case where no recipe was found to delete
                 $this->addFlash('error', 'No matching recipe found to delete.');
             }
 
@@ -770,7 +735,6 @@ class TastyTableController extends AbstractController
 
             $user2Id = $em->getRepository(Recipes::class)->findOneBy(['id'=>$id])->getUserId();
 
-            //!!!Validation!!!!!
             if (!$user2Id) {
                 $this->addFlash('error', 'Recipe not found.');
                 return $this->redirectToRoute('recipeDisplay', ['id' => $id]);
@@ -790,7 +754,6 @@ class TastyTableController extends AbstractController
                 'userId' => $user,
                 'followingId' => $user2Id
             ]);
-            //!!!Validation!!!!!
             if ($existingFollow) {
                 $this->addFlash('error', 'Already following this user.');
                 return $this->redirectToRoute('homePage');
@@ -942,10 +905,8 @@ class TastyTableController extends AbstractController
         LoggerInterface $logger,
         SpoonacularApiService $apiService
     ): Response {
-        // Find the user by username
         $user = $entityManager->getRepository(User::class)->findOneBy(['username' => $username]);
 
-        // If user not found, throw an exception or handle the error as needed
         if (!$user) {
             throw $this->createNotFoundException('User not found');
         }
@@ -1042,7 +1003,6 @@ class TastyTableController extends AbstractController
             // Fetch user's own recipes
             $recipeIds = $entityManager->getRepository(Recipes::class)->findIdsByUserId($profileUserId);
 
-            // $recipeIds = $entityManager->getRepository(SavedRecipes::class)->findRecipeIdsByUserAndIsApi($profileUserId, 0, 1);
             $Db_recipes = $entityManager->getRepository(Recipes::class)->findRecipesByIdsAndDiets($recipeIds);
         }
         else
@@ -1062,7 +1022,6 @@ class TastyTableController extends AbstractController
             }
         }
 
-        // Render the user profile template
         return $this->render('Pages/User.html.twig', [
             'user' => $user,
             'isFollowing' => $isFollowing,
@@ -1095,7 +1054,6 @@ class TastyTableController extends AbstractController
             throw $this->createNotFoundException('No recipe found for id ' . $id);
         }
 
-        // Create the form with the existing recipe data
         $form = $this->createFormBuilder($recipe)
             ->add('recipeName', TextType::class, ['label' => 'Recipe Name', 'data' => $recipe->getRecipeName()])
             ->add('recipeDescription', TextareaType::class, ['label' => 'Recipe Description', 'required' => false, 'data' => $recipe->getRecipeDescription()])
@@ -1136,10 +1094,8 @@ class TastyTableController extends AbstractController
             $pictureFile = $form->get('picture')->getData();
 
             if ($pictureFile) {
-                // Generate a unique name for the file before saving it
                 $newFilename = uniqid() . '.' . $pictureFile->guessExtension();
 
-                // Move the file to the directory where images are stored
                 try {
                     $pictureFile->move(
                         $this->getParameter('recipe_images_directory'),
@@ -1149,23 +1105,19 @@ class TastyTableController extends AbstractController
                     $logger->error('Error uploading file: ' . $e->getMessage());
                 }
 
-                // Store the file name in the entity
                 $recipe->setPicturePath($newFilename);
             }
 
-            // Get ingredients, quantities, units, and instructions from hidden fields
             $ingredientsJSON = json_decode($form->get('ingredients')->getData(), true);
             $ingredientsAmountsJSON = json_decode($form->get('ingredientsAmounts')->getData(), true);
             $ingredientsUnitsJSON = json_decode($form->get('ingredientsUnits')->getData(), true);
             $instructionsJSON = json_decode($form->get('instructions')->getData(), true);
 
-            // Set the data to the recipe entity
             $recipe->setIngredients($ingredientsJSON ?? []);
             $recipe->setIngredientsAmounts($ingredientsAmountsJSON ?? []);
             $recipe->setIngredientsUnits($ingredientsUnitsJSON ?? []);
             $recipe->setInstructions($instructionsJSON ?? []);
 
-            // Save the edited recipe to the database
             $em->flush();
 
             return $this->redirectToRoute('recipeDisplay', ['id' => $recipe->getId()]);
