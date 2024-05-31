@@ -2,10 +2,15 @@
 
 namespace App\Tests\controllerTests;
 
+use App\Entity\Comments;
+use App\Entity\Recipes;
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 use App\Service\SpoonacularApiService;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 class recipeDisplayTest extends WebTestCase
 {
@@ -101,31 +106,83 @@ class recipeDisplayTest extends WebTestCase
     public function testCommentSubmission()
     {
         $client = static::createClient();
-        $client->enableProfiler();
 
-        // Mock the session service
-        $mockSession = $this->createMock(SessionInterface::class);
-        $mockSession->method('get')->willReturnMap([
-            ['isOnline', true],
-            ['userId', 1], // Adjust as per your session mock requirements
-        ]);
+        // Create a user to own the recipe and submit the comment
+        $user = new User();
+        $user->setName('Test');
+        $user->setSurname('User');
+        $user->setUsername('testuser');
+        $user->setPassword(password_hash('testpassword', PASSWORD_BCRYPT));
+        $user->setEmail('testuser@example.com');
 
-        // Set the mocked session in the container
-        $client->getContainer()->set('session', $mockSession);
+        // Persist and flush the user to the database
+        $entityManager = $client->getContainer()->get('doctrine')->getManager();
+        $entityManager->persist($user);
+        $entityManager->flush();
 
-        // Simulate a request to load the page where comment submission form is present
-        $crawler = $client->request('GET', '/recipeDisplay/7');
+        // Create a recipe for the test
+        $recipe = new Recipes();
+        $recipe->setRecipeName('Test Recipe');
+        $recipe->setUserId($user->getId());
+        $recipe->setCost('5');
+        $recipe->setTime(45);
+        $recipe->setServings(4);
+        $recipe->setCalories(600);
+        $recipe->setFat(25);
+        $recipe->setCarbs(70);
+        $recipe->setProtein(35);
+        $recipe->setDiet('vegan');
+        $recipe->setType('dinner');
+        $recipe->setIngredients(['Ingredient A', 'Ingredient B']);
+        $recipe->setIngredientsAmounts([150, 250]);
+        $recipe->setIngredientsUnits(['g', 'ml']);
+        $recipe->setInstructions(['Step 1: Prepare ingredients', 'Step 2: Cook ingredients']);
 
-        // Check if the form exists
-        $form = $crawler->filter('form[name="comment_form"]')->form();
-        $this->assertCount(1, $form, 'Form not found on the page.');
+        // Persist and flush the recipe to the database
+        $entityManager->persist($recipe);
+        $entityManager->flush();
 
-        // Simulate form submission with comment data
+        // Get the ID of the created recipe
+        $recipeId = $recipe->getId();
+
+        // Mock the session to simulate a logged-in user
+        $session = new Session(new MockArraySessionStorage());
+        $session->set('isOnline', true);
+        $session->set('userId', $user->getId());
+
+        // Set the session into the client
+        $client->getContainer()->set('session', $session);
+        $client->getContainer()->get('session')->setId('mock-session-id');
+
+        // Simulate a request to load the recipe display page
+        $crawler = $client->request('GET', '/recipeDisplay/' . $recipeId);
+
+        // Check if the response is successful
+        $this->assertResponseIsSuccessful();
+
+        // Ensure the URI is correct
+        $this->assertEquals('/recipeDisplay/' . $recipeId, $client->getRequest()->getRequestUri());
+
+        // Check if the form exists and submit the comment
+        $form = $crawler->selectButton('Add Comment')->form();
         $form['comment'] = 'This is a test comment.';
         $client->submit($form);
 
         // Assertions
-        $this->assertResponseRedirects('/recipeDisplay/7'); // Ensure redirect back to the recipe page
+        $this->assertResponseRedirects('/recipeDisplay/' . $recipeId);
+
+        // Follow the redirect and check the response
+        $crawler = $client->followRedirect();
+        $this->assertResponseIsSuccessful();
+
+        // Check if the comment appears on the page
+        $this->assertSelectorTextContains('li', 'This is a test comment.');
+
+        // Verify that the comment is correctly saved to the database
+        $comment = $entityManager->getRepository(Comments::class)->findOneBy(['comment' => 'This is a test comment.']);
+        $this->assertNotNull($comment);
+        $this->assertEquals($user->getId(), $comment->getUserId()->getId());
+        $this->assertEquals($recipe->getId(), $comment->getRecipeId()->getId());
     }
 
     public function testAccessDeniedForUnauthenticatedUser()

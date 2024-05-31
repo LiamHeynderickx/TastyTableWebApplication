@@ -564,7 +564,8 @@ class TastyTableController extends AbstractController
     {
         $recipe = new Recipes();
 
-        if (!$this->getUser()) {
+        if (!$session->get('isOnline'))
+        {
             return $this->redirectToRoute('index');
         }
 
