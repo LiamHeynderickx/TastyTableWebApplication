@@ -563,7 +563,8 @@ class TastyTableController extends AbstractController
     {
         $recipe = new Recipes();
 
-        if (!$this->getUser()) {
+        if (!$session->get('isOnline'))
+        {
             return $this->redirectToRoute('index');
         }
 
@@ -573,7 +574,7 @@ class TastyTableController extends AbstractController
 
         $form = $this->createFormBuilder($recipe)
             ->add('recipeName', TextType::class, ['label' => 'Recipe Name'])
-            ->add('recipeDescription', TextareaType::class, ['label' => 'Recipe Description', 'required' => false])
+            ->add('recipeDescription', TextareaType::class, ['label' => 'Recipe Description', 'required' => false, 'attr' => ['maxlength' => 255]])
             ->add('picture', FileType::class, [
                 'label' => 'Recipe Image',
                 'required' => false,
@@ -1030,19 +1031,36 @@ class TastyTableController extends AbstractController
     }
 
     #[Route('/recipe_delete/{id}', name: 'recipe_delete')]
-    public function recipe_delete(Request $request, EntityManagerInterface $em, $id): Response
+    public function recipe_delete(Request $request, SessionInterface $session, EntityManagerInterface $em, $id): Response
     {
+        // Check if the user is logged in
+        if (!$session->get('isOnline')) {
+            return $this->redirectToRoute('index');
+        }
+
+        // Get the logged-in user ID
+        $loggedInUserId = $session->get('userId'); // Adjust according to your session structure
+
+        // Find the recipe by ID
         $recipe = $em->getRepository(Recipes::class)->find($id);
 
+        // Check if the recipe exists
         if (!$recipe) {
             throw $this->createNotFoundException('No recipe found for id '.$id);
         }
 
+        // Check if the logged-in user is the owner of the recipe
+        if ($recipe->getUserId() !== $loggedInUserId) {
+            return new Response('Access Denied', Response::HTTP_FORBIDDEN);
+        }
+
+        // Delete the recipe
         $em->remove($recipe);
         $em->flush();
 
         return $this->redirectToRoute('homePage');
     }
+
 
     #[Route('/recipe_edit/{id}', name: 'recipe_edit')]
     public function edit($id, Request $request, EntityManagerInterface $em, LoggerInterface $logger): Response
@@ -1055,7 +1073,7 @@ class TastyTableController extends AbstractController
 
         $form = $this->createFormBuilder($recipe)
             ->add('recipeName', TextType::class, ['label' => 'Recipe Name', 'data' => $recipe->getRecipeName()])
-            ->add('recipeDescription', TextareaType::class, ['label' => 'Recipe Description', 'required' => false, 'data' => $recipe->getRecipeDescription()])
+            ->add('recipeDescription', TextareaType::class, ['label' => 'Recipe Description', 'required' => false, 'attr' => ['maxlength' => 255], 'data' => $recipe->getRecipeDescription()])
             ->add('picture', FileType::class, ['label' => 'Recipe Image', 'required' => false, 'mapped' => false, 'attr' => ['accept' => 'image/*'],'data_class' => null])
             ->add('cost', ChoiceType::class, ['choices' => ['€' => '1', '€€' => '2', '€€€' => '3'], 'expanded' => true, 'multiple' => false, 'attr' => ['class' => 'form-label-cost'], 'data' => $recipe->getCost(),])
             ->add('time', IntegerType::class, ['label' => 'Cooking Time (minutes)', 'data' => $recipe->getTime()])

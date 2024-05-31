@@ -72,14 +72,14 @@ class recipeSubmissionTest extends WebTestCase {
         $client->submit($form);
 
         // Check if the form submission redirects to the expected recipe display page
-        $this->assertTrue($client->getResponse()->isRedirect('/recipeDisplay/1')); // Adjust ID as per your application
+        $this->assertTrue($client->getResponse()->isRedirect('/recipeDisplay/127'));
 
         // Follow the redirect
         $crawler = $client->followRedirect();
 
         // Assert that the final response is successful
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Test Recipe'); // Adjust as per your application
+        $this->assertSelectorTextContains('h1', 'Test Recipe');
     }
 
     public function testAccessDeniedForUnauthenticatedUser()
