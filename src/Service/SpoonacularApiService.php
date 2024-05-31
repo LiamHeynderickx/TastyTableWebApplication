@@ -12,6 +12,9 @@ class SpoonacularApiService
     public function __construct(HttpClientInterface $client)
     {
         $this->client = $client;
+
+        //Below are some api keys we use for the application, they run out so we need multiple.
+
 //        $this->apiKey = '19d88678c40e403bae96298037a292bc';
 //        $this->apiKey =   'c032d39ece4346bdb75d5e9ac3d6b903';
 //       $this->apiKey = 'a97f080d485740608c87a17ef0957691';
@@ -19,55 +22,7 @@ class SpoonacularApiService
         $this->apiKey = '8fc06e17edce40e88e7f2f8984508877';
     }
 
-//    public function getRandomRecipe($filters) {
-//
-//        $diet = [];
-//        $intolerances = [];
-//
-//        if (!empty($filters['vegetarian'])) {
-//            $diet[] = 'vegetarian';
-//        }
-//        if (!empty($filters['vegan'])) {
-//            $diet[] = 'vegan';
-//        }
-//        if (!empty($filters['gluten-free'])) {
-//            $intolerances = "true";
-//        }
-//        if (!empty($filters['dairy-free'])) {
-//            $intolerances = "true";
-//        }
-//
-//        $dietString = implode(',', $diet);
-//        $intolerancesString = implode(',',$intolerances);
-//        $url = "https://api.spoonacular.com/recipes/complexSearch?number=1&sort=random&diet=".$dietString."&intolerances=".$intolerancesString."&apiKey={$this->apiKey}";
-//
-////        echo $url;
-//
-//        $response = file_get_contents($url);
-//
-//        // Decode the JSON response into a stdClass object
-//        $data = json_decode($response);
-//
-//        $id = $data->recipe[0]->id;
-//
-//        $urlID = "https://api.spoonacular.com/recipes/".$id."/information?includeNutrition=false&apiKey=".$this->apiKey;
-//        $response = file_get_contents($urlID);
-//        $data2 = json_decode($response);
-//
-//
-//
-//        if(!isset($data2->recipes[0]->image)){ //overwrite image with default
-//            $image = $data2->recipes[0]->image ?? 'style/images/WebTech Mascot.jpg';
-//            return array($data2->recipes[0]->title, $image, $data2->recipes[0]->readyInMinutes,
-//                intval($data2->recipes[0]->spoonacularScore), $data2->recipes[0]->id);
-//        }
-//        else{
-//            return array($data2->recipes[0]->title, $data2->recipes[0]->image,
-//                $data2->recipes[0]->readyInMinutes, intval($data2->recipes[0]->spoonacularScore),
-//                $data2->recipes[0]->id);
-//        }
-//        // Access the properties of the object
-//    }
+
 
     public function getRandomRecipe($filters) {
         $diet = [];
@@ -227,49 +182,6 @@ class SpoonacularApiService
 
     }
 
-    public function searchRecipesByNutrients(array $params)
-    {
-        $response = $this->client->request(
-            'GET',
-            'https://api.spoonacular.com/recipes/findByNutrients',
-            [
-                'query' => array_merge($params, ['apiKey' => $this->apiKey])
-            ]
-        );
-
-        if ($response->getStatusCode() !== 200) {
-            throw new \Exception('API request failed.');
-        }
-
-        return $response->toArray();
-    }
-/*
-    public function getRecipesByIds(array $ids)
-    {
-        // Convert the array of IDs into a comma-separated string
-        $idsString = implode(',', $ids);
-
-        // Make the API request
-        $response = $this->client->request(
-            'GET',
-            'https://api.spoonacular.com/recipes/informationBulk',
-            [
-                'query' => [
-                    'ids' => $idsString,
-                    'apiKey' => $this->apiKey
-                ]
-            ]
-        );
-
-        // Check if the response status code is not 200
-        if ($response->getStatusCode() !== 200) {
-            throw new \Exception('API request failed.');
-        }
-
-        // Return the response data as an array
-        return $response->toArray();
-    }
-*/
 
     public function getRecipesInformationBulk(array $recipeIds)
     {
