@@ -158,7 +158,7 @@ class recipeEditTest extends WebTestCase {
         $crawler = $client->request('GET', '/recipe_edit/' . $recipeId);
 
         // Path to a real image file for testing
-        $testFilePath = __DIR__ . '/test.jpg'; // Make sure you have a test.jpg file in the same directory as this test file
+        $testFilePath = __DIR__ . '/test.jpg';
         copy($testFilePath, sys_get_temp_dir() . '/test.jpg'); // Copy to a temp directory to simulate an upload
         $uploadedFile = new UploadedFile(
             sys_get_temp_dir() . '/test.jpg',

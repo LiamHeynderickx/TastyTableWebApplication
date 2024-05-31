@@ -40,7 +40,7 @@ class recipeDisplayTest extends WebTestCase
         // Page loads successfully
         $this->assertResponseIsSuccessful();
 
-        // Hard to do other tests in a mock session, but could not figure out how to setup a session in test
+        // Hard to do tests in a mock session, but could not figure out how to setup a session in test
 
     }
 

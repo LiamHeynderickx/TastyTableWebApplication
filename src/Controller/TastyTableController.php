@@ -68,7 +68,6 @@ class TastyTableController extends AbstractController
             if (!$user)
             {
                 //No user is found
-
                 $alertMessage='There is No User Record Found';
 
             }
@@ -196,7 +195,6 @@ class TastyTableController extends AbstractController
                 $session->set('isOnline', true);
                 $session->set('username', $person->getUsername());
                 $session->set('mail', $person->getEmail());
-                //$session->set('userId', $person->getId());
 
                 return $this->redirectToRoute('homePage');
             } catch (\Exception $e) {
@@ -1039,7 +1037,7 @@ class TastyTableController extends AbstractController
         }
 
         // Get the logged-in user ID
-        $loggedInUserId = $session->get('userId'); // Adjust according to your session structure
+        $loggedInUserId = $session->get('userId');
 
         // Find the recipe by ID
         $recipe = $em->getRepository(Recipes::class)->find($id);

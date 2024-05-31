@@ -77,7 +77,7 @@ class HomePageFilteredTest extends KernelTestCase
             new Recipes(),
             new Recipes(),
             new Recipes(),
-            new Recipes(), // Add more if necessary
+            new Recipes(),
         ];
     }
 }
