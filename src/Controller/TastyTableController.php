@@ -574,7 +574,7 @@ class TastyTableController extends AbstractController
 
         $form = $this->createFormBuilder($recipe)
             ->add('recipeName', TextType::class, ['label' => 'Recipe Name'])
-            ->add('recipeDescription', TextareaType::class, ['label' => 'Recipe Description', 'required' => false])
+            ->add('recipeDescription', TextareaType::class, ['label' => 'Recipe Description', 'required' => false, 'attr' => ['maxlength' => 255]])
             ->add('picture', FileType::class, [
                 'label' => 'Recipe Image',
                 'required' => false,
@@ -1056,7 +1056,7 @@ class TastyTableController extends AbstractController
 
         $form = $this->createFormBuilder($recipe)
             ->add('recipeName', TextType::class, ['label' => 'Recipe Name', 'data' => $recipe->getRecipeName()])
-            ->add('recipeDescription', TextareaType::class, ['label' => 'Recipe Description', 'required' => false, 'data' => $recipe->getRecipeDescription()])
+            ->add('recipeDescription', TextareaType::class, ['label' => 'Recipe Description', 'required' => false, 'attr' => ['maxlength' => 255], 'data' => $recipe->getRecipeDescription()])
             ->add('picture', FileType::class, ['label' => 'Recipe Image', 'required' => false, 'mapped' => false, 'attr' => ['accept' => 'image/*'],'data_class' => null])
             ->add('cost', ChoiceType::class, ['choices' => ['€' => '1', '€€' => '2', '€€€' => '3'], 'expanded' => true, 'multiple' => false, 'attr' => ['class' => 'form-label-cost'], 'data' => $recipe->getCost(),])
             ->add('time', IntegerType::class, ['label' => 'Cooking Time (minutes)', 'data' => $recipe->getTime()])
