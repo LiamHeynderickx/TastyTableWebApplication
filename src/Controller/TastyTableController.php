@@ -457,7 +457,6 @@ class TastyTableController extends AbstractController
 
         $UserID=$session->get('userId');
 
-        //!!!!Validation !!!!!!!!!
         $userID = $session->get('userId');
         if (empty($userID)) {
             // Handle invalid or missing userID
