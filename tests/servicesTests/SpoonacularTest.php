@@ -129,24 +129,41 @@ class SpoonacularTest extends WebTestCase
         $this->assertEquals($expectedStars, $result);
     }
 
-//    public function testGetRecipesInformationBulk(): void
-//    {
-//        $response = $this->createMock(ResponseInterface::class);
-//        $response->method('getContent')->willReturn(json_encode([
-//            ['id' => 1, 'title' => 'Mock Recipe 1'],
-//            ['id' => 2, 'title' => 'Mock Recipe 2']
-//        ]));
-//        $response->method('getStatusCode')->willReturn(200);
-//        $this->client->method('request')->willReturn($response);
-//
-//        $result = $this->service->getRecipesInformationBulk([1, 2]);
-//
-//        $this->assertCount(2, $result);
-//        $this->assertEquals(1, $result[0]['id']);
-//        $this->assertEquals('Mock Recipe 1', $result[0]['title']);
-//        $this->assertEquals(2, $result[1]['id']);
-//        $this->assertEquals('Mock Recipe 2', $result[1]['title']);
-//    }
+    public function testGetRecipesInformationBulk(): void
+    {
+        // Mock the API response for getting a single recipe information in bulk
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getStatusCode')->willReturn(200);
+        $response->method('toArray')->willReturn([
+            [
+                'id' => 660932,
+                'title' => 'Spiced Apple Cider',
+                'image' => 'https://img.spoonacular.com/recipes/660932-556x370.jpg',
+                'readyInMinutes' => 10,
+                'spoonacularScore' => 90
+            ]
+        ]);
+
+        // Configure the client mock to return the response
+        $this->client->method('request')
+            ->with(
+                $this->equalTo('GET'),
+                $this->stringContains('/recipes/informationBulk')
+            )
+            ->willReturn($response);
+
+        // Call the method under test
+        $result = $this->service->getRecipesInformationBulk([660932]);
+
+        // Assert that the result has the expected values
+        $this->assertCount(1, $result);
+        $this->assertEquals(660932, $result[0]['id']);
+        $this->assertEquals('Spiced Apple Cider', $result[0]['title']);
+        $this->assertEquals('https://img.spoonacular.com/recipes/660932-556x370.jpg', $result[0]['image']);
+        $this->assertEquals(10, $result[0]['readyInMinutes']);
+        $this->assertEquals(90, $result[0]['spoonacularScore']);
+    }
+
 }
 
 

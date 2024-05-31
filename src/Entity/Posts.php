@@ -76,7 +76,7 @@ class Posts
     {
         if (!$this->PostsComments->contains($postsComment)) {
             $this->PostsComments->add($postsComment);
-            $postsComment->setPostId($this);
+            // Removed reference to setPostId
         }
 
         return $this;
@@ -85,10 +85,7 @@ class Posts
     public function removePostsComment(Comments $postsComment): static
     {
         if ($this->PostsComments->removeElement($postsComment)) {
-            // set the owning side to null (unless already changed)
-            if ($postsComment->getPostId() === $this) {
-                $postsComment->setPostId(null);
-            }
+            // Removed reference to setPostId
         }
 
         return $this;
